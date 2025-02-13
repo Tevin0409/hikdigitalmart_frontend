@@ -78,3 +78,4 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 # hikdigitalmart_frontend
 # hikdigitalmart_frontend
 # hikdigitalmart_frontend
+# hikdigitalmart_frontend
