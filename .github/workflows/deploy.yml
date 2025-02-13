@@ -1,0 +1,65 @@
+name: Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to DigitalOcean
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
+          script: |
+            # Set project directory
+            PROJECT_DIR="$HOME/frontend"
+
+            # Ensure SSH agent is running
+            eval "$(ssh-agent -s)"
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+
+            # Create the backend folder if it doesn't exist
+            mkdir -p $PROJECT_DIR
+
+            # Clone repository if it doesn’t exist, otherwise pull updates
+            if [ ! -d "$PROJECT_DIR/.git" ]; then
+              echo "Repository not found. Cloning..."
+              git clone https://github.com/Tevin0409/hikdigitalmart_frontend.git $PROJECT_DIR
+            else
+              echo "Repository exists. Pulling latest changes..."
+              cd $PROJECT_DIR
+              git pull origin main
+            fi
+
+            # Navigate to project directory
+            cd $PROJECT_DIR
+
+            # Install dependencies
+            npm install --production
+
+            # Build the project
+            # npm run build
+
+            # Restart the application using PM2
+            pm2 restart all || pm2 start npm --name "hickdigitalmart_frontend" -- start
