@@ -1,0 +1,17 @@
+:root {
+  --primary-color: #f44336; /* Red */
+  --secondary-color: #039BD4; /* Red */
+  --primary-color-text: #ffffff; /* White text */
+  --primary-color-hover: #d32f2f; /* Darker red for hover */
+}
+
+.p-button {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color-text) !important;
+}
+
+.p-button:hover {
+  background-color: var(--primary-color-hover) !important;
+  border-color: var(--primary-color-hover) !important;
+}
