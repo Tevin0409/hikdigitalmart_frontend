@@ -1,32 +1,38 @@
 <template>
   <div class="flex gap-6 p-4">
     <!-- Sidebar -->
-    <div class="w-1/5 bg-white shadow p-4 rounded-lg">
-      <ul class="space-y-4">
+    <div
+      class="w-1/5 bg-white shadow p-4 rounded-lg relative h-32 sm:h-40 md:h-80 xl:h-80"
+    >
+      <ul class="space-y-2">
         <li
-          class="flex items-center gap-2 pt-3 hover:text-primary cursor-pointer font-medium"
+          class="flex items-center gap-2 pt-3 hover:text-primary cursor-pointer font-regular"
           v-for="item in categories"
         >
-          <i class="pi pi-camera"></i>
-          <span>{{ item.name }}</span>
+          <i :class="getIcon(item.name)"></i>
+          <span class="text-xs truncate">{{ item.name }}</span>
         </li>
       </ul>
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 bg-white shadow rounded-lg p- relative">
+    <div
+      class="flex-1 bg-white shadow rounded-lg relative w-full h-32 sm:h-40 md:h-80 xl:h-80"
+    >
       <div class="flex items-center gap-6">
         <!-- Text Section -->
         <div class="relative p-4">
-          <h2 class="text-4xl font-bold">
+          <h2 class="text-2xl font-bold" style="font-family: san-serrif">
             Break from <br />
             reality
           </h2>
-          <p class="text-lg text-gray-600">HD and Audio</p>
+          <p class="text-lg text-gray-600" style="font-family: mono-space">
+            HD and Audio
+          </p>
           <div
             class="bg-primary text-white font-bold px-4 py-2 inline-block mt-4 rounded"
           >
-            As low as KSH 2,300
+            As low as Ksh 4,300
           </div>
         </div>
         <Carousel
@@ -38,16 +44,17 @@
           :showNavigators="false"
           circular
           autoplayInterval="3000"
-          class="rounded-lg shadow-lg"
+          class="rounded-lg shadow-lg w-full"
         >
           <template #item="slotProps">
             <img
               :src="slotProps.data.src"
               :alt="slotProps.data.alt"
-              class="rounded-lg w-full h-full object-cover"
+              class="rounded-lg object-cover w-full h-32 sm:h-40 md:h-80 xl:h-80"
             />
           </template>
         </Carousel>
+
         <button
           class="bg-black text-white px-6 py-2 mt-6 rounded-lg absolute bottom-6 right-6"
         >
@@ -57,21 +64,17 @@
     </div>
 
     <!-- Right Sidebar -->
-    <div class="w-1/5 space-y-4">
+    <div class="w-1/5 space-y-4 hidden lg:block h-32 lg:h-80 xl:h-80">
       <div class="bg-white shadow p-4 rounded-lg">
         <h4 class="text-primary font-bold">HELP CENTER</h4>
         <p class="text-gray-600 text-sm">Guide to Customer Care</p>
-        <!-- </div>
-            <div class="bg-white shadow p-4 rounded-lg"> -->
-        <h4 class="text-primary font-bold">HOT DEALS</h4>
-        <p class="text-gray-600 text-sm">Updated Daily</p>
 
         <h4 class="text-primary font-bold">HOT DEALS</h4>
         <p class="text-gray-600 text-sm">Updated Daily</p>
       </div>
       <div class="bg-primary text-white text-center p-6 rounded-lg">
         <p class="font-bold text-lg">CALL OR WHATSAPP</p>
-        <p class="text-2xl font-bold">0712 345 678</p>
+        <p class="text-2xl font-bold">+254 727 909 060</p>
         <p class="text-sm">TO ORDER</p>
       </div>
     </div>
@@ -105,6 +108,21 @@ const images = ref([
     alt: "Surveillance Camera 3",
   },
 ]);
+
+const iconMap = {
+  "HD ANALOGUE CAMERAS AND DVR": "pi pi-video",
+  "IP NETWORK CAMERAS AND NVR": "pi pi-wifi",
+  "ACCESS CONTROL PRODUCTS": "pi pi-lock",
+  "VIDEO INTERCOM PRODUCTS": "pi pi-phone",
+  "NETWORK AND CABLES PRODUCTS": "pi pi-sitemap",
+  "MONITOR DISPLAY PRODUCTS": "pi pi-desktop",
+  "ACCESSORIES PRODUCTS": "pi pi-cog",
+  Phones: "pi pi-mobile",
+};
+
+const getIcon = name => {
+  return iconMap[name] || "pi pi-question"; // Default icon if no match
+};
 
 // }
 </script>

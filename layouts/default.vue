@@ -32,7 +32,7 @@ export default {
       refresh.value = !refresh.value; // Toggle the refresh value
     };
 
-    return { searchTerm, handleSearchUpdate, handleRefresh };
+    return { searchTerm, handleSearchUpdate, handleRefresh, refresh };
   },
 };
 </script>
