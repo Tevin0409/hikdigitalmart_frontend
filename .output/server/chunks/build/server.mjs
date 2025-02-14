@@ -605,7 +605,7 @@ const _routes = [
   {
     name: "auth",
     path: "/auth",
-    component: () => import('./index-pZB8iihM.mjs')
+    component: () => import('./index-CiQykfNQ.mjs')
   },
   {
     name: "cart",

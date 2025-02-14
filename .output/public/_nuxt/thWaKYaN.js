@@ -1,1 +1,0 @@
-import{aK as o,G as t,aL as r}from"./Fo99IELK.js";const n=o((a,s)=>{console.log("Auth middleware executed");const e=t();if(console.log("Auth middleware",e.isLoggedIn),!e.isLoggedIn)return console.log("User not logged in, redirecting to /auth"),r("/auth")});export{n as default};
