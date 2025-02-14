@@ -1,12 +1,26 @@
 <template>
   <div class="container mx-auto my-10 pa-10">
-    <!-- <TopCard :categories="categories" /> -->
-    <!-- <section class="flash-sales mt-12 mx-4 ">
-      <Carousel :value="categories" :numVisible="4" :numScroll="5" :responsiveOptions="responsiveOptions">
+    <TopCard :categories="categories" />
+
+    <section class="flash-sales mt-12 mx-4">
+      <h2 class="text-xl font-bold">Browse By Category</h2>
+      <Carousel
+        :value="categories"
+        :numVisible="4"
+        :numScroll="5"
+        :responsiveOptions="responsiveOptions"
+      >
         <template #item="slotProps">
-          <div class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white">
+          <div
+            class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white"
+          >
             <div class="p-4">
-              <div class="mb-4 font-medium">{{ slotProps.data.name }}</div>
+              <div
+                class="mb-4 text-xs font-medium text-center flex items-center"
+              >
+                <i :class="getIcon(slotProps.data.name)"></i>
+                {{ slotProps.data.name }}
+              </div>
               <div class="flex justify-between items-center">
                 <div class="mt-0 font-semibold text-xl">
                   {{ slotProps.data.price }}
@@ -15,62 +29,10 @@
             </div>
           </div>
         </template>
-</Carousel>
-</section> -->
+      </Carousel>
+    </section>
     <!-- </div> -->
     <!-- Categories -->
-
-    <!-- <section class="flash-sales mt-12 mx-4">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">Browse By Category</h2>
-        <div class="flex space-x-2">
-          <button class="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-arrow-left"
-            >
-              <path d="m12 19-7-7 7-7" />
-              <path d="M19 12H5" />
-            </svg>
-          </button>
-          <button class="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-arrow-right"
-            >
-              <path d="M5 12h14" />
-              <path d="m12 5 7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div
-        class="grid gap-8 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
-      >
-        <CategoryCard
-          v-for="(i, index) in categories"
-          :item="i"
-          :key="index"
-          @click="getItems(i)"
-        />
-      </div>
-    </section> -->
     <section>
       <div class="p-4 rounded-md">
         <div class="flex justify-between items-center mb-4 px-2">
@@ -92,7 +54,7 @@
           >
             <div class="relative">
               <img
-                :src="product.image"
+                :src="product.images[0]?.optimizeUrl"
                 :alt="product.name"
                 class="w-full h-36 object-cover rounded-md"
               />
@@ -295,6 +257,19 @@ export default {
         };
       }
     };
+    const iconMap = {
+      "HD ANALOGUE CAMERAS AND DVR": "pi pi-video",
+      "IP NETWORK CAMERAS AND NVR": "pi pi-wifi",
+      "ACCESS CONTROL PRODUCTS": "pi pi-lock",
+      "VIDEO INTERCOM PRODUCTS": "pi pi-phone",
+      "NETWORK AND CABLES PRODUCTS": "pi pi-sitemap",
+      "MONITOR DISPLAY PRODUCTS": "pi pi-desktop",
+      "ACCESSORIES PRODUCTS": "pi pi-cog",
+      Phones: "pi pi-mobile",
+    };
+    const getIcon = name => {
+      return iconMap[name] || "pi pi-question"; // Default icon if no match
+    };
     const images = ref([]);
     const categories = ref([]);
     const { $axios } = useNuxtApp();
@@ -430,6 +405,7 @@ export default {
       formatPrice,
       randomizedProducts,
       goToProductPage,
+      getIcon,
     };
   },
 };

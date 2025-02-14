@@ -3,7 +3,7 @@
     class="border-r border-gray-200 rounded-lg p-4 text-center bg-white shadow-md relative group"
   >
     <img
-      :src="item.image"
+      :src="item.images[0]?.optimizeUrl"
       class="h-32 mx-auto mb-2 transition-transform group-hover:scale-105"
       alt="Product Image"
     />
