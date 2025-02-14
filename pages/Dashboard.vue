@@ -1,7 +1,9 @@
 <template>
   <div class="container mx-auto my-10 pa-10">
     <TopCard :categories="categories" />
+
     <section class="flash-sales mt-12 mx-4">
+      <h2 class="text-xl font-bold">Browse By Category</h2>
       <Carousel
         :value="categories"
         :numVisible="4"
@@ -13,7 +15,12 @@
             class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white"
           >
             <div class="p-4">
-              <div class="mb-4 font-medium">{{ slotProps.data.name }}</div>
+              <div
+                class="mb-4 text-xs font-medium text-center flex items-center"
+              >
+                <i :class="getIcon(slotProps.data.name)"></i>
+                {{ slotProps.data.name }}
+              </div>
               <div class="flex justify-between items-center">
                 <div class="mt-0 font-semibold text-xl">
                   {{ slotProps.data.price }}
@@ -26,7 +33,6 @@
     </section>
     <!-- </div> -->
     <!-- Categories -->
-    <h2 class="text-xl font-bold">Browse By Category</h2>
     <section>
       <div class="p-4 rounded-md">
         <div class="flex justify-between items-center mb-4 px-2">
@@ -251,6 +257,19 @@ export default {
         };
       }
     };
+    const iconMap = {
+      "HD ANALOGUE CAMERAS AND DVR": "pi pi-video",
+      "IP NETWORK CAMERAS AND NVR": "pi pi-wifi",
+      "ACCESS CONTROL PRODUCTS": "pi pi-lock",
+      "VIDEO INTERCOM PRODUCTS": "pi pi-phone",
+      "NETWORK AND CABLES PRODUCTS": "pi pi-sitemap",
+      "MONITOR DISPLAY PRODUCTS": "pi pi-desktop",
+      "ACCESSORIES PRODUCTS": "pi pi-cog",
+      Phones: "pi pi-mobile",
+    };
+    const getIcon = name => {
+      return iconMap[name] || "pi pi-question"; // Default icon if no match
+    };
     const images = ref([]);
     const categories = ref([]);
     const { $axios } = useNuxtApp();
@@ -386,6 +405,7 @@ export default {
       formatPrice,
       randomizedProducts,
       goToProductPage,
+      getIcon,
     };
   },
 };

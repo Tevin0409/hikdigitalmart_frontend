@@ -8,6 +8,9 @@
         <li
           class="flex items-center gap-2 pt-3 hover:text-primary cursor-pointer font-regular"
           v-for="item in categories"
+          :key="item.name"
+          @mouseover="hoveredCategory = item.name"
+          @mouseleave="hoveredCategory = ''"
         >
           <i :class="getIcon(item.name)"></i>
           <span class="text-xs truncate">{{ item.name }}</span>
@@ -19,14 +22,22 @@
     <div
       class="flex-1 bg-white shadow rounded-lg relative w-full h-32 sm:h-40 md:h-80 xl:h-80"
     >
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-6 relative">
+        <!-- Overlay -->
+        <div
+          v-if="hoveredCategory"
+          class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-2xl font-bold transition-opacity duration-300 rounded w-full h-32 sm:h-40 md:h-80 xl:h-80"
+        >
+          {{ hoveredCategory }}
+        </div>
+
         <!-- Text Section -->
         <div class="relative p-4">
-          <h2 class="text-2xl font-bold" style="font-family: san-serrif">
+          <h2 class="text-2xl font-bold" style="font-family: sans-serif">
             Break from <br />
             reality
           </h2>
-          <p class="text-lg text-gray-600" style="font-family: mono-space">
+          <p class="text-lg text-gray-600" style="font-family: monospace">
             HD and Audio
           </p>
           <div
@@ -35,7 +46,10 @@
             As low as Ksh 4,300
           </div>
         </div>
+
+        <!-- Carousel -->
         <Carousel
+          v-if="!hoveredCategory"
           :verticalViewPortHeight="200"
           :value="images"
           :numVisible="1"
@@ -119,6 +133,8 @@ const iconMap = {
   "ACCESSORIES PRODUCTS": "pi pi-cog",
   Phones: "pi pi-mobile",
 };
+
+const hoveredCategory = ref(""); // Stores the category name on hover
 
 const getIcon = name => {
   return iconMap[name] || "pi pi-question"; // Default icon if no match
