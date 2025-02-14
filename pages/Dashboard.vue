@@ -54,7 +54,7 @@
           >
             <div class="relative">
               <img
-                :src="product.image"
+                :src="product.images[0]?.optimizeUrl"
                 :alt="product.name"
                 class="w-full h-36 object-cover rounded-md"
               />
