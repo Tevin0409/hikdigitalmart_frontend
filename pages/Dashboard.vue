@@ -12,14 +12,17 @@
       >
         <template #item="slotProps">
           <div
-            class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white"
+            @click="getCategoryProducts(slotProps.data)"
+            class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white cursor-pointer"
           >
             <div class="p-4">
               <div
                 class="mb-4 text-xs font-medium text-center flex items-center"
               >
                 <i :class="getIcon(slotProps.data.name)"></i>
-                {{ slotProps.data.name }}
+                <span class="pl-2">
+                  {{ slotProps.data.name }}
+                </span>
               </div>
               <div class="flex justify-between items-center">
                 <div class="mt-0 font-semibold text-xl">
@@ -206,6 +209,7 @@ export default {
     });
     // const emit = defineEmits(["refresh"]);
     const filter = ref(false);
+    const categoryId = ref(null);
     const value = ref([20, 80]);
     const fetching = ref(false);
     const fetchingMore = ref(false);
@@ -299,7 +303,11 @@ export default {
         minimumFractionDigits: 0,
       }).format(value);
     };
-
+    const getCategoryProducts = item => {
+      console.log("findCategoryProductsw", item);
+      categoryId.value = item.id;
+      getProduct();
+    };
     // Example usage:
 
     const goToSlide = index => {
@@ -318,6 +326,11 @@ export default {
         const params = {};
         if (props.searchTerm) {
           params.searchTerm = props.searchTerm;
+        }
+        if (categoryId.value) {
+          console.log("emmee", categoryId.value);
+
+          params.categoryId = categoryId.value;
         }
 
         const response = await $axios.get("/product/product-models", {
@@ -406,6 +419,7 @@ export default {
       randomizedProducts,
       goToProductPage,
       getIcon,
+      getCategoryProducts,
     };
   },
 };

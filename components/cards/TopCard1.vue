@@ -2,7 +2,7 @@
   <div class="flex gap-6 p-4">
     <!-- Sidebar -->
     <div
-      class="w-1/5 bg-white shadow p-4 rounded-lg relative h-32 sm:h-40 md:h-80 xl:h-80"
+      class="w-1/5 bg-white shadow p-4 rounded-lg relative h-32 sm:h-40 md:h-80 xl:h-80 hidden lg:block"
     >
       <ul class="space-y-2">
         <li
@@ -32,20 +32,6 @@
         </div>
 
         <!-- Text Section -->
-        <div class="relative p-4">
-          <h2 class="text-2xl font-bold" style="font-family: sans-serif">
-            Break from <br />
-            reality
-          </h2>
-          <p class="text-lg text-gray-600" style="font-family: monospace">
-            HD and Audio
-          </p>
-          <div
-            class="bg-primary text-white font-bold px-4 py-2 inline-block mt-4 rounded"
-          >
-            As low as Ksh 4,300
-          </div>
-        </div>
 
         <!-- Carousel -->
         <Carousel
@@ -69,11 +55,20 @@
           </template>
         </Carousel>
 
-        <button
-          class="bg-black text-white px-6 py-2 mt-6 rounded-lg absolute bottom-6 right-6"
+        <div
+          class="bg-black opacit text-white px-6 py-2 mt-6 rounded-lg absolute bottom-6 right-6"
         >
-          Shop Now
-        </button>
+          <h2 class="text-sm font-bold" style="font-family: sans-serif">
+            Break from <br />
+            reality
+          </h2>
+          <p class="text-xs text-gray-600" style="font-family: monospace">
+            HD and Audio
+          </p>
+          <button class="bg-primary text-white px-6 py-2 mt-6 rounded-lg">
+            Shop Now
+          </button>
+        </div>
       </div>
     </div>
 
