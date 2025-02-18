@@ -1,0 +1,12 @@
+# Environment Mode (e.g., development, production)
+NUXT_ENVIRONMENT=development
+NUXT_PORT=8000
+
+# Base URL for your API (use this if you need to connect to an external API)
+API_URL=http://localhost:4500/api/
+
+# Store Information
+SHOP_NAME=HK Vision
+SHOP_CURRENCY=KES
+SHOP_COUNTRY=KE
+

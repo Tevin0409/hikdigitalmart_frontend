@@ -5,56 +5,32 @@
       <p class="text-gray-500 text-2xl mb-10 text-center">
         Enter your details below to sign up
       </p>
-      <form
-        v-if="!otpSent"
-        @submit.prevent="register"
-        class="w-full flex flex-col items-center"
-      >
+      <form v-if="!otpSent" @submit.prevent="register" class="w-full flex flex-col items-center">
         <div class="flex space-x-4 mb-4">
           <FloatLabel variant="on" class="w-full">
-            <InputText
-              type="text"
-              id="firstName"
-              v-model="form.firstName"
-              class="w-full"
-            />
+            <InputText type="text" id="firstName" v-model="form.firstName" class="w-full" />
             <label for="firstName">First Name</label>
           </FloatLabel>
           <FloatLabel variant="on" class="w-full">
-            <InputText
-              type="text"
-              id="lastName"
-              v-model="form.lastName"
-              class="w-full"
-            />
+            <InputText type="text" id="lastName" v-model="form.lastName" class="w-full" />
             <label for="lastName">Last Name</label>
           </FloatLabel>
         </div>
 
         <div class="flex flex-col space-y-4 mb-4 w-full">
           <FloatLabel variant="on" class="w-full">
-            <InputText
-              type="email"
-              id="email"
-              v-model="form.email"
-              class="w-full"
-            />
+            <InputText type="email" id="email" v-model="form.email" class="w-full" />
             <label for="email">Email</label>
           </FloatLabel>
 
           <FloatLabel variant="on" class="w-full">
-            <InputText
-              type="number"
-              id="phoneNumber"
-              v-model="form.phoneNumber"
-              class="w-full"
-            />
+            <InputText type="number" id="phoneNumber" v-model="form.phoneNumber" class="w-full" />
             <label for="phoneNumber">Mobile Phone</label>
           </FloatLabel>
 
           <!-- Password Fields with Full Width Fix -->
           <div class="flex">
-            <FloatLabel variant="on" class="w-full custom-password">
+            <!-- <FloatLabel variant="on" class="w-full custom-password">
               <Password
                 id="password"
                 v-model="form.password"
@@ -62,7 +38,8 @@
                 class=""
               />
               <label for="password">Password</label>
-            </FloatLabel>
+            </FloatLabel> -->
+            <InputText name="email" v-model="form.password" type="password" class="w-full" placeholder="password" />
 
             <!-- <FloatLabel variant="on" class="w-full">
                <Password id="cpassword" v-model="form.cpassword" toggleMask class="w-full" />
@@ -70,46 +47,27 @@
              </FloatLabel> -->
           </div>
 
-          <Select
-            v-model="form.role"
-            :options="roles"
-            optionLabel="name"
-            @change="handleRole"
-            placeholder="Select a Role"
-            class="w-full custom-dropdown"
-          />
+          <Select v-model="form.role" :options="roles" optionLabel="name" @change="handleRole"
+            placeholder="Select a Role" class="w-full custom-dropdown" />
         </div>
 
-        <button
-          type="submit"
-          class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-12"
-        >
+        <button type="submit" class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-12">
           Sign Up
         </button>
       </form>
 
       <!-- OTP Input Section -->
-      <div v-else>
+      <div v-else class="flex flex-col items-center text-center">
         <h3 class="text-3xl font-medium mb-4">Verify OTP</h3>
         <p class="text-gray-500 mb-6">
           Enter the OTP sent to your email address.
-          <span class="font-weight-bold" style="font-weight: bold"
-            >{{ form.email }}
-          </span>
+          <span class="font-weight-bold font-bold">{{ form.email }}</span>
         </p>
-        <div class="w-full mb-4">
-          <InputOtp
-            :length="6"
-            mask="*"
-            v-model="otp"
-            class="p-inputtex w-full text-center p-3"
-            placeholder="Enter OTP"
-          />
+        <div class="w-full flex justify-center mb-4">
+          <InputOtp :length="6" mask="*" v-model="otp" class="p-inputtex text-center p-3 w-3/4 md:w-1/2 lg:w-1/3"
+            placeholder="Enter OTP" />
         </div>
-        <button
-          @click="verifyOtp"
-          class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600"
-        >
+        <button @click="verifyOtp" class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600">
           Verify OTP
         </button>
       </div>
@@ -248,8 +206,7 @@ export default {
 </script>
 
 <style scoped>
-.image_cont {
-}
+.image_cont {}
 
 .custom-dropdown .p-dropdown {
   border: none;

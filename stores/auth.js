@@ -157,6 +157,25 @@ export const useUserStore = defineStore("user", {
         throw new Error(error.response?.data?.error?.message || "Invalid OTP.");
       }
     },
+    async updateUser(user, id){
+      try {
+        const { $axios } = useNuxtApp();
+        
+        const response = await $axios.put(`user/update-user/${id}`, user);
+        return response;
+      }catch (error) {
+        throw new Error(error.response?.data?.error?.message);
+      }  
+    },
+   async updatePassword(password){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post(`auth/change-password`, password);
+        return response;
+      }catch (error) {
+        throw new Error(error.response?.data?.error?.message);
+      }  
+    },
   async resetPassword(resetPassDTO) {
   try {
     const { $axios } = useNuxtApp();

@@ -1,17 +1,11 @@
 <template>
   <div class="flex gap-6 p-4">
     <!-- Sidebar -->
-    <div
-      class="w-1/5 bg-white shadow p-4 rounded-lg relative h-32 sm:h-40 md:h-80 xl:h-80 hidden lg:block"
-    >
+    <div class="w-1/5 bg-white shadow p-4 rounded-lg relative h-32 sm:h-40 md:h-80 xl:h-80 hidden lg:block">
       <ul class="space-y-2">
-        <li
-          class="flex items-center gap-2 pt-3 hover:text-primary cursor-pointer font-regular"
-          v-for="item in categories"
-          :key="item.name"
-          @mouseover="hoveredCategory = item.name"
-          @mouseleave="hoveredCategory = ''"
-        >
+        <li class="flex items-center gap-2 pt-3 hover:text-primary cursor-pointer font-regular"
+          v-for="item in categories" :key="item.name" @mouseover="hoveredCategory = item.name"
+          @mouseleave="hoveredCategory = ''">
           <i :class="getIcon(item.name)"></i>
           <span class="text-xs truncate">{{ item.name }}</span>
         </li>
@@ -19,56 +13,41 @@
     </div>
 
     <!-- Main Content -->
-    <div
-      class="flex-1 bg-white shadow rounded-lg relative w-full h-32 sm:h-40 md:h-80 xl:h-80"
-    >
+    <div class="flex-1 bg-white shadow rounded-lg relative w-full h-32 sm:h-40 md:h-80 xl:h-80">
       <div class="flex items-center gap-6 relative">
         <!-- Overlay -->
-        <div
-          v-if="hoveredCategory"
-          class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-2xl font-bold transition-opacity duration-300 rounded w-full h-32 sm:h-40 md:h-80 xl:h-80"
-        >
+        <div v-if="hoveredCategory"
+          class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-2xl font-bold transition-opacity duration-300 rounded w-full h-32 sm:h-40 md:h-80 xl:h-80">
           {{ hoveredCategory }}
         </div>
 
         <!-- Text Section -->
 
         <!-- Carousel -->
-        <Carousel
-          v-if="!hoveredCategory"
-          :verticalViewPortHeight="200"
-          :value="images"
-          :numVisible="1"
-          :numScroll="1"
-          :showIndicators="false"
-          :showNavigators="false"
-          circular
-          autoplayInterval="3000"
-          class="rounded-lg shadow-lg w-full"
-        >
+        <Carousel v-if="!hoveredCategory" :verticalViewPortHeight="200" :value="images" :numVisible="1" :numScroll="1"
+          :showIndicators="false" :showNavigators="false" circular autoplayInterval="3000"
+          class="rounded-lg shadow-lg w-full">
           <template #item="slotProps">
-            <img
-              :src="slotProps.data.src"
-              :alt="slotProps.data.alt"
-              class="rounded-lg object-cover w-full h-32 sm:h-40 md:h-80 xl:h-80"
-            />
+            <img :src="slotProps.data.src" :alt="slotProps.data.alt"
+              class="rounded-lg object-cover w-full h-32 sm:h-40 md:h-80 xl:h-80" />
           </template>
         </Carousel>
 
         <div
-          class="bg-black opacit text-white px-6 py-2 mt-6 rounded-lg absolute bottom-6 right-6"
-        >
-          <h2 class="text-sm font-bold" style="font-family: sans-serif">
+          class="bg-black text-white px-4 py-2 sm:px-6 sm:py-3 md:px-6 md:py-4 rounded-lg absolute bottom-2 sm:bottom-4 md:bottom-6 right-2 sm:right-4 md:right-6 w-auto max-w-[70%] sm:max-w-[60%] md:max-w-[50%]">
+          <h2 class="text-xs sm:text-sm md:text-base font-bold" style="font-family: sans-serif">
             Break from <br />
             reality
           </h2>
-          <p class="text-xs text-gray-600" style="font-family: monospace">
+          <p class="text-[10px] sm:text-xs md:text-sm text-gray-400" style="font-family: monospace">
             HD and Audio
           </p>
-          <button class="bg-primary text-white px-6 py-2 mt-6 rounded-lg">
+          <button
+            class="bg-primary text-white text-xs sm:text-sm md:text-base px-4 sm:px-6 py-1 sm:py-2 mt-3 sm:mt-4 rounded-lg">
             Shop Now
           </button>
         </div>
+
       </div>
     </div>
 

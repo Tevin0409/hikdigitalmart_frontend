@@ -9,12 +9,7 @@
       <form @submit.prevent="login" class="w-full flex flex-col items-center">
         <div class="flex flex-col gap-4 w-full">
           <FloatLabel variant="on">
-            <InputText
-              type="email"
-              id="email"
-              v-model="form.email"
-              class="w-full"
-            />
+            <InputText type="email" id="email" v-model="form.email" class="w-full" />
             <label for="email">Email</label>
           </FloatLabel>
 
@@ -27,18 +22,12 @@
 
         <!-- Forgot Password -->
         <div class="mt-4 flex justify-end w-full">
-          <p
-            class="text-blue-500 text-sm cursor-pointer"
-            @click="forgotPassword = true"
-          >
+          <p class="text-blue-500 text-sm cursor-pointer" @click="forgotPassword = true">
             Forgot password?
           </p>
         </div>
 
-        <button
-          type="submit"
-          class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-4"
-        >
+        <button type="submit" class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-4">
           Log In
         </button>
       </form>
@@ -61,26 +50,15 @@
       </p>
 
       <FloatLabel variant="on">
-        <InputText
-          type="email"
-          id="resetEmail"
-          v-model="resetEmail"
-          class="w-full"
-        />
+        <InputText type="email" id="resetEmail" v-model="resetEmail" class="w-full" />
         <label for="resetEmail">Email</label>
       </FloatLabel>
 
-      <button
-        @click="sendResetEmail"
-        class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-4"
-      >
+      <button @click="sendResetEmail" class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-4">
         Send Reset Link
       </button>
 
-      <p
-        class="text-sm mt-4 text-center cursor-pointer text-blue-500"
-        @click="forgotPassword = false"
-      >
+      <p class="text-sm mt-4 text-center cursor-pointer text-blue-500" @click="forgotPassword = false">
         Back to login
       </p>
     </div>
@@ -94,20 +72,10 @@
           <span class="font-bold">{{ form.email }}</span>
         </p>
         <div class="w-full mb-4 flex justify-center items-center">
-          <InputOtp
-            :length="6"
-            mask="*"
-            v-model="otp"
-            size="large"
-            class="text-center p-3"
-            placeholder="Enter OTP"
-          />
+          <InputOtp :length="6" mask="*" v-model="otp" size="large" class="text-center p-3" placeholder="Enter OTP" />
         </div>
 
-        <button
-          @click="verifyOtp"
-          class="w-full text-white py-3 rounded bg-red-600"
-        >
+        <button @click="verifyOtp" class="w-full text-white py-3 rounded bg-red-600">
           Verify OTP
         </button>
       </div>
@@ -116,22 +84,12 @@
         <p class="text-gray-500 mb-6">Enter a new password for your account.</p>
 
         <FloatLabel variant="on">
-          <Password
-            v-model="form.newPassword"
-            id="resetPassword"
-            toggleMask
-            class="w-full"
-          />
+          <Password v-model="form.newPassword" id="resetPassword" toggleMask class="w-full" />
           <label for="resetPassword">New Password</label>
         </FloatLabel>
 
         <FloatLabel variant="on" class="mt-3">
-          <Password
-            v-model="form.confirmNewPassword"
-            id="confirmNewPassword"
-            toggleMask
-            class="w-full"
-          />
+          <Password v-model="form.confirmNewPassword" id="confirmNewPassword" toggleMask class="w-full" />
           <label for="confirmNewPassword">Confirm Password</label>
         </FloatLabel>
 
@@ -140,11 +98,8 @@
           Passwords do not match.
         </p>
 
-        <button
-          @click="handleResetPassword"
-          class="w-full text-white py-3 mt-4 rounded bg-red-600"
-          :disabled="passwordMismatch"
-        >
+        <button @click="handleResetPassword" class="w-full text-white py-3 mt-4 rounded bg-red-600"
+          :disabled="passwordMismatch">
           Reset Password
         </button>
       </div>
@@ -196,6 +151,9 @@ export default {
         };
         const response = await this.userStore.resetPassword(resetPassword);
         console.log(response, "reset");
+        this.isVerified = false
+        this.forgotPassword = false;
+
         // if (accessToken) {
         //   this.$router.push("/dashboard");
         // }
@@ -278,6 +236,7 @@ export default {
         });
         if (!this.resetPassword) {
           // this.$router.push("/change-password");
+          this.userStore.logout();
           this.resetPassword = true;
           return;
         }
@@ -298,6 +257,5 @@ export default {
 </script>
 
 <style scoped>
-.image_cont {
-}
+.image_cont {}
 </style>
