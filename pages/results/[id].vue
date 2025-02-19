@@ -13,9 +13,7 @@
         </div>
       </div>
       <div class="flex">
-        <!--  v-if="filter"  -->
-        <!-- Left Section -->
-        <FilterCard />
+        <FilterCard :features="features" />
         <!-- Right Section -->
         <div class="w-full">
           <div v-if="fetching && products.length < 1" class="text-center mt-6">
@@ -128,7 +126,7 @@ export default {
     // const emit = defineEmits(["refresh"]);
     const filter = ref(false);
     const categoryId = ref(null);
-    const features = ref(null);
+    const features = ref([]);
     const value = ref([20, 80]);
     const fetching = ref(false);
     const fetchingMore = ref(false);
@@ -277,14 +275,13 @@ export default {
 
       try {
         const { $axios } = useNuxtApp();
-        // Extract parameters from route query
         const catId = router.params.id; // ID from URL path
 
         // Build the request parameters dynamically
         const params = {};
 
         if (catId) {
-          params.categoryId = catId;
+          params.categoryId = "ed7555b7-780e-49c2-9d8d-0525fc89083b";
         }
 
         const response = await $axios.get("/product/features", {
@@ -295,8 +292,8 @@ export default {
           },
         });
         // fetching.value = false;
-        features.value = response.data.results;
-        console.log(features.value, "products");
+        features.value = response.data;
+        console.log(response.data, "features");
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
