@@ -1,100 +1,21 @@
 <template>
   <div class="container mx-auto my-10 pa-10">
-    <TopCard :categories="categories" />
-
-    <section class="flash-sales mt-12 mx-4">
-      <h2 class="text-xl font-bold">Browse By Category</h2>
-      <Carousel
-        :value="categories"
-        :numVisible="4"
-        :numScroll="5"
-        :responsiveOptions="responsiveOptions"
-      >
-        <template #item="slotProps">
-          <div
-            @click="getCategoryProducts(slotProps.data)"
-            class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white cursor-pointer"
-          >
-            <div class="p-4">
-              <div
-                class="mb-4 text-xs font-medium text-center flex items-center"
-              >
-                <i :class="getIcon(slotProps.data.name)"></i>
-                <span class="pl-2">
-                  {{ slotProps.data.name }}
-                </span>
-              </div>
-              <div class="flex justify-between items-center">
-                <div class="mt-0 font-semibold text-xl">
-                  {{ slotProps.data.price }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-      </Carousel>
-    </section>
-    <!-- </div> -->
-    <!-- Categories -->
-    <section>
-      <div class="p-4 rounded-md">
-        <div class="flex justify-between items-center mb-4 px-2">
-          <h2 class="text-lg font-semibold">Top selling items</h2>
-          <!-- <NuxtLink
-            to="/top-selling"
-            class="text-orange-200 hover:text-orange-400 text-sm font-semibold"
-          >
-            See All &rarr;
-          </NuxtLink> -->
-        </div>
-
-        <div class="flex overflow-x-auto gap-4 p-2">
-          <div
-            v-for="(product, index) in randomizedProducts"
-            :key="index"
-            class="min-w-[200px] md:min-w-[220px] bg-white rounded-md shadow-md cursor-pointer p-2"
-            @click="goToProductPage(product)"
-          >
-            <div class="relative">
-              <img
-                :src="product.images[0]?.optimizeUrl"
-                :alt="product.name"
-                class="w-full h-36 object-cover rounded-md"
-              />
-              <!-- <span
-                class="absolute top-2 right-2 bg-orange-400 text-white text-xs px-2 py-1 rounded-md"
-              >
-                -{{ product.discount }}%
-              </span> -->
-            </div>
-            {{ product.product.name }}
-            <h3 class="text-sm font-medium mt-2 truncate">
-              {{ product.name }}
-            </h3>
-            <p class="text-lg font-semibold text-gray-900">
-              {{ formatPrice(product.price) }}
-            </p>
-            <p class="text-gray-500 text-xs line-through">
-              {{ product.oldPrice }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section
       class="flash-sales mt-5 mx-2 full-screen"
       style="min-height: 900px"
     >
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold">Explore Our Products</h2>
+        <h2 class="text-xl font-regular">
+          Search results for <span class="font-bold"> {{ searchTer }}</span>
+        </h2>
         <div class="flex space-x-2">
-          <button class="bg-red-500 text-white px-4 py-2">View All</button>
+          <!-- <button class="bg-red-500 text-white px-4 py-2">View All</button> -->
         </div>
       </div>
       <div class="flex">
+        <!--  v-if="filter"  -->
         <!-- Left Section -->
-        <FilterCard v-if="filter" />
+        <FilterCard />
         <!-- Right Section -->
         <div class="w-full">
           <div v-if="fetching && products.length < 1" class="text-center mt-6">
@@ -162,7 +83,7 @@ import ProductCard from "~/components/cards/ProductCard.vue";
 import TopCard from "~/components/cards/TopCard1.vue";
 import Footer from "~/components/shared/utils/Footer.vue";
 import FilterCard from "~/components/cards/FilterCard.vue";
-import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 
 export default {
   name: "Dashboard",
@@ -185,6 +106,7 @@ export default {
     watch(
       () => props.searchTerm,
       (newVal, oldVal) => {
+        // console.log(newVal, "cajc")
         filter.value = true;
         getProduct(newVal);
       }
@@ -193,13 +115,9 @@ export default {
       getProduct();
       updateTime();
       await fetchCat();
-
-      //   import { ProductService } from '@/service/ProductService';
-
-      // ProductService.getProductsSmall().then((data) => (products.value = data.slice(0, 9)));
       //  timer.value = setInterval(updateTime(), 1000);
     });
-    const router = useRouter();
+    const router = useRoute();
     const currentPage = ref(1);
     const totalPages = ref(1); // Track total pages
     const randomizedProducts = computed(() => {
@@ -210,9 +128,12 @@ export default {
     // const emit = defineEmits(["refresh"]);
     const filter = ref(false);
     const categoryId = ref(null);
+    const features = ref(null);
     const value = ref([20, 80]);
     const fetching = ref(false);
     const fetchingMore = ref(false);
+    const category = router.params.id;
+    const searchTer = router.query.searchTerm;
     // const { $formatPrice } = useNuxtApp();
 
     const timeLeft = ref({
@@ -304,7 +225,6 @@ export default {
       }).format(value);
     };
     const getCategoryProducts = item => {
-      console.log("findCategoryProductsw", item);
       categoryId.value = [item.id];
       getProduct();
     };
@@ -316,16 +236,21 @@ export default {
     const getProduct = async () => {
       fetching.value = true;
       fetchingMore.value = true;
+
       try {
         const { $axios } = useNuxtApp();
 
+        // Extract parameters from route query
+        const productId = router.params.id; // ID from URL path
+        const searchTerm = router.query.searchTerm || ""; // Default to empty if not provided
+
         // Build the request parameters dynamically
         const params = {};
-        if (props.searchTerm) {
-          params.searchTerm = props.searchTerm;
+        if (searchTerm) {
+          params.searchTerm = searchTerm.slice(0, 5);
         }
-        if (categoryId.value) {
-          params.categoryIds = categoryId.value;
+        if (productId) {
+          params.categoryId = [productId];
         }
 
         const response = await $axios.get("/product/product-models", {
@@ -335,14 +260,48 @@ export default {
             limit: 10,
           },
         });
-
         fetching.value = false;
-        fetchingMore.value = false;
-        products.value = [...products.value, ...response.data.results];
+        products.value = response.data.results;
+        await getFeatures();
+        console.log(products.value, "products");
       } catch (error) {
         console.error("Error fetching products:", error);
+      } finally {
         fetching.value = false;
         fetchingMore.value = false;
+      }
+    };
+    const getFeatures = async () => {
+      // fetching.value = true;
+      // fetchingMore.value = true;
+
+      try {
+        const { $axios } = useNuxtApp();
+        // Extract parameters from route query
+        const catId = router.params.id; // ID from URL path
+
+        // Build the request parameters dynamically
+        const params = {};
+
+        if (catId) {
+          params.categoryId = catId;
+        }
+
+        const response = await $axios.get("/product/features", {
+          params: {
+            ...params,
+            // page: currentPage.value,
+            // limit: 10,
+          },
+        });
+        // fetching.value = false;
+        features.value = response.data.results;
+        console.log(features.value, "products");
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        // fetching.value = false;
+        // fetchingMore.value = false;
       }
     };
 
@@ -415,6 +374,11 @@ export default {
       goToProductPage,
       getIcon,
       getCategoryProducts,
+      getProduct,
+      getFeatures,
+      features,
+      category,
+      searchTer,
     };
   },
 };

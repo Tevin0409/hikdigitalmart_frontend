@@ -11,6 +11,13 @@
             class="h-16 object-contain"
           />
         </NuxtLink>
+        <NuxtLink to="/dashboard">
+          <img
+            src="@/assets/images/logoo.png"
+            alt="Hikvision Logo"
+            class="h-16 object-contain"
+          />
+        </NuxtLink>
 
         <!-- Search Input (Full Width in Between) -->
         <AutoComplete
@@ -80,6 +87,13 @@
         </div>
 
         <div class="w-full bg-red flex justify-center items-center py-4">
+          <Select
+            v-model="selectedCategory"
+            :options="categories"
+            optionLabel="name"
+            placeholder="Select Category"
+            class=""
+          />
           <div class="flex items-center space-x-2">
             <AutoComplete
               v-model="searchTerm"
@@ -203,11 +217,12 @@ const props = defineProps({
 //     }
 //   }
 // );
+
 const productStore = useProductStore();
 
 const userStore = useUserStore();
 const searchTerm = ref(""); // Stores the search term
-const selectedCategory = ref("");
+const selectedCategory = ref([]);
 const menuOpen = ref(false);
 const categories = ref([]);
 const cartCount = computed(() => productStore.cartCount);
@@ -242,15 +257,25 @@ const routeTo = () => {
   // const userStore = useUserStore();
 };
 const navigateToProduct = event => {
-  if (event && event.value && event.value.id) {
+  console.log("ree", selectedCategory.value);
+  console.log("ree", searchTerm.value);
+
+  // Check if selectedCategory is empty or does not have an ID
+  if (!selectedCategory.value || !selectedCategory.value.id) {
+    // If selectedCategory is empty, go to products
     router.push({
       path: `/products/${event.value.id}`,
     });
+  } else {
+    // If selectedCategory has an ID, go to results and pass only the ID & search term
+    router.push({
+      path: `/results/${selectedCategory.value.id}`,
+      query: {
+        // category: selectedCategory.value.id, // Pass only the category ID
+        searchTerm: searchTerm.value.name, // Pass only the search term (trimmed, default to empty string)
+      },
+    });
   }
-
-  //  router.push({
-  //   path: `/products/${product.id}`,
-  // });
 };
 
 const emit = defineEmits(["update:searchTerm"]);
@@ -293,29 +318,53 @@ const getCartItems = async () => {
 const searchItems = async event => {
   let query = event.query;
   filteredItems.value = [];
-
+  const { $axios } = useNuxtApp();
   if (!query) return;
 
   try {
-    const { $axios } = useNuxtApp();
-    const response = await $axios.get("/product", {
-      params: { searchTerm: query },
-    });
+    let response;
+
+    // Extract category IDs, but ignore "All"
+    const categoryIds = Array.isArray(selectedCategory?.value)
+      ? selectedCategory.value.filter(cat => cat.id !== null).map(cat => cat.id)
+      : selectedCategory?.value?.id && selectedCategory.value.id !== null
+      ? [selectedCategory.value.id]
+      : [];
 
     const defaultImage =
       "https://www.shutterstock.com/shutterstock/photos/2059817444/display_1500/stock-vector-no-image-available-photo-coming-soon-illustration-vector-2059817444.jpg";
-    filteredItems.value = response.data.results.flatMap(product =>
-      product.models.map(model => ({
-        id: model.id, // Now using the model's ID
-        name: `${product.name} - (${model.name})`,
-        images:
-          model.images.length > 0
-            ? model.images.map(img => img.autoCropUrl)
-            : [defaultImage],
-      }))
-    );
 
-    console.log(filteredItems.value);
+    if (categoryIds.length > 0) {
+      response = await $axios.get("/product", {
+        params: { searchTerm: query, categoryId: categoryIds },
+      });
+      console.log("response: ", response.data.results);
+      filteredItems.value = response.data.results.flatMap(product =>
+        product.models.map(model => ({
+          id: model.id,
+          name: `${product.name} - (${model.name})`,
+          images:
+            model.images.length > 0
+              ? model.images.map(img => img.autoCropUrl)
+              : [defaultImage],
+        }))
+      );
+    } else {
+      response = await $axios.get("/product/product-models", {
+        params: { searchTerm: query },
+      });
+      const products = response.data?.results ?? [];
+      filteredItems.value = products.map(product => ({
+        id: product.id,
+        name: product.product.name,
+        price: product.price,
+        category: product.product?.subCategory?.category?.name ?? "Unknown",
+        images:
+          product.images.length > 0
+            ? product.images.map(image => image.autoCropUrl)
+            : [defaultImage],
+      }));
+    }
   } catch (error) {
     console.error("Error fetching products:", error);
   }
