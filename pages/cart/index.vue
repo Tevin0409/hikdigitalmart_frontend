@@ -66,7 +66,7 @@
                     Seller: <span class="font-bold">Jumia</span>
                   </p> -->
                     <p class="text--500 text-sm">
-                      {{ item.productModel.features[0]?.description }}
+                      {{ item.productModel?.features[0]?.description }}
                     </p>
                     <!-- <img
                     src="https://upload.wikimedia.org/wikipedia/commons/9/99/Jumia_Express_Logo.png"

@@ -42,6 +42,7 @@
             <input
               type="text"
               id="company-name"
+              v-model="user.company_name"
               placeholder="Company Name"
               class="w-full p-2 border rounded"
             />
@@ -52,6 +53,7 @@
             >
             <input
               type="text"
+              v-model="user.street_address"
               id="street-address"
               placeholder="Street Address"
               required
@@ -64,6 +66,7 @@
             >
             <input
               type="text"
+              v-model="user.apartment"
               id="apartment"
               placeholder="Apartment, floor, etc."
               class="w-full p-2 border rounded"
@@ -76,6 +79,7 @@
             <input
               type="text"
               id="city"
+              v-model="user.town"
               placeholder="Town/City"
               required
               class="w-full p-2 border rounded"
@@ -115,7 +119,6 @@
         class="cart-summary bg-white p-6 rounded-lg w-full md:max-w-sm shadow"
       >
         <h3 class="text-lg font-semibold mb-4">Cart Summary</h3>
-
         <!-- Cart Items -->
         <div class="cart-items space-y-4">
           <div
@@ -123,18 +126,16 @@
             :key="item.id"
             class="cart-item flex flex-col sm:flex-row items-center gap-4 border-b pb-3"
           >
+            <!-- {{ item }} -->
             <img
-              :src="
-                item.productModel.images[0]?.optimizeUrl ||
-                'https://via.placeholder.com/80x80'
-              "
+              :src="item?.productModel?.images[0]?.optimizeUrl ?? defaultImage"
               class="w-16 h-16 object-cover rounded"
             />
             <div class="flex-1 text-center sm:text-left">
-              <p class="text-sm">{{ item.productModel.name }}</p>
+              <p class="text-sm">{{ item?.productModel?.name ?? item.name }}</p>
               <p class="text-gray-600 text-xs">
                 Ksh
-                {{ formattedPrice(item.productModel.price * item.quantity) }}
+                {{ formattedPrice(item.productModel?.price ?? item.price) }}
               </p>
             </div>
           </div>
@@ -161,7 +162,7 @@
               class="w-16 sm:w-1/4"
               alt="M-Pesa"
             />
-            <label class="text-sm font-medium">{{ user.phoneNumber }}</label>
+            <label class="text-sm font-medium">{{ user?.phoneNumber }}</label>
           </div>
 
           <!-- Place Order Button -->
@@ -175,7 +176,7 @@
         </div>
       </div>
     </div>
-    <Toast position="bottom-right" group="br" />
+    <Toast position="top-right" group="br" />
   </div>
 </template>
 
@@ -183,6 +184,7 @@
 import { ref, computed, onMounted } from "vue";
 import { useProductStore } from "@/stores/productStore";
 import { useUserStore } from "@/stores/auth";
+import defaultImage from "@/assets/images/logoo.png";
 
 export default {
   setup() {
@@ -194,11 +196,12 @@ export default {
     const cartItems = computed(() => productStore.cartItems);
     // const $formatPrice = useNuxtApp()
     // Pre-fill user details from the store
-    const user = computed(() => userStore.user);
+    const user = computed(() => userStore.user || {});
 
     const formattedPrice = price => {
       return $formatPrice(price);
     };
+    const requiredFields = ["firstName", "lastName", "email", "phoneNumber"];
 
     const getCartItems = async () => {
       try {
@@ -231,36 +234,143 @@ export default {
         alert("Invalid coupon code.");
       }
     };
-
+    const toast = useToast();
     const placeOrder = async () => {
-      loading.value = true;
-      console.log("cart", cartItems.value);
-      // const {products} = cartItems.value
-      const response = await productStore.placeOrder();
-      console.log(response.data.id);
-      // response.data.orderPrice
+      const userLoggedIn = userStore.isLoggedIn;
 
-      let order = {
-        orderId: response.data.id,
-        amount: 1,
-        phoneNumber: user.value.phoneNumber,
-      };
-      const mpesaResponse = await productStore.checkOut(order);
+      if (userLoggedIn) {
+        console.log(userLoggedIn);
+        // Check if user is not logged in or the user object is empty
+        if (!user.value || Object.keys(user.value).length === 0) {
+          toast.add({
+            severity: "warn",
+            summary: `Please log in to place an order.`,
+            group: "br",
+            life: 3000,
+          });
+          return;
+        }
 
-      console.log(mpesaResponse, "Mpesa");
+        // Validate required fields
+        for (const field of requiredFields) {
+          if (!user.value[field]) {
+            toast.add({
+              severity: "warn",
+              summary: `${field} is required.`,
+              group: "br",
+              life: 3000,
+            });
+            return;
+          }
+        }
 
-      loading.value = false;
+        try {
+          // console.log("Order placed successfully.");
 
-      toast.add({
-        severity: "success",
-        summary: "Your Order has been placed successfully, Thank you",
-        group: "br",
-        life: 3000,
-      });
+          loading.value = true;
+          // console.log("cart", cartItems.value);
+          // const {products} = cartItems.value
+          const response = await productStore.placeOrder();
+          // console.log(response.data.id);
+          // response.data.orderPrice
+
+          let order = {
+            orderId: response.data.id,
+            amount: 1,
+            phoneNumber: user.value.phoneNumber,
+          };
+          const mpesaResponse = await productStore.checkOut(order);
+
+          console.log(mpesaResponse, "Mpesa");
+
+          loading.value = false;
+
+          toast.add({
+            severity: "success",
+            summary: "Your Order has been placed successfully, Thank you",
+            group: "br",
+            life: 3000,
+          });
+        } catch (error) {
+          console.log("Error placing order:", error);
+          loading.value = false;
+          toast.add({
+            severity: "error",
+            summary: "Error placing order",
+            detail: error.message,
+            group: "br",
+            life: 3000,
+          });
+        }
+      } else {
+        // console.log(user.value, "user");
+        if (!user.value || Object.keys(user.value).length === 0) {
+          toast.add({
+            severity: "warn",
+            summary: `Please Enter your details to place an order.`,
+            group: "br",
+            life: 3000,
+          });
+          return;
+        }
+        // Validate required fields
+        for (const field of requiredFields) {
+          if (!user.value[field]) {
+            toast.add({
+              severity: "warn",
+              summary: `${field} is required to place an order.`,
+              group: "br",
+              life: 3000,
+            });
+            return;
+          }
+        }
+
+        try {
+          // console.log("Order placed successfully.");
+
+          loading.value = true;
+          // console.log("cart", cartItems.value);
+          // const {products} = cartItems.value
+          const response = await productStore.placeOrderAnonymous(user.value);
+          // console.log(response.data.id);
+          // response.data.orderPrice
+
+          let order = {
+            orderId: response.data.id,
+            amount: 1,
+            phoneNumber: user.value.phoneNumber,
+          };
+          const mpesaResponse = await productStore.checkOut(order);
+
+          console.log(mpesaResponse, "Mpesa");
+
+          loading.value = false;
+
+          toast.add({
+            severity: "success",
+            summary: "Your Order has been placed successfully, Thank you",
+            group: "br",
+            life: 3000,
+          });
+        } catch (error) {
+          console.log("Error placing order:", error);
+          loading.value = false;
+          toast.add({
+            severity: "error",
+            summary: "Error placing order",
+            detail: error.message,
+            group: "br",
+            life: 3000,
+          });
+        }
+      }
+
+      // Proceed with order placement
     };
 
     onMounted(() => {
-      getCartItems();
+      // getCartItems();
     });
 
     return {
@@ -272,6 +382,7 @@ export default {
       placeOrder,
       formattedPrice,
       loading,
+      defaultImage,
     };
   },
 };

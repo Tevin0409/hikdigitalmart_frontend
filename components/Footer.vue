@@ -10,18 +10,23 @@
             <h2 class="text-lg font-semibold">Secure Group</h2>
           </div>
           <p class="text-sm text-gray-500">Secure Store</p>
-          <p class="text-sm mt-2">Moi Ave, Nairobi, Kenya</p>
-          <p class="text-sm">39495 Kilima road, CBD</p>
+          <p class="text-sm mt-2">Ground Floor Suite 1 & 2, Vision</p>
+          <p class="text-sm">Plaza, Mombasa Road, Nairobi, Kenya</p>
 
           <!-- Contact Info -->
           <div class="mt-4 space-y-2">
-            <div class="flex items-center space-x-2">
-              <PrimeIcon name="map-marker" class="text-orange-500" />
-              <span class="text-sm">00100 Kimathi, Street</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <PrimeIcon name="phone" class="text-orange-500" />
-              <span class="text-sm">0711-800-654-3210</span>
+            <h4 class="font-bold">Contact us on</h4>
+            <div class="flex flex-col space-x-2">
+              <div>
+                <i class="pi pi-phone pr-4" aria-hidden="true"></i>
+                <span class="text-sm font-bold">+254 727 909 060</span>
+              </div>
+              <div>
+                <span class="text-sm font-bold">
+                  <i class="pi pi-envelope pr-4" aria-hidden="true"></i>
+                  sdl@securedigitallimited.com <br />
+                </span>
+              </div>
             </div>
           </div>
 
@@ -46,15 +51,11 @@
 
         <!-- Links -->
         <div>
-          <h3 class="font-semibold mb-4">Find It Fast</h3>
+          <h3 class="font-semibold mb-4">Opening hrs</h3>
           <ul class="space-y-2 text-sm text-gray-600">
-            <!-- <li>Laptops & Computers</li>
-                        <li>Cameras & Photography</li>
-                        <li>Smart Phones & Tablets</li>
-                        <li>Video Games & Consoles</li>
-                        <li>TV & Audio</li>
-                        <li>Gadgets</li>
-                        <li>Waterproof Headphones</li> -->
+            <li>8:00am to 5:30pm (MON - FRI)</li>
+            <li>8:30am to 1:00pm (SAT)</li>
+            <li>Closed on Sundays and Public Holidays</li>
           </ul>
         </div>
 

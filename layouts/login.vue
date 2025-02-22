@@ -1,21 +1,16 @@
+<!-- layouts/login.vue -->
 <template>
-  <div class="landing">
+  <div class="login-layou">
     <NuxtPage />
   </div>
 </template>
 
-
-<script>
-export default {
-  components: {
-  },
-  setup() { },
-};
-</script>
-
-<style lang="css" scoped>
-.landing {
-  margin-inline: 12%;
-  background-color: red;
+<style scoped>
+.login-layout {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5; /* Optional background */
 }
 </style>

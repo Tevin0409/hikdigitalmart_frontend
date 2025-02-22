@@ -14,11 +14,11 @@
           {{ price }}
           <span class="line-through text-gray-400 text-lg ml-4">Ksh 2,860</span>
         </div>
-        <div class="discount flex items-center mb-6">
+        <!-- <div class="discount flex items-center mb-6">
           <div class="flex items-center text-lg text-primary mr-4">
             <span class="text-xl font-bold">29%</span> off
           </div>
-        </div>
+        </div> -->
         <div class="stock flex items-center text-sm text-gray-600 mb-6">
           <div class="w-full max-w-xs">
             <div class="relative">
@@ -36,7 +36,8 @@
           <button
             class="px-6 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-secondary"
           >
-            SHOP NOW →
+            SHOP NOW
+            <i class="pi pi-angle-right"></i>
           </button>
         </NuxtLink>
       </div>
@@ -50,11 +51,11 @@
           alt="Selected Product"
           class="w-full max-w-xs rounded-md border-0"
         />
-        <div
+        <!-- <div
           class="absolute bottom-0 left-0 text-white bg-primary text-sm px-3 py-1 rounded-full transform -translate-x-1/2 translate-y-1/2"
         >
           29% off
-        </div>
+        </div> -->
       </div>
 
       <!-- Right Section -->
@@ -89,7 +90,7 @@
                   {{ slotProps.data.price }}
                 </div>
                 <div class="stock flex items-center text-sm text-gray-600 mb-4">
-                  <span>Available: 334</span> | <span>Stock: 180</span>
+                  <!-- <span>Available: 334</span> | <span>Stock: 180</span> -->
                 </div>
               </div>
             </template>
@@ -173,19 +174,19 @@ export default {
       products: [
         {
           name: "HD Camera Bullet",
-          price: "KES 3,200.00",
+          price: "Ksh 3,200.00",
           image:
             "https://html.themexriver.com/radios/assets/img/product/img_52.png",
         },
         {
           name: "Wireless Speaker",
-          price: "KES 5,000.00",
+          price: "Ksh 5,000.00",
           image:
             "https://html.themexriver.com/radios/assets/img/product/img_53.png",
         },
         {
           name: "Smart Watch Pro",
-          price: "KES 15,000.00",
+          price: "Ksh 15,000.00",
           image:
             "https://html.themexriver.com/radios/assets/img/product/img_54.png",
         },
@@ -218,6 +219,28 @@ export default {
         },
       ],
     };
+  },
+
+  methods: {
+    selectImage(image) {
+      this.selectedImage = image;
+    },
+    nextImage() {
+      const currentIndex = this.images.indexOf(this.selectedImage);
+      if (currentIndex < this.images.length - 1) {
+        this.selectedImage = this.images[currentIndex + 1];
+      } else {
+        this.selectedImage = this.images[0];
+      }
+    },
+    prevImage() {
+      const currentIndex = this.images.indexOf(this.selectedImage);
+      if (currentIndex > 0) {
+        this.selectedImage = this.images[currentIndex - 1];
+      } else {
+        this.selectedImage = this.images[this.images.length - 1];
+      }
+    },
   },
 };
 </script>

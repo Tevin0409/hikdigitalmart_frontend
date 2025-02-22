@@ -9,8 +9,13 @@
     />
 
     <!-- Product Name -->
-    <div class="flex flex-col text-center p-2" @click="goToProductPage(item)">
-      <h3 class="text-sm font-regular truncate">
+    <div
+      class="flex flex-col text-center p-2 hover:text-primary transition-colors duration-200"
+      @click="goToProductPage(item)"
+    >
+      <h3
+        class="text-sm font-regular truncate hover:text-primary transition-colors duration-200 cursor-pointer"
+      >
         {{ item.product.name }} <br />
         <span class="font-medium text-sm"> ({{ item.name }})</span>
       </h3>

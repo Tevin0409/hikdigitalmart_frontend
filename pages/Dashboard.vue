@@ -6,10 +6,12 @@
       <h2 class="text-xl font-bold">Browse By Category</h2>
       <Carousel
         :value="categories"
-        :numVisible="4"
-        :numScroll="5"
+        :numVisible="3"
+        :numScroll="1"
         :responsiveOptions="responsiveOptions"
       >
+        <!--  :numVisible="3"
+        :numScroll="3" -->
         <template #item="slotProps">
           <div
             @click="getCategoryProducts(slotProps.data)"
@@ -358,21 +360,21 @@ export default {
     const responsiveOptions = ref([
       {
         breakpoint: "1400px",
-        numVisible: 2,
-        numScroll: 1,
+        numVisible: 4,
+        numScroll: 4,
       },
       {
         breakpoint: "1199px",
-        numVisible: 3,
-        numScroll: 1,
+        numVisible: 4,
+        numScroll: 4,
       },
       {
         breakpoint: "767px",
         numVisible: 2,
-        numScroll: 1,
+        numScroll: 2,
       },
       {
-        breakpoint: "575px",
+        breakpoint: "475px",
         numVisible: 1,
         numScroll: 1,
       },

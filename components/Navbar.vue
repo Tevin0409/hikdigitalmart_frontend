@@ -11,13 +11,6 @@
             class="h-16 object-contain"
           />
         </NuxtLink>
-        <NuxtLink to="/dashboard">
-          <img
-            src="@/assets/images/logoo.png"
-            alt="Hikvision Logo"
-            class="h-16 object-contain"
-          />
-        </NuxtLink>
 
         <!-- Search Input (Full Width in Between) -->
         <AutoComplete
@@ -87,14 +80,17 @@
         </div>
 
         <div class="w-full bg-red flex justify-center items-center py-4">
-          <Select
-            v-model="selectedCategory"
-            :options="categories"
-            optionLabel="name"
-            placeholder="Select Category"
-            class=""
-          />
-          <div class="flex items-center space-x-2">
+          <div class="relative flex items-center w-">
+            <!-- Select Dropdown at the Beginning -->
+            <Select
+              v-model="selectedCategory"
+              :options="categories"
+              optionLabel="name"
+              placeholder="Choose Category"
+              class="min-w-[150px] z-10 rounded-l-md mr-3 border-l"
+            />
+
+            <!-- AutoComplete Input -->
             <AutoComplete
               v-model="searchTerm"
               @input="fetchProducts"
@@ -102,9 +98,12 @@
               @complete="searchItems"
               optionLabel="name"
               placeholder="I'm Searching for ..."
-              class="flex-grow mx-2 p-input-icon-left"
+              class="flex-grow p-input-icon-left border-l-10 border-r-0"
               @item-select="navigateToProduct"
             >
+              <template #dropdownicon>
+                <i class="pi pi-chevron-down text-gray-500" />
+              </template>
               <template #option="slotProps">
                 <div class="flex items-center w-full">
                   <img
@@ -117,7 +116,14 @@
                 </div>
               </template>
             </AutoComplete>
-            <Button label="Search" icon="pi pi-search" iconPos="left" />
+
+            <!-- Search Button on the Right -->
+            <!-- <button
+              @click="handleSearch"
+              class="bg-primary text-white px-4 py-2 rounded-r-md flex items-center justify-center"
+            >
+              <i class="pi pi-search" />
+            </button> -->
           </div>
         </div>
 
@@ -257,8 +263,7 @@ const routeTo = () => {
   // const userStore = useUserStore();
 };
 const navigateToProduct = event => {
-  console.log("ree", selectedCategory.value);
-  console.log("ree", searchTerm.value);
+  console.log("ree", event);
 
   // Check if selectedCategory is empty or does not have an ID
   if (!selectedCategory.value || !selectedCategory.value.id) {
@@ -272,7 +277,8 @@ const navigateToProduct = event => {
       path: `/results/${selectedCategory.value.id}`,
       query: {
         // category: selectedCategory.value.id, // Pass only the category ID
-        searchTerm: searchTerm.value.name, // Pass only the search term (trimmed, default to empty string)
+        searchTerm: searchTerm.value.name,
+        productId: event.value.id,
       },
     });
   }

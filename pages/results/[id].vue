@@ -239,16 +239,18 @@ export default {
         const { $axios } = useNuxtApp();
 
         // Extract parameters from route query
-        const productId = router.params.id; // ID from URL path
-        const searchTerm = router.query.searchTerm || ""; // Default to empty if not provided
+        const catId = router.params.id; // ID from URL path
+        const searchTerm = router.query.searchTerm || "";
+
+        // console.log(catId, searchTerm
 
         // Build the request parameters dynamically
         const params = {};
         if (searchTerm) {
           params.searchTerm = searchTerm.slice(0, 5);
         }
-        if (productId) {
-          params.categoryId = [productId];
+        if (catId) {
+          params.categoryId = [catId];
         }
 
         const response = await $axios.get("/product/product-models", {
@@ -276,24 +278,26 @@ export default {
       try {
         const { $axios } = useNuxtApp();
         const catId = router.params.id; // ID from URL path
+        const productId = router.query.productId;
 
         // Build the request parameters dynamically
         const params = {};
 
         if (catId) {
-          params.categoryId = "ed7555b7-780e-49c2-9d8d-0525fc89083b";
+          params.categoryId = catId;
+          params.productId = productId;
         }
 
         const response = await $axios.get("/product/features", {
           params: {
             ...params,
-            // page: currentPage.value,
-            // limit: 10,
           },
         });
         // fetching.value = false;
-        features.value = response.data;
-        console.log(response.data, "features");
+        features.value = response.data.map(feature => ({
+          ...feature,
+          selected: false,
+        }));
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {

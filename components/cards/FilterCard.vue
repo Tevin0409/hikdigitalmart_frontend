@@ -10,12 +10,21 @@
             :key="index"
             class="flex items-center"
           >
+            <!-- {{ filter.selected }} -->
             <Checkbox
-              v-model="filter.description"
+              v-model="filter.value"
               :value="filter.description"
               class="mr-2"
             />
-            <label :for="filter.description">{{ filter.description }}</label>
+            <label
+              :for="filter.description"
+              :class="{
+                'text-primary font-bold': filter.selected,
+                'text-gray-700': !filter.selected,
+              }"
+            >
+              {{ filter.description }}
+            </label>
           </div>
         </div>
 

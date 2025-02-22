@@ -1,1 +1,0 @@
-import{aD as o,x as t,aE as r}from"./dcrsIaZE.js";const n=o((a,s)=>{console.log("Auth middleware executed");const e=t();if(console.log("Auth middleware",e.isLoggedIn),!e.isLoggedIn)return console.log("User not logged in, redirecting to /auth"),r("/auth")});export{n as default};

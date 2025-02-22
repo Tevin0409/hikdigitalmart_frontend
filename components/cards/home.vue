@@ -4,13 +4,25 @@
     <div class="flex gap-3">
       <div class="flex flex-col w-1/4 border rounded-lg dark:border-orange-600">
         <h4 class="font-bold px-4 py-4 border-b">Available Categories</h4>
-        <div
+
+        <ul v-if="categories.length" class="space-y-2 p-4">
+          <li
+            class="flex items-center gap-2 pt-1 hover:text-primary hover:underline cursor-pointer font-regular"
+            v-for="item in categories"
+            :key="item.name"
+          >
+            <i :class="getIcon(item.name)"></i>
+            <span class="text-xs truncate">{{ item.name }}</span>
+          </li>
+        </ul>
+
+        <!-- <div
           v-for="(category, index) in categories"
           :key="index"
           class="p-4 rounded-lg hover:bg-[#f44336] hover:text-white transition duration-300 cursor-pointer"
         >
           <h5 class="font-semibold">{{ category.name }}</h5>
-        </div>
+        </div> -->
       </div>
 
       <div class="border rounded-lg border-primary w-3/4 p-3">
@@ -106,6 +118,20 @@ export default {
         console.error("Error fetching categories:", error);
       }
     };
+    const iconMap = {
+      "HD ANALOGUE CAMERAS AND DVR": "pi pi-video",
+      "IP NETWORK CAMERAS AND NVR": "pi pi-wifi",
+      "ACCESS CONTROL PRODUCTS": "pi pi-lock",
+      "VIDEO INTERCOM PRODUCTS": "pi pi-phone",
+      "NETWORK AND CABLES PRODUCTS": "pi pi-sitemap",
+      "MONITOR DISPLAY PRODUCTS": "pi pi-desktop",
+      "ACCESSORIES PRODUCTS": "pi pi-cog",
+      Phones: "pi pi-mobile",
+    };
+
+    const getIcon = name => {
+      return iconMap[name] || "pi pi-question"; // Default icon if no match
+    };
 
     onMounted(() => {
       getCategories();
@@ -116,6 +142,8 @@ export default {
       categories,
       chunkedProducts,
       getCategories,
+      iconMap,
+      getIcon,
     };
   },
 };

@@ -46,16 +46,16 @@ export const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/product-models");
-        this.products = response.data.results // Update the cart items
+        this.products = response.data.results; // Update the cart items
       } catch (error) {
         console.error("Error fetching cart items:", error);
       }
     },
-     async getModels() {
+    async getModels() {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/product-models");
-        this.models = response.data.results // Update the cart items
+        this.models = response.data.results; // Update the cart items
       } catch (error) {
         console.error("Error fetching cart items:", error);
       }
@@ -180,7 +180,6 @@ export const useProductStore = defineStore("product", {
             }
             this.getCartItems();
             localStorage.removeItem("cart"); // Clear wishlist from localStorage
-         
           } catch (error) {
             console.error("Error moving cart", error);
           }
@@ -301,12 +300,15 @@ export const useProductStore = defineStore("product", {
     async placeOrder() {
       try {
         const { $axios } = useNuxtApp();
+
+        // console.log("Place Order", this.cartItems)
         const orderData = {
           products: this.cartItems.map(item => ({
-            productModelId: item.productModel.id,
-            quantity: item.quantity,
+            productModelId: item?.productModel?.id ?? item?.id ?? "",
+            quantity: item?.quantity ?? 1,
           })),
         };
+
         const response = await $axios.post("/product/orders", orderData);
         // if (response.data.success) {
         console.log("Order placed successfully:", response.data);
@@ -321,6 +323,49 @@ export const useProductStore = defineStore("product", {
         return response;
       } catch (error) {
         console.error("Error placing order:", error);
+        throw new Error(error.response?.data?.error?.message);
+      }
+    },
+
+    async placeOrderAnonymous(user) {
+      console.log("ccds", user)
+      try {
+        const { $axios } = useNuxtApp();
+
+        // console.log("Place Order", this.cartItems)
+        // const orderData = {
+        let  products= this.cartItems.map(item => ({
+            productModelId: item?.productModel?.id ?? item?.id ?? "",
+            quantity: item?.quantity ?? 1,
+          }))
+        // };
+
+        let order = {
+          products: products,
+          first_name:  user.firstName,
+          last_name: user.lastName,
+          email: user.email,
+          town: user.town,
+          phone_number: user.phoneNumber,
+          street_address: user.street_address,
+          city: user.city,
+        }
+
+        const response = await $axios.post("/product/orders/anonymous", order);
+        // if (response.data.success) {
+        console.log("Order placed successfully:", response.data);
+        //   // Clear cart items after successful order placement
+        //   this.cartItems = [];
+        //   this.cartCount = 0;
+        //   this.cartTotal = 0;
+        // } else {
+        //   console.error("Failed to place order:", response.data);
+        // }
+
+        return response;
+      } catch (error) {
+        console.error("Error placing order:", error);
+        throw new Error(error.response?.data?.error?.message);
       }
     },
     async checkOut(order) {

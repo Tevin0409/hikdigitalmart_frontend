@@ -30,7 +30,10 @@
           v-if="hoveredCategory"
           class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-2xl font-bold transition-opacity duration-300 rounded w-full h-32 sm:h-40 md:h-80 xl:h-80"
         >
-          {{ hoveredCategory }}
+          <i :class="getIcon(hoveredCategory)"></i>
+          <span class="ml-3">
+            {{ hoveredCategory }}
+          </span>
         </div>
         <Carousel
           v-if="!hoveredCategory"
@@ -54,6 +57,7 @@
         </Carousel>
 
         <div
+          v-if="!hoveredCategory"
           class="bg-black text-white px-4 py-2 sm:px-6 sm:py-3 md:px-6 md:py-4 rounded-lg absolute bottom-2 sm:bottom-4 md:bottom-6 right-2 sm:right-4 md:right-6 w-auto max-w-[70%] sm:max-w-[60%] md:max-w-[50%]"
         >
           <h2
