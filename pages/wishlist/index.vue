@@ -131,7 +131,7 @@
             {{ item.productModel?.name ?? item.name }}
           </p>
           <p class="text-primary font-semibold text-lg">
-            KES {{ formattedPrice(item.productModel?.price ?? item.price) }}
+            Ksh {{ formattedPrice(item.productModel?.price ?? item.price) }}
           </p>
         </div>
       </div>

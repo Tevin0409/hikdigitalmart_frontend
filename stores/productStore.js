@@ -72,7 +72,6 @@ export const useProductStore = defineStore("product", {
 
     // Add a product to the cart
     async addToCart(product, quantity) {
-      console.log("Add to cart", product);
       const userStore = useUserStore();
 
       let user = userStore.user;
@@ -110,7 +109,6 @@ export const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/orders");
-        console.log(response, "orders");
         this.orders = response.data; // Update the orders
         return response.data; // Return the data
       } catch (error) {
@@ -119,24 +117,77 @@ export const useProductStore = defineStore("product", {
       }
     },
 
+    async updateQuantity(id, quantity) {
+      try {
+        const { $axios } = useNuxtApp();
+
+        // Check if the user is logged in
+        const userStore = useUserStore();
+        if (userStore.isLoggedIn) {
+          // Update the quantity on the server-side cart
+          await $axios.put(`/product/cart/update`, { id, quantity });
+          this.getCartItems(); // Fetch updated cart items from the server
+        } else {
+          // Update the quantity in the localStorage cart
+          const storedCart = localStorage.getItem("cart");
+          const localCart = storedCart ? JSON.parse(storedCart) : [];
+
+          // Map through the cart to update the quantity of the specific item
+          const updatedCart = localCart.map(item => {
+            if (item.id === id) {
+              return { ...item, quantity };
+            }
+            return item;
+          });
+
+          // Update the local storage
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          this.getCartItems();
+        }
+      } catch (error) {
+        console.error("Error updating cart quantity:", error);
+      }
+    },
+
     // Remove a product from the cart
     async removeFromCart(cartId) {
       try {
         const { $axios } = useNuxtApp();
-        await $axios.delete(`/product/cart/remove/${cartId}`);
-        this.getCartItems();
 
-        // Remove the item from cart items
-        // const itemIndex = this.cartItems.findIndex(item => item.id === productId);
-        // if (itemIndex !== -1) {
-        //   this.cartTotal -= (this.cartItems[itemIndex].quantity * this.cartItems[itemIndex].price);
-        //   this.cartItems.splice(itemIndex, 1);  // Remove item from cart
-        // }
+        // Check if the user is logged in
+        const userStore = useUserStore();
+        if (userStore.isLoggedIn) {
+          // Remove from the server-side cart
+          await $axios.delete(`/product/cart/remove/${cartId}`);
+          this.getCartItems(); // Fetch updated cart items from the server
+        } else {
+          // Remove from the localStorage cart
+          const storedCart = localStorage.getItem("cart");
+          const localCart = storedCart ? JSON.parse(storedCart) : [];
 
-        // // Recalculate cart count
-        // this.cartCount = this.cartItems.length;
+          // Filter out the item with the matching cartId
+          const updatedCart = localCart.filter(item => item.id !== cartId);
+
+          // Update the local storage
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          this.getCartItems();
+        }
       } catch (error) {
         console.error("Error removing from cart:", error);
+      }
+    },
+    async clearCart() {
+      try {
+        const { $axios } = useNuxtApp();
+
+        for (const item of this.cartItems) {
+          await $axios.delete(`/product/cart/remove/${item.id}`);
+        }
+
+        this.cartItems = []; // Clear the cart items locally
+        await this.getCartItems(); // Fetch updated cart items
+      } catch (error) {
+        console.error("Error clearing the cart:", error);
       }
     },
 
@@ -151,8 +202,6 @@ export const useProductStore = defineStore("product", {
 
         await this.getCartItems();
       } catch (error) {
-        console.error("Error fetching wishlist:", error);
-        // Fallback to localStorage if no response
         const localWishlist =
           JSON.parse(localStorage.getItem("wishlist")) || [];
         this.wishListItems = localWishlist;
@@ -170,7 +219,6 @@ export const useProductStore = defineStore("product", {
       if (typeof window !== "undefined") {
         const storedWishlist = localStorage.getItem("cart");
         const wishIds = storedWishlist ? JSON.parse(storedWishlist) : [];
-        console.log("cdcs", wishIds);
 
         if (Array.isArray(wishIds) && wishIds.length > 0) {
           try {
@@ -192,12 +240,9 @@ export const useProductStore = defineStore("product", {
     },
     async moveWishlistToCart() {
       const userStore = useUserStore();
-      console.log("moveWishlistToCart");
       if (!userStore.isLoggedIn) {
-        console.log("User is not logged in. Cannot move wishlist items.");
         return;
       }
-
       if (typeof window !== "undefined") {
         const storedWishlist = localStorage.getItem("wishlist");
         const wishIds = storedWishlist ? JSON.parse(storedWishlist) : [];
@@ -205,14 +250,11 @@ export const useProductStore = defineStore("product", {
         if (Array.isArray(wishIds) && wishIds.length > 0) {
           try {
             for (let productModelId of wishIds) {
-              console.log("cs", productModelId);
-              // await this.addToCart(productModelId, 1, userStore.user.id);
               await this.addToWishlist(productModelId.id);
             }
             this.getWishList();
             this.getCartItems();
             localStorage.removeItem("wishlist"); // Clear wishlist from localStorage
-            console.log("Wishlist items moved to cart successfully.");
           } catch (error) {
             console.error("Error moving wishlist to cart:", error);
           }
@@ -223,8 +265,6 @@ export const useProductStore = defineStore("product", {
         console.error("LocalStorage is not available.");
       }
     },
-    // Add a product to the wishlist
-    // Add a product to the wishlist
     async addToWishlist(productModelId) {
       try {
         const { $axios } = useNuxtApp();
@@ -263,63 +303,59 @@ export const useProductStore = defineStore("product", {
         }
       }
     },
-    // Remove a product from the wishlist
-    async removeFromWishlist(productId) {
-      console.log("productId", productId);
-      const userStore = useUserStore();
-
-      try {
+  async removeFromWishlist(productId) {
+    const userStore = useUserStore();
+    try {
         const { $axios } = useNuxtApp();
 
-        // Get wishlist from localStorage
-        let localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-        // Check and remove from localWishlist
-        const localIndex = localWishlist.findIndex(
-          item => item.id === productId
-        );
-        if (localIndex !== -1) {
-          localWishlist.splice(localIndex, 1);
-          localStorage.setItem("wishlist", JSON.stringify(localWishlist));
-        }
         if (userStore.isLoggedIn) {
-          await $axios.delete(`/product/wishlist/remove/${productId}`);
+            // If logged in, remove from the server-side wishlist
+            await $axios.delete(`/product/wishlist/remove/${productId}`);
+        } else {
+            // If not logged in, remove from the localStorage wishlist
+            let localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            const updatedWishlist = localWishlist.filter(item => item.id !== productId);
+            localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
         }
+
+        // Fetch updated wishlist and update local state
         await this.getWishList();
-        const index = this.wishListItems.findIndex(
-          item => item.id === productId
-        );
+
+        // Update the wishlist items and count
+        const index = this.wishListItems.findIndex(item => item.id === productId);
         if (index !== -1) {
-          this.wishListItems.splice(index, 1);
+            this.wishListItems.splice(index, 1);
         }
         this.wishListCount = this.wishListItems.length;
-      } catch (error) {
+        
+    } catch (error) {
         console.error("Error removing from wishlist:", error);
-      }
-    },
-    // Place an order
-    async placeOrder() {
+    }
+},
+
+    async placeOrder(user) {
       try {
         const { $axios } = useNuxtApp();
 
-        // console.log("Place Order", this.cartItems)
-        const orderData = {
-          products: this.cartItems.map(item => ({
-            productModelId: item?.productModel?.id ?? item?.id ?? "",
-            quantity: item?.quantity ?? 1,
-          })),
+        let products = this.cartItems.map(item => ({
+          productModelId: item?.productModel?.id ?? item?.id ?? "",
+          quantity: item?.quantity ?? 1,
+        }));
+        // };
+
+        let order = {
+          products: products,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          email: user.email,
+          town: user.town,
+          phone_number: user.phoneNumber,
+          street_address: user.street_address,
+          city: user.city,
         };
 
-        const response = await $axios.post("/product/orders", orderData);
-        // if (response.data.success) {
-        console.log("Order placed successfully:", response.data);
-        //   // Clear cart items after successful order placement
-        //   this.cartItems = [];
-        //   this.cartCount = 0;
-        //   this.cartTotal = 0;
-        // } else {
-        //   console.error("Failed to place order:", response.data);
-        // }
-
+        const response = await $axios.post("/product/orders", order);
+        this.clearCart();
         return response;
       } catch (error) {
         console.error("Error placing order:", error);
@@ -328,40 +364,28 @@ export const useProductStore = defineStore("product", {
     },
 
     async placeOrderAnonymous(user) {
-      console.log("ccds", user)
       try {
         const { $axios } = useNuxtApp();
-
-        // console.log("Place Order", this.cartItems)
-        // const orderData = {
-        let  products= this.cartItems.map(item => ({
-            productModelId: item?.productModel?.id ?? item?.id ?? "",
-            quantity: item?.quantity ?? 1,
-          }))
+        let products = this.cartItems.map(item => ({
+          productModelId: item?.productModel?.id ?? item?.id ?? "",
+          quantity: item?.quantity ?? 1,
+        }));
         // };
 
         let order = {
           products: products,
-          first_name:  user.firstName,
+          first_name: user.firstName,
           last_name: user.lastName,
           email: user.email,
           town: user.town,
           phone_number: user.phoneNumber,
           street_address: user.street_address,
           city: user.city,
-        }
+        };
 
         const response = await $axios.post("/product/orders/anonymous", order);
-        // if (response.data.success) {
-        console.log("Order placed successfully:", response.data);
-        //   // Clear cart items after successful order placement
-        //   this.cartItems = [];
-        //   this.cartCount = 0;
-        //   this.cartTotal = 0;
-        // } else {
-        //   console.error("Failed to place order:", response.data);
-        // }
 
+        this.clearCart();
         return response;
       } catch (error) {
         console.error("Error placing order:", error);
@@ -378,15 +402,6 @@ export const useProductStore = defineStore("product", {
         };
 
         const response = await $axios.post("/product/checkout", orderData);
-        // if (response.data.success) {
-        console.log("Order placed successfully:", response);
-        //   // Clear cart items after successful order placement
-        //   this.cartItems = [];
-        //   this.cartCount = 0;
-        //   this.cartTotal = 0;
-        // } else {
-        //   console.error("Failed to place order:", response.data);
-        // }
 
         return response;
       } catch (error) {

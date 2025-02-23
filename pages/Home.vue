@@ -2,10 +2,12 @@
   <div
     class="product-section pt-20"
     style="
-      background-image: url('https://media.istockphoto.com/id/1255070620/photo/modern-house-with-garden-and-solar-panels.jpg?s=2048x2048&w=is&k=20&c=o-q6PLV-jwspJrtYwC-98d6bsBMW139OLXppJiglVcU=');
+      background-image: url(' https://www.sdl.co.ke/assets/images/icons/vector-1.png');
     "
   >
-    <!-- https://www.sdl.co.ke/assets/images/icons/vector-1.png -->
+    <!-- style="
+      background-image: url('https://media.istockphoto.com/id/1255070620/photo/modern-house-with-garden-and-solar-panels.jpg?s=2048x2048&w=is&k=20&c=o-q6PLV-jwspJrtYwC-98d6bsBMW139OLXppJiglVcU=');
+    " -->
     <div class="flex flex-wrap justify-center items-start">
       <!-- Left Section -->
       <div class="product-details w-full md:w-1/3 mb-6 md:mb-0">

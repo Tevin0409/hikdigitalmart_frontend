@@ -22,6 +22,31 @@
       </NuxtLink>
     </div>
     <div v-else class="mx-auto container">
+      <Breadcrumb :home="home" :model="items">
+        <template #item="{ item, props }">
+          <router-link
+            v-if="item.route"
+            v-slot="{ href, navigate }"
+            :to="item.route"
+            custom
+          >
+            <a :href="href" v-bind="props.action" @click="navigate">
+              <span :class="[item.icon, 'text-color']" />
+              <span class="text-primary font-semibold">{{ item.label }}</span>
+            </a>
+          </router-link>
+          <a
+            v-else
+            :href="item.url"
+            :target="item.target"
+            v-bind="props.action"
+          >
+            <span class="text-surface-700 dark:text-surface-0">{{
+              item.label
+            }}</span>
+          </a>
+        </template>
+      </Breadcrumb>
       <div class="bg-red-10 rounded-lg p-4">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-semibold text-gray-700">
@@ -124,11 +149,11 @@
               <div class="cart-total rounded-lg">
                 <h3 class="text-lg font-semibold">Cart Total</h3>
                 <p class="text-gray-600">
-                  Subtotal: KES {{ formattedPrice(cartTotal) }}
+                  Subtotal: Ksh {{ formattedPrice(cartTotal) }}
                 </p>
                 <hr class="my-2" />
                 <p class="text-lg font-bold">
-                  Total: KES {{ formattedPrice(cartTotal) }}
+                  Total: Ksh {{ formattedPrice(cartTotal) }}
                 </p>
                 <button
                   class="w-full bg-primary text-white py-2 mt-4 rounded-lg hover:bg-secondary"
@@ -169,6 +194,15 @@ const coupon = ref("");
 const cartTotal = computed(() => productStore.cartTotal);
 const cartItems = computed(() => productStore.cartItems);
 
+const home = ref({
+  icon: "pi pi-home",
+  route: "/dashboard",
+});
+const items = ref([
+  { label: "Cart", route: "/cart" },
+  { label: "Checkout", route: "/checkout" },
+]);
+
 const formattedPrice = price => {
   return $formatPrice(price);
 };
@@ -191,7 +225,9 @@ const getCartItems = async () => {
 };
 
 // Update quantity of a specific item
-const updateQuantity = (id, quantity) => {
+const updateQuantity = async (id, quantity) => {
+  await productStore.updateQuantity(id, quantity);
+  return;
   const item = cartItems.value.find(item => item.id === id);
   if (item && quantity > 0) {
     item.quantity = quantity;

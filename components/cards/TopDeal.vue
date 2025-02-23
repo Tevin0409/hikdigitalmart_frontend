@@ -1,8 +1,8 @@
 <template>
-  <div class="flex md:flex-row w-full p-6">
+  <div class="flex flex-col md:flex-row w-full p-6">
     <!-- Hot Deals Card -->
     <div
-      class="w-1/5 p-2 m-2 border dark:border-orange-600 rounded-lg shadow-sm"
+      class="w-full md:w-1/5 p-2 m-2 border dark:border-orange-600 rounded-lg shadow-sm"
     >
       <div
         class="text-lg font-semibold mb-2 border-b flex justify-between items-center"
@@ -38,18 +38,14 @@
               <div class="mb-4 font-medium flex justify-around">
                 {{ slotProps.data.name }}
               </div>
-              <div
-                class="flex justify-between items-center flex justify-around"
-              >
-                <div
-                  class="mt-0 font-semibold text-xl flex justify-around py-4"
-                >
-                  {{ slotProps.data.price }}
+              <div class="flex justify-around items-center">
+                <div class="mt-0 font-semibold text-xl py-4">
+                  {{ formattedPrice(slotProps.data.price) }}
                 </div>
               </div>
 
               <div
-                class="stock flex items-center text-sm text-gray-600 mb-6 flex justify-around"
+                class="stock flex items-center text-sm text-gray-600 mb-6 justify-around"
               >
                 <div
                   v-for="(label, index) in ['DAYS', 'HOURS', 'MINS', 'SEC']"
@@ -57,7 +53,7 @@
                   class="flex flex-col items-center"
                 >
                   <div
-                    class="flex items-center justify-center bg-orange-500 text-white rounded-full text-base md:text-lg font-bold"
+                    class="flex items-center justify-center p-1 bg-orange-500 text-white rounded-full text-base md:text-lg font-bold"
                   >
                     {{ index === 0 ? 21 : "00" }}
                   </div>
@@ -73,20 +69,22 @@
     </div>
 
     <!-- Monthly Featured Items Section -->
-    <div class="p-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-bold">
+    <div class="p-6 w-full md:w-4/5">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <h2 class="text-lg font-bold mb-2 md:mb-0">
           <span class="text-red-500">Monthly Featured Items</span>
         </h2>
 
         <!-- Tabs -->
-        <div class="flex space-x-4 border-b">
+        <div
+          class="flex flex-wrap md:flex-nowrap space-x-2 md:space-x-4 border-b"
+        >
           <button
             v-for="tab in tabs"
             :key="tab"
             @click="selectedTab = tab"
             :class="[
-              'px-4 py-2 text-sm font-semibold',
+              'px-2 py-1 md:px-4 md:py-2 text-sm font-semibold whitespace-nowrap',
               selectedTab === tab
                 ? 'border-b-2 border-primary text-orange-500'
                 : 'text-gray-600',
@@ -98,9 +96,11 @@
       </div>
 
       <div class="gap-6 mt-4">
-        <div class="flex justify-between space-x-4">
+        <div
+          class="flex flex-col md:flex-row justify-between space-y-4 md:space-x-4 md:space-y-0"
+        >
           <!-- Left Products -->
-          <div class="flex flex-col space-y-4 w-1/3">
+          <div class="flex flex-col space-y-4 w-full md:w-1/3">
             <div
               v-for="item in featuredProducts.slice(0, 2)"
               :key="item.name"
@@ -112,35 +112,13 @@
                   class="w-28 h-28 object-cover rounded-md"
                 />
                 <div class="ml-4 flex flex-col">
-                  <div class="flex items-center mt-1">
-                    <span v-for="star in 5" :key="star" class="text-yellow-400">
-                      <i
-                        :class="{
-                          'pi pi-star-fill': star <= item.rating,
-                          'pi pi-star': star > item.rating,
-                        }"
-                      ></i>
-                    </span>
-                    <!-- <span class="text-gray-500 ml-2">({{ item.reviews }})</span> -->
-                  </div>
                   <h3 class="text-lg font-medium">{{ item.name }}</h3>
                   <div class="mt-2 text-primary font-bold text-lg">
-                    <!-- <span class="line-through text-gray-400">{{
-                      item.oldPrice
-                    }}</span> -->
-                    <span class="ml-2"
-                      >Ksh {{ formattedPrice(item.price) }}</span
-                    >
+                    <span class="ml-2"> {{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
                     Available: <strong>{{ item.stock }}</strong>
                   </p>
-                  <div class="w-full bg-primary h-2 mt-2 rounded-full">
-                    <div
-                      class="h-2 bg-orange-500 rounded-full"
-                      :style="{ width: `${item.stock / 5}%` }"
-                    ></div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -156,42 +134,20 @@
               <div class="flex flex-col items-center h-full">
                 <img :src="item.image" class="object-cover rounded-md" />
                 <div class="text-center items-center pt-4 flex flex-col">
-                  <div class="flex items-center mt-1">
-                    <span v-for="star in 5" :key="star" class="text-yellow-400">
-                      <i
-                        :class="{
-                          'pi pi-star-fill': star <= item.rating,
-                          'pi pi-star': star > item.rating,
-                        }"
-                      ></i>
-                    </span>
-                    <!-- <span class="text-gray-500 ml-2">({{ item.reviews }})</span> -->
-                  </div>
                   <h3 class="text-lg font-medium">{{ item.name }}</h3>
                   <div class="mt-2 text-orange-500 font-bold text-lg">
-                    <span class="line-through text-gray-400"
-                      >Ksh {{ item.oldPrice }}</span
-                    >
-                    <span class="ml-2"
-                      >Ksh{{ formattedPrice(item.price) }}</span
-                    >
+                    <span class="ml-2">{{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
                     Available: <strong>{{ item.stock }}</strong>
                   </p>
-                  <div class="w-full bg-gray-300 h-2 mt-2 rounded-full">
-                    <div
-                      class="h-2 bg-orange-500 rounded-full"
-                      :style="{ width: `${item.stock / 5}%` }"
-                    ></div>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           <!-- Right Products -->
-          <div class="flex flex-col space-y-4 w-1/3">
+          <div class="flex flex-col space-y-4 w-full md:w-1/3">
             <div
               v-for="item in featuredProducts.slice(3, 5)"
               :key="item.name"
@@ -203,35 +159,13 @@
                   class="w-28 h-28 object-cover rounded-md"
                 />
                 <div class="ml-4 flex flex-col">
-                  <div class="flex items-center mt-1">
-                    <span v-for="star in 5" :key="star" class="text-yellow-400">
-                      <i
-                        :class="{
-                          'pi pi-star-fill': star <= item.rating,
-                          'pi pi-star': star > item.rating,
-                        }"
-                      ></i>
-                    </span>
-                    <!-- <span class="text-gray-500 ml-2">({{ item.reviews }})</span> -->
-                  </div>
                   <h3 class="text-lg font-medium truncate">{{ item.name }}</h3>
                   <div class="mt-2 text-orange-500 font-bold text-lg">
-                    <!-- <span class="line-through text-gray-400"
-                      >${{ item.oldPrice }}</span
-                    > -->
-                    <span class="ml-2"
-                      >Ksh{{ formattedPrice(item.price) }}</span
-                    >
+                    <span class="ml-2">{{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
                     Available: <strong>{{ item.stock }}</strong>
                   </p>
-                  <div class="w-full bg-gray-300 h-2 mt-2 rounded-full">
-                    <div
-                      class="h-2 bg-orange-500 rounded-full"
-                      :style="{ width: `${item.stock / 5}%` }"
-                    ></div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -262,7 +196,7 @@ export default {
       {
         image:
           "https://html.themexriver.com/radios/assets/img/product/img_53.png",
-        name: "Amazon Basics Window Air",
+        name: "Bullet Camera",
         rating: 3,
         reviews: 26,
         oldPrice: 28.52,
@@ -271,7 +205,7 @@ export default {
       {
         image:
           "https://html.themexriver.com/radios/assets/img/product/img_53.png",
-        name: "Amazon Basics Wall Light",
+        name: "Bullet HD Camera",
         rating: 4,
         reviews: 42,
         oldPrice: 19.53,
@@ -281,7 +215,8 @@ export default {
     const { $formatPrice } = useNuxtApp();
     const productStore = useProductStore();
     const formattedPrice = price => {
-      return $formatPrice(price);
+      let p = `Ksh ${$formatPrice(price)}`;
+      return p;
     };
 
     const featuredProducts = computed(() => productStore.products);

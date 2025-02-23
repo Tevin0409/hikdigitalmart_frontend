@@ -617,27 +617,27 @@ const _routes = [
   {
     name: "cart",
     path: "/cart",
-    component: () => import('./index-CeiOdnrh.mjs')
+    component: () => import('./index-BGAX_xre.mjs')
   },
   {
     name: "checkout",
     path: "/checkout",
-    component: () => import('./index-DA-8KrV_.mjs')
+    component: () => import('./index-DX7K-VpI.mjs')
   },
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-CmUHSm2e.mjs')
+    component: () => import('./Dashboard-STmS9L99.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./Home-CvhjJz4N.mjs')
+    component: () => import('./Home-CQcMD2y5.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BjfOig-L.mjs')
+    component: () => import('./index-BFr3r-F7.mjs')
   },
   {
     name: "landing",
@@ -665,7 +665,7 @@ const _routes = [
     name: "Profile",
     path: "/Profile",
     meta: __nuxt_page_meta || {},
-    component: () => import('./Profile-Su8GZv6m.mjs')
+    component: () => import('./Profile-BaubBKtW.mjs')
   },
   {
     name: "results-id",
@@ -675,7 +675,7 @@ const _routes = [
   {
     name: "wishlist",
     path: "/wishlist",
-    component: () => import('./index-BZvYN-T5.mjs')
+    component: () => import('./index-B2vhDWFA.mjs')
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -2259,7 +2259,6 @@ const useProductStore = defineStore("product", {
     },
     // Add a product to the cart
     async addToCart(product, quantity) {
-      console.log("Add to cart", product);
       const userStore = useUserStore();
       let user = userStore.user;
       try {
@@ -2296,21 +2295,64 @@ const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/orders");
-        console.log(response, "orders");
         this.orders = response.data;
         return response.data;
       } catch (error) {
         console.error("Error fetching orders:", error);
       }
     },
+    async updateQuantity(id, quantity) {
+      try {
+        const { $axios } = useNuxtApp();
+        const userStore = useUserStore();
+        if (userStore.isLoggedIn) {
+          await $axios.put(`/product/cart/update`, { id, quantity });
+          this.getCartItems();
+        } else {
+          const storedCart = localStorage.getItem("cart");
+          const localCart = storedCart ? JSON.parse(storedCart) : [];
+          const updatedCart = localCart.map((item) => {
+            if (item.id === id) {
+              return { ...item, quantity };
+            }
+            return item;
+          });
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          this.getCartItems();
+        }
+      } catch (error) {
+        console.error("Error updating cart quantity:", error);
+      }
+    },
     // Remove a product from the cart
     async removeFromCart(cartId) {
       try {
         const { $axios } = useNuxtApp();
-        await $axios.delete(`/product/cart/remove/${cartId}`);
-        this.getCartItems();
+        const userStore = useUserStore();
+        if (userStore.isLoggedIn) {
+          await $axios.delete(`/product/cart/remove/${cartId}`);
+          this.getCartItems();
+        } else {
+          const storedCart = localStorage.getItem("cart");
+          const localCart = storedCart ? JSON.parse(storedCart) : [];
+          const updatedCart = localCart.filter((item) => item.id !== cartId);
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          this.getCartItems();
+        }
       } catch (error) {
         console.error("Error removing from cart:", error);
+      }
+    },
+    async clearCart() {
+      try {
+        const { $axios } = useNuxtApp();
+        for (const item of this.cartItems) {
+          await $axios.delete(`/product/cart/remove/${item.id}`);
+        }
+        this.cartItems = [];
+        await this.getCartItems();
+      } catch (error) {
+        console.error("Error clearing the cart:", error);
       }
     },
     // Fetch wishlist items from the server
@@ -2322,7 +2364,6 @@ const useProductStore = defineStore("product", {
         this.wishListCount = response.data.length;
         await this.getCartItems();
       } catch (error) {
-        console.error("Error fetching wishlist:", error);
         const localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
         this.wishListItems = localWishlist;
         this.wishListCount = localWishlist.length;
@@ -2340,17 +2381,13 @@ const useProductStore = defineStore("product", {
     },
     async moveWishlistToCart() {
       const userStore = useUserStore();
-      console.log("moveWishlistToCart");
       if (!userStore.isLoggedIn) {
-        console.log("User is not logged in. Cannot move wishlist items.");
         return;
       }
       {
         console.error("LocalStorage is not available.");
       }
     },
-    // Add a product to the wishlist
-    // Add a product to the wishlist
     async addToWishlist(productModelId) {
       var _a;
       try {
@@ -2381,27 +2418,19 @@ const useProductStore = defineStore("product", {
         }
       }
     },
-    // Remove a product from the wishlist
     async removeFromWishlist(productId) {
-      console.log("productId", productId);
       const userStore = useUserStore();
       try {
         const { $axios } = useNuxtApp();
-        let localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-        const localIndex = localWishlist.findIndex(
-          (item) => item.id === productId
-        );
-        if (localIndex !== -1) {
-          localWishlist.splice(localIndex, 1);
-          localStorage.setItem("wishlist", JSON.stringify(localWishlist));
-        }
         if (userStore.isLoggedIn) {
           await $axios.delete(`/product/wishlist/remove/${productId}`);
+        } else {
+          let localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+          const updatedWishlist = localWishlist.filter((item) => item.id !== productId);
+          localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
         }
         await this.getWishList();
-        const index = this.wishListItems.findIndex(
-          (item) => item.id === productId
-        );
+        const index = this.wishListItems.findIndex((item) => item.id === productId);
         if (index !== -1) {
           this.wishListItems.splice(index, 1);
         }
@@ -2410,22 +2439,29 @@ const useProductStore = defineStore("product", {
         console.error("Error removing from wishlist:", error);
       }
     },
-    // Place an order
-    async placeOrder() {
+    async placeOrder(user) {
       var _a, _b, _c;
       try {
         const { $axios } = useNuxtApp();
-        const orderData = {
-          products: this.cartItems.map((item) => {
-            var _a2;
-            return {
-              productModelId: ((_a2 = item == null ? void 0 : item.productModel) == null ? void 0 : _a2.id) ?? (item == null ? void 0 : item.id) ?? "",
-              quantity: (item == null ? void 0 : item.quantity) ?? 1
-            };
-          })
+        let products = this.cartItems.map((item) => {
+          var _a2;
+          return {
+            productModelId: ((_a2 = item == null ? void 0 : item.productModel) == null ? void 0 : _a2.id) ?? (item == null ? void 0 : item.id) ?? "",
+            quantity: (item == null ? void 0 : item.quantity) ?? 1
+          };
+        });
+        let order = {
+          products,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          email: user.email,
+          town: user.town,
+          phone_number: user.phoneNumber,
+          street_address: user.street_address,
+          city: user.city
         };
-        const response = await $axios.post("/product/orders", orderData);
-        console.log("Order placed successfully:", response.data);
+        const response = await $axios.post("/product/orders", order);
+        this.clearCart();
         return response;
       } catch (error) {
         console.error("Error placing order:", error);
@@ -2434,7 +2470,6 @@ const useProductStore = defineStore("product", {
     },
     async placeOrderAnonymous(user) {
       var _a, _b, _c;
-      console.log("ccds", user);
       try {
         const { $axios } = useNuxtApp();
         let products = this.cartItems.map((item) => {
@@ -2455,7 +2490,7 @@ const useProductStore = defineStore("product", {
           city: user.city
         };
         const response = await $axios.post("/product/orders/anonymous", order);
-        console.log("Order placed successfully:", response.data);
+        this.clearCart();
         return response;
       } catch (error) {
         console.error("Error placing order:", error);
@@ -2471,7 +2506,6 @@ const useProductStore = defineStore("product", {
           phoneNumber: order.phoneNumber
         };
         const response = await $axios.post("/product/checkout", orderData);
-        console.log("Order placed successfully:", response);
         return response;
       } catch (error) {
         console.error("Error placing order:", error);

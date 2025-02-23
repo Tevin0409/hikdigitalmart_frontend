@@ -307,7 +307,6 @@ export default {
       }).format(value);
     };
     const getCategoryProducts = item => {
-      console.log("findCategoryProductsw", item);
       categoryId.value = [item.id];
       getProduct();
     };
