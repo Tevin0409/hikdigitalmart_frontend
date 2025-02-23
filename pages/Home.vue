@@ -1,5 +1,11 @@
 <template>
-  <div class="product-section pt-20 px-4 md:px-16">
+  <div
+    class="product-section pt-20"
+    style="
+      background-image: url('https://media.istockphoto.com/id/1255070620/photo/modern-house-with-garden-and-solar-panels.jpg?s=2048x2048&w=is&k=20&c=o-q6PLV-jwspJrtYwC-98d6bsBMW139OLXppJiglVcU=');
+    "
+  >
+    <!-- https://www.sdl.co.ke/assets/images/icons/vector-1.png -->
     <div class="flex flex-wrap justify-center items-start">
       <!-- Left Section -->
       <div class="product-details w-full md:w-1/3 mb-6 md:mb-0">
@@ -145,9 +151,9 @@
       </div>
     </div>
 
-    <NewArrivals class="py-12" />
-    <CardsHome />
-    <TopDeal />
+    <!-- <NewArrivals class="py-12" /> -->
+    <!-- <CardsHome /> -->
+    <!-- <TopDeal /> -->
     <Footer class="w-full bg-gray-100 text-gray-800 py-10" />
   </div>
 </template>
@@ -161,6 +167,7 @@ import Footer from "~/components/Footer.vue";
 export default {
   name: "ProductSection",
   components: { CardsHome, TopDeal, NewArrivals, Footer },
+  layout: "login",
   data() {
     return {
       price: "Ksh 2,400.00",
@@ -247,7 +254,7 @@ export default {
 
 <style scoped>
 .product-section {
-  margin-inline: 12%;
+  margin-inline: 5%;
 
   /* background-color: #f9fafc; */
 }

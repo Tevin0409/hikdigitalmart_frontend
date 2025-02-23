@@ -4,11 +4,17 @@ import Lara from "@primevue/themes/lara";
 export default defineNuxtConfig({
   app: {
     head: {
-      title: "Hk Secure ",
+      title: "Secure Digital  ",
       link: [
-        { rel: 'icon', type: 'image/png', href: '/logo.png' } // Your custom logo as favicon
-      ]
-    }
+        { rel: "icon", type: "image/png", href: "/logo.png" }, // Your custom logo as favicon
+      ],
+      meta: [
+        {
+          name: "description",
+          content: "Secure Digital ",
+        },
+      ],
+    },
   },
   runtimeConfig: {
     public: {
@@ -19,7 +25,11 @@ export default defineNuxtConfig({
     "primeicons/primeicons.css", // PrimeIcons
     "@/assets/css/global.css",
   ],
-  plugins: ["~/plugins/axios", "~/plugins/initializeStore", "~/plugins/formatPrice.js"],
+  plugins: [
+    "~/plugins/axios",
+    "~/plugins/initializeStore",
+    "~/plugins/formatPrice.js",
+  ],
   modules: [
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",

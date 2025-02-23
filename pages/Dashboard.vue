@@ -1,8 +1,8 @@
 <template>
   <div class="container mx-auto my-10 pa-10">
     <TopCard :categories="categories" />
-
-    <section class="flash-sales mt-12 mx-4">
+    <TopDeal />
+    <!-- <section class="flash-sales mt-12 mx-4">
       <h2 class="text-xl font-bold">Browse By Category</h2>
       <Carousel
         :value="categories"
@@ -10,8 +10,6 @@
         :numScroll="1"
         :responsiveOptions="responsiveOptions"
       >
-        <!--  :numVisible="3"
-        :numScroll="3" -->
         <template #item="slotProps">
           <div
             @click="getCategoryProducts(slotProps.data)"
@@ -35,7 +33,7 @@
           </div>
         </template>
       </Carousel>
-    </section>
+    </section> -->
     <!-- </div> -->
     <!-- Categories -->
     <section>
@@ -164,6 +162,8 @@ import ProductCard from "~/components/cards/ProductCard.vue";
 import TopCard from "~/components/cards/TopCard1.vue";
 import Footer from "~/components/shared/utils/Footer.vue";
 import FilterCard from "~/components/cards/FilterCard.vue";
+import TopDeal from "~/components/cards/TopDeal.vue";
+
 import { useRouter } from "vue-router";
 
 export default {
@@ -175,6 +175,7 @@ export default {
     TopCard,
     Footer,
     FilterCard,
+    TopDeal,
   },
   props: {
     searchTerm: {

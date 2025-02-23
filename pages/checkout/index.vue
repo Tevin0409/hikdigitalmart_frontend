@@ -132,11 +132,19 @@
               class="w-16 h-16 object-cover rounded"
             />
             <div class="flex-1 text-center sm:text-left">
-              <p class="text-sm">{{ item?.productModel?.name ?? item.name }}</p>
-              <p class="text-gray-600 text-xs">
-                Ksh
-                {{ formattedPrice(item.productModel?.price ?? item.price) }}
+              <!-- <p class="text-sm">{{ item?.productModel?.name ?? item.name }}</p> -->
+              <p class="text-sm">
+                {{ item?.productModel?.name ?? item.name }}
               </p>
+              <div class="flex justify-between">
+                <p class="text-gray-600 text-xs">
+                  Ksh
+                  {{ formattedPrice(item.productModel?.price ?? item.price) }}
+                </p>
+                <p class="text-sm">
+                  {{ item?.productModel?.quantity ?? item.quantity }}
+                </p>
+              </div>
             </div>
           </div>
         </div>
