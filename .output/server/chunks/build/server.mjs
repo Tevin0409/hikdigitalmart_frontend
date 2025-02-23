@@ -627,17 +627,17 @@ const _routes = [
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-STmS9L99.mjs')
+    component: () => import('./Dashboard-1PflGKeh.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./Home-CQcMD2y5.mjs')
+    component: () => import('./Home-UN9AjetP.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-BFr3r-F7.mjs')
+    component: () => import('./index-CmnTbxeV.mjs')
   },
   {
     name: "landing",

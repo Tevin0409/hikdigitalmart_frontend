@@ -192,6 +192,7 @@ export default {
       "Top Rating",
     ]);
     const carousel = ref(null);
+    const selectedTab = ref("Recent");
     const products = ref([
       {
         image:
@@ -221,7 +222,14 @@ export default {
 
     const featuredProducts = computed(() => productStore.products);
 
-    return { products, featuredProducts, carousel, tabs, formattedPrice };
+    return {
+      products,
+      featuredProducts,
+      carousel,
+      tabs,
+      formattedPrice,
+      selectedTab,
+    };
   },
 };
 </script>
