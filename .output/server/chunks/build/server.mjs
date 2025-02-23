@@ -627,17 +627,17 @@ const _routes = [
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-1PflGKeh.mjs')
+    component: () => import('./Dashboard-DQ9aRBrn.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./Home-UN9AjetP.mjs')
+    component: () => import('./Home-B5_lTy3O.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-CmnTbxeV.mjs')
+    component: () => import('./index-D1RtGSTR.mjs')
   },
   {
     name: "landing",
@@ -653,7 +653,7 @@ const _routes = [
   {
     name: "products-id",
     path: "/products/:id()",
-    component: () => import('./_id_-D18q6mDQ.mjs')
+    component: () => import('./_id_-DpUWZh6F.mjs')
   },
   {
     name: "products",
@@ -2234,6 +2234,7 @@ const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/product-models");
+        console.log(response, "products ");
         this.products = response.data.results;
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -2808,8 +2809,8 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-  default: defineAsyncComponent(() => import('./default-bYqFhtKM.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-CYADLC2V.mjs')),
+  default: defineAsyncComponent(() => import('./default-C4Q-6Wja.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-BIasWZ0b.mjs')),
   login: defineAsyncComponent(() => import('./login-D8XEc4AN.mjs'))
 };
 const LayoutLoader = defineComponent({

@@ -40,12 +40,6 @@
       <div class="p-4 rounded-md">
         <div class="flex justify-between items-center mb-4 px-2">
           <h2 class="text-lg font-semibold">Top selling items</h2>
-          <!-- <NuxtLink
-            to="/top-selling"
-            class="text-orange-200 hover:text-orange-400 text-sm font-semibold"
-          >
-            See All &rarr;
-          </NuxtLink> -->
         </div>
 
         <div class="flex overflow-x-auto gap-4 p-2">
@@ -151,6 +145,7 @@
         </div>
       </div>
     </section>
+
     <Footer />
   </div>
 </template>

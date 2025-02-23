@@ -259,6 +259,48 @@
         <span class="sr-only">Loading...</span>
       </div> -->
     </div>
+
+    <!-- Related Products -->
+
+    <section>
+      <div class="rounded-md pt-10">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-semibold">Related Products</h2>
+        </div>
+
+        <div class="flex overflow-x-auto gap-4 p-2">
+          <div
+            v-for="(product, index) in randomizedProducts"
+            :key="index"
+            class="min-w-[200px] md:min-w-[220px] bg-white rounded-md shadow-md cursor-pointer p-2"
+            @click="goToProductPage(product)"
+          >
+            <div class="relative">
+              <img
+                :src="product.images[0]?.optimizeUrl"
+                :alt="product.name"
+                class="w-full h-36 object-cover rounded-md"
+              />
+              <!-- <span
+                class="absolute top-2 right-2 bg-orange-400 text-white text-xs px-2 py-1 rounded-md"
+              >
+                -{{ product.discount }}%
+              </span> -->
+            </div>
+            {{ product.product.name }}
+            <h3 class="text-sm font-medium mt-2 truncate">
+              {{ product.name }}
+            </h3>
+            <p class="text-lg font-semibold text-gray-900">
+              {{ formatPrice(product.price) }}
+            </p>
+            <p class="text-gray-500 text-xs line-through">
+              {{ product.oldPrice }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -266,7 +308,9 @@
 import { useRoute } from "vue-router";
 import { ref, onMounted } from "vue";
 // import formatPrice from "~/plugins/formatPrice";
+import { useProductStore } from "@/stores/productStore";
 
+// const productStore = useProductStore();
 const { $formatPrice } = useNuxtApp();
 
 const formattedPrice = price => {
@@ -276,7 +320,8 @@ const formattedPrice = price => {
 const route = useRoute();
 const quantity = ref(1);
 const activeTab = ref("details");
-
+const products = ref([]);
+// const productList = computed(() => productStore.products);
 const reviews = [
   {
     id: 1,
@@ -308,6 +353,7 @@ const { $axios } = useNuxtApp();
 onMounted(() => {
   // product.value = route.state?.product || dummyProduct;
   getProductByID();
+  // getProducts()
 });
 
 const setMainImage = image => {
@@ -362,6 +408,11 @@ const getProductByID = async () => {
   }
 };
 
+const randomizedProducts = computed(() => {
+  return [...products.value] // Create a shallow copy
+    .sort(() => Math.random() - 0.5) // Shuffle array
+    .slice(0, 6); // Limit to 6 items
+});
 const tabClass = tab => ({
   "text-black border-b-2 border-black": activeTab.value === tab,
   "text-gray-600": activeTab.value !== tab,

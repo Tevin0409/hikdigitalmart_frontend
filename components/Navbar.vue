@@ -62,6 +62,12 @@
                 :value="formattedPrice(item.badge)"
                 severity="warning"
               />
+              <Badge
+                v-if="item.count"
+                class="ml-auto"
+                :value="count"
+                severity="warning"
+              />
             </a>
           </template>
         </Menu>
@@ -448,6 +454,7 @@ const items = ref([
         label: "Cart",
         icon: "pi pi-shopping-cart",
         command: goToCart,
+        // count: cartCount,
         badge: computed(() => (cartTotal.value > 0 ? cartTotal.value : null)),
       },
     ],
@@ -485,6 +492,7 @@ const wishProduct = async productId => {
 };
 // Fetch the data on component mount
 onMounted(async () => {
+  await productStore.getProducts();
   await productStore.getCategories();
   await productStore.getCartItems();
   await productStore.getWishList();

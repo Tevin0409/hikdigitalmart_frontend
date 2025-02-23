@@ -46,6 +46,7 @@ export const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/product-models");
+        console.log(response, "products ")
         this.products = response.data.results; // Update the cart items
       } catch (error) {
         console.error("Error fetching cart items:", error);
