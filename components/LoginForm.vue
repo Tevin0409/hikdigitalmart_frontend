@@ -59,12 +59,19 @@
               </p>
             </div>
 
-            <button
+            <!-- <button
               type="submit"
               class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-4"
             >
               Log In
-            </button>
+            </button> -->
+            <Button
+              class="w-full bg-red-500 text-white py-3 rounded hover:bg-red-600 mt-4"
+              type="submit"
+              label="Log In"
+              :loading="loading"
+              @click="load"
+            />
           </form>
 
           <p class="text-sm mt-4 text-center">
@@ -254,6 +261,7 @@ export default {
       userStore: useUserStore(),
       productStore: useProductStore(),
       resetPassword: false,
+      loading: false,
     };
   },
   computed: {
@@ -330,6 +338,7 @@ export default {
     },
     async login() {
       try {
+        this.loading = true;
         const { accessToken } = await this.userStore.login(
           this.form.email,
           this.form.password
@@ -345,6 +354,8 @@ export default {
         } else {
           this.isVerified = false;
         }
+        this.loading = false;
+
         this.$toast.add({
           severity: "error",
           summary: error.message,

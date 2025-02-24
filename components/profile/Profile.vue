@@ -10,55 +10,96 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label>First Name</label>
-                <input type="text" v-model="user.firstName" class="border w-full p-2 mt-1" />
+                <input
+                  type="text"
+                  v-model="user.firstName"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
               <div>
                 <label>Last Name</label>
-                <input type="text" v-model="user.lastName" class="border w-full p-2 mt-1" />
+                <input
+                  type="text"
+                  v-model="user.lastName"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
               <div>
                 <label>Email</label>
-                <input type="email" v-model="user.email" class="border w-full p-2 mt-1" />
+                <input
+                  type="email"
+                  v-model="user.email"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
               <div>
                 <label>Phone Number</label>
-                <input type="text" v-model="user.phoneNumber" class="border w-full p-2 mt-1" />
+                <input
+                  type="text"
+                  v-model="user.phoneNumber"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
             </div>
             <div class="flex justify-between mt-6">
               <button type="button" class="border px-4 py-2 w-1/2 md:w-auto">
                 Cancel
               </button>
-              <button type="submit" class="bg-red-500 text-white px-4 py-2 w-1/2 md:w-auto">
-                Save Changes
-              </button>
+              <Button
+                class="bg-primary text-white py-3 rounded hover:bg-secondary mt-4"
+                type="submit"
+                label="Save Changes"
+                :loading="loadingSave"
+              />
             </div>
             <!-- Change Password Section -->
             <div class="mt-6">
-              <button type="button" @click="showPasswordFields = !showPasswordFields"
-                class="bg-blue-500 text-white px-4 py-2 w-full md:w-auto">
+              <button
+                type="button"
+                @click="showPasswordFields = !showPasswordFields"
+                class="bg-secondary text-white px-4 py-2 w-full md:w-auto"
+              >
                 Change Password
               </button>
 
-              <div v-if="showPasswordFields" class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div
+                v-if="showPasswordFields"
+                class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4"
+              >
                 <div>
                   <label>Old Password</label>
-                  <input type="password" v-model="passwords.oldPassword" class="border w-full p-2 mt-1" />
+                  <input
+                    type="password"
+                    v-model="passwords.oldPassword"
+                    class="border w-full p-2 mt-1"
+                  />
                 </div>
                 <div>
                   <label>New Password</label>
-                  <input type="password" v-model="passwords.newPassword" class="border w-full p-2 mt-1" />
+                  <input
+                    type="password"
+                    v-model="passwords.newPassword"
+                    class="border w-full p-2 mt-1"
+                  />
                 </div>
                 <div>
                   <label>Confirm Password</label>
-                  <input type="password" v-model="passwords.confirmNewPassword" class="border w-full p-2 mt-1" />
+                  <input
+                    type="password"
+                    v-model="passwords.confirmNewPassword"
+                    class="border w-full p-2 mt-1"
+                  />
                 </div>
 
                 <!-- Update Password Button -->
                 <div class="col-span-1 md:col-span-2 flex justify-end mt-4">
-                  <button type="button" @click="updatePassword" class="bg-primary text-white px-4 py-2 md:w-auto">
-                    Update Password
-                  </button>
+                  <Button
+                    class="bg-primary text-white py-3 rounded hover:bg-secondary mt-4"
+                    type="button"
+                    label="Update Password"
+                    :loading="loading"
+                    @click="updatePassword"
+                  />
                 </div>
               </div>
             </div>
@@ -68,10 +109,14 @@
         <!-- Payment Options Section -->
         <div v-if="activeSection === 'paymentOptions'">
           <h2 class="text-xl font-bold mb-4 text-red-500">Payment Method</h2>
-          <div class="mt-4 flex flex-col md:flex-row items-center md:items-start">
+          <div
+            class="mt-4 flex flex-col md:flex-row items-center md:items-start"
+          >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/512px-M-PESA_LOGO-01.svg.png?20191120100524"
-              class="w-1/2 md:w-1/4" alt="Mpesa Logo" />
+              class="w-1/2 md:w-1/4"
+              alt="Mpesa Logo"
+            />
             <div class="ml-4">
               <h3 class="font-bold mb-2">Mpesa</h3>
               <p class="text-gray-600">Mobile Number: {{ user.phoneNumber }}</p>
@@ -84,24 +129,36 @@
           <h2 class="text-xl font-bold mb-4 text-red-500">My Orders</h2>
           <div class="p-4 bg-gray-100">
             <div class="flex space-x-4 mb-4 overflow-x-auto">
-              <button v-for="filter in filters" :key="filter" @click="selectedFilter = filter" :class="[
-                'px-4 py-2 rounded-full border whitespace-nowrap',
-                selectedFilter === filter
-                  ? 'bg-red-100 text-red-600'
-                  : 'bg-white text-gray-600',
-              ]">
+              <button
+                v-for="filter in filters"
+                :key="filter"
+                @click="selectedFilter = filter"
+                :class="[
+                  'px-4 py-2 rounded-full border whitespace-nowrap',
+                  selectedFilter === filter
+                    ? 'bg-red-100 text-red-600'
+                    : 'bg-white text-gray-600',
+                ]"
+              >
                 {{ filter }}
               </button>
             </div>
 
             <!-- Orders List -->
-            <div v-for="(order, index) in filteredOrders" :key="index" class="bg-white shadow-md rounded-lg mb-4 p-4">
+            <div
+              v-for="(order, index) in filteredOrders"
+              :key="index"
+              class="bg-white shadow-md rounded-lg mb-4 p-4"
+            >
               <div class="flex justify-between items-center">
-                <span class="px-3 py-1 text-xs rounded-full" :class="{
-                  'bg-yellow-200 text-yellow-800': order.status === 'Pending',
-                  'bg-green-100 text-green-600': order.status === 'Delivered',
-                  'bg-gray-300 text-gray-700': order.status === 'Cancelled',
-                }">
+                <span
+                  class="px-3 py-1 text-xs rounded-full"
+                  :class="{
+                    'bg-yellow-200 text-yellow-800': order.status === 'Pending',
+                    'bg-green-100 text-green-600': order.status === 'Delivered',
+                    'bg-gray-300 text-gray-700': order.status === 'Cancelled',
+                  }"
+                >
                   {{ order.status }}
                 </span>
                 <span class="text-sm text-gray-500">{{
@@ -109,17 +166,28 @@
                 }}</span>
               </div>
 
-              <div class="mt-2 flex flex-col md:flex-row items-center md:items-start">
-                <img :src="order.orderItems[0]?.productModel.images[0]?.optimizeUrl
-                  " alt="Product Image" class="w-16 h-16 rounded-md object-cover" />
+              <div
+                class="mt-2 flex flex-col md:flex-row items-center md:items-start"
+              >
+                <img
+                  :src="
+                    order.orderItems[0]?.productModel.images[0]?.optimizeUrl
+                  "
+                  alt="Product Image"
+                  class="w-16 h-16 rounded-md object-cover"
+                />
                 <div class="ml-0 md:ml-4 text-center md:text-left">
                   <p class="text-red-600 font-semibold">
                     Order ID: {{ order.id.slice(0, 8) }}
                   </p>
                   <p class="text-gray-700">
                     {{ order.orderItems[0].productModel.name }}
-                    <span v-if="order.orderItems.length > 1" class="text-blue-600">
-                      & {{ order.orderItems.length - 1 }} more items</span>
+                    <span
+                      v-if="order.orderItems.length > 1"
+                      class="text-blue-600"
+                    >
+                      & {{ order.orderItems.length - 1 }} more items</span
+                    >
                   </p>
                   <p class="text-gray-800 font-semibold mt-1">
                     KES {{ formattedPrice(order.total) }}
@@ -147,9 +215,9 @@ export default {
     return {
       showPasswordFields: false,
       passwords: {
-        oldPassword: '',
-        newPassword: '',
-        confirmNewPassword: ''
+        oldPassword: "",
+        newPassword: "",
+        confirmNewPassword: "",
       },
       selectedFilter: "All",
       filters: ["All", "Pending", "Delivered", "Cancelled"],
@@ -174,14 +242,14 @@ export default {
       },
       orders: [],
       wishlist: [],
+      loading: false,
+      loadingSave: false,
     };
   },
   computed: {
     filteredOrders() {
       if (this.selectedFilter === "All") return this.orders;
-      return this.orders.filter(
-        (order) => order.status === this.selectedFilter
-      );
+      return this.orders.filter(order => order.status === this.selectedFilter);
     },
   },
 
@@ -189,11 +257,11 @@ export default {
     await this.getUserData();
     await this.getWishList();
     await this.getOrders();
-
   },
 
   methods: {
     async updatePassword() {
+      this.loading = true;
       const userStore = useUserStore();
       try {
         const password = {
@@ -208,8 +276,10 @@ export default {
           group: "br",
           life: 3000,
         });
-        userStore.logout()
+        this.loading = false;
+        userStore.logout();
       } catch (err) {
+        this.loading = false;
         this.$toast.add({
           severity: "error",
           summary: err,
@@ -221,12 +291,12 @@ export default {
     async updateUser() {
       const userStore = useUserStore();
       try {
+        this.loadingSave = true;
         const user = {
           firstName: this.user.firstName,
           lastName: this.user.lastName,
           email: this.user.email,
           phoneNumber: this.user.phoneNumber,
-
         };
         const response = await userStore.updateUser(user, this.user.id);
         this.$toast.add({
@@ -235,8 +305,9 @@ export default {
           group: "br",
           life: 3000,
         });
+        this.loadingSave = false;
       } catch (err) {
-        console.log("updateUser failed", err);
+        this.loadingSave = false;
         this.$toast.add({
           severity: "error",
           summary: err,

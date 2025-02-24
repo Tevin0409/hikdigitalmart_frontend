@@ -122,7 +122,7 @@
                 </div>
               </template>
             </AutoComplete>
-
+            <Button icon="pi pi-filter" class="ml-3 p-0" aria-label="Filter" />
             <!-- Search Button on the Right -->
             <!-- <button
               @click="handleSearch"
@@ -381,6 +381,7 @@ const searchItems = async event => {
     console.error("Error fetching products:", error);
   }
 };
+const logout = () => userStore.logout();
 
 // check if user is logged in
 const checkUserLoggedIn = async () => {
@@ -456,6 +457,11 @@ const items = ref([
         command: goToCart,
         // count: cartCount,
         badge: computed(() => (cartTotal.value > 0 ? cartTotal.value : null)),
+      },
+      {
+        label: "Log out",
+        icon: "pi pi-sign-out",
+        command: logout,
       },
     ],
   },

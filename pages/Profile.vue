@@ -5,16 +5,26 @@
       <div class="card flex">
         <Breadcrumb :home="home" :model="items">
           <template #item="{ item, props }">
-            <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+            <router-link
+              v-if="item.route"
+              v-slot="{ href, navigate }"
+              :to="item.route"
+              custom
+            >
               <a :href="href" v-bind="props.action" @click="navigate">
                 <span :class="[item.icon, 'text-color']" />
                 <span class="text-primary font-semibold">{{ item.label }}</span>
               </a>
             </router-link>
-            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+            <a
+              v-else
+              :href="item.url"
+              :target="item.target"
+              v-bind="props.action"
+            >
               <span class="text-surface-700 dark:text-surface-0">{{
                 item.label
-                }}</span>
+              }}</span>
             </a>
           </template>
         </Breadcrumb>
@@ -22,29 +32,43 @@
     </div>
 
     <!-- Mobile Sidebar Toggle -->
-    <button class="md:hidden bg-red-500 text-white px-4 py-2 rounded mb-4" @click="toggleSidebar">
+    <button
+      class="md:hidden bg-red-500 text-white px-4 py-2 rounded mb-4"
+      @click="toggleSidebar"
+    >
       {{ sidebarOpen ? "Close Menu" : "Menu" }}
     </button>
 
     <div class="flex flex-col md:flex-row">
       <!-- Sidebar -->
-      <aside :class="[
-        'md:w-1/4 w-full bg-white shadow-md md:shadow-none md:block fixed md:relative top-0 left-0 h-full md:h-auto transform transition-transform duration-300 ease-in-out',
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
-      ]">
+      <aside
+        :class="[
+          'md:w-1/4 w-full bg-white shadow-md md:shadow-none md:block fixed md:relative top-0 left-0 h-full md:h-auto transform transition-transform duration-300 ease-in-out',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
+        ]"
+      >
         <ul class="space-y-2 text-gray-600 pt-2 p-4">
           <li class="font-bold text-red-500">Manage My Account</li>
           <li @click="setActiveSection('profile')" class="cursor-pointer">
             Profile
           </li>
-          <li @click="setActiveSection('paymentOptions')" class="cursor-pointer">
+          <li
+            @click="setActiveSection('paymentOptions')"
+            class="cursor-pointer"
+          >
             Payment Options
           </li>
-          <li @click="setActiveSection('orders')" class="font-bold text-red-500 mt-4 cursor-pointer">
+          <li
+            @click="setActiveSection('orders')"
+            class="font-bold text-red-500 mt-4 cursor-pointer"
+          >
             My Orders
           </li>
         </ul>
-        <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded w-full mt-4 md:mt-12">
+        <button
+          @click="logout"
+          class="bg-red-500 text-white px-4 py-2 rounded w-full mt-4 md:mt-12"
+        >
           Logout
         </button>
       </aside>
@@ -53,29 +77,48 @@
       <main class="md:w-3/4 w-full bg-white border p-4">
         <!-- Profile Section -->
         <div v-if="activeSection === 'profile'">
-          <h2 class="text-xl font-bold mb-4 text-red-500">Edit Your Profile</h2>
+          <!-- <h2 class="text-xl font-bold mb-4 text-red-500">Edit Your Profile</h2> -->
           <form>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label>First Name</label>
-                <input type="text" v-model="user.firstName" class="border w-full p-2 mt-1" />
+                <input
+                  type="text"
+                  v-model="user.firstName"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
               <div>
                 <label>Last Name</label>
-                <input type="text" v-model="user.lastName" class="border w-full p-2 mt-1" />
+                <input
+                  type="text"
+                  v-model="user.lastName"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
               <div>
                 <label>Email</label>
-                <input type="email" v-model="user.email" class="border w-full p-2 mt-1" />
+                <input
+                  type="email"
+                  v-model="user.email"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
               <div>
                 <label>Phone Number</label>
-                <input type="text" v-model="user.phoneNumber" class="border w-full p-2 mt-1" />
+                <input
+                  type="text"
+                  v-model="user.phoneNumber"
+                  class="border w-full p-2 mt-1"
+                />
               </div>
             </div>
             <div class="flex justify-between mt-6">
               <button class="border px-4 py-2 w-1/2 md:w-auto">Cancel</button>
-              <button class="bg-red-500 text-white px-4 py-2 w-1/2 md:w-auto" @click="updateUser">
+              <button
+                class="bg-red-500 text-white px-4 py-2 w-1/2 md:w-auto"
+                @click="updateUser"
+              >
                 Save Changes
               </button>
             </div>
@@ -85,10 +128,14 @@
         <!-- Payment Options Section -->
         <div v-if="activeSection === 'paymentOptions'">
           <h2 class="text-xl font-bold mb-4 text-red-500">Payment Method</h2>
-          <div class="mt-4 flex flex-col md:flex-row items-center md:items-start">
+          <div
+            class="mt-4 flex flex-col md:flex-row items-center md:items-start"
+          >
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/M-PESA_LOGO-01.svg/512px-M-PESA_LOGO-01.svg.png?20191120100524"
-              class="w-1/2 md:w-1/4" alt="Mpesa Logo" />
+              class="w-1/2 md:w-1/4"
+              alt="Mpesa Logo"
+            />
             <div class="ml-4">
               <h3 class="font-bold mb-2">Mpesa</h3>
               <p class="text-gray-600">Mobile Number: {{ user.phoneNumber }}</p>
@@ -101,42 +148,65 @@
           <h2 class="text-xl font-bold mb-4 text-red-500">My Orders</h2>
           <div class="p-4 bg-gray-100">
             <div class="flex space-x-4 mb-4 overflow-x-auto">
-              <button v-for="filter in filters" :key="filter" @click="selectedFilter = filter" :class="[
-                'px-4 py-2 rounded-full border whitespace-nowrap',
-                selectedFilter === filter
-                  ? 'bg-red-100 text-red-600'
-                  : 'bg-white text-gray-600',
-              ]">
+              <button
+                v-for="filter in filters"
+                :key="filter"
+                @click="selectedFilter = filter"
+                :class="[
+                  'px-4 py-2 rounded-full border whitespace-nowrap',
+                  selectedFilter === filter
+                    ? 'bg-red-100 text-red-600'
+                    : 'bg-white text-gray-600',
+                ]"
+              >
                 {{ filter }}
               </button>
             </div>
 
             <!-- Orders List -->
-            <div v-for="(order, index) in filteredOrders" :key="index" class="bg-white shadow-md rounded-lg mb-4 p-4">
+            <div
+              v-for="(order, index) in filteredOrders"
+              :key="index"
+              class="bg-white shadow-md rounded-lg mb-4 p-4"
+            >
               <div class="flex justify-between items-center">
-                <span class="px-3 py-1 text-xs rounded-full" :class="{
-                  'bg-yellow-200 text-yellow-800': order.status === 'Pending',
-                  'bg-green-100 text-green-600': order.status === 'Delivered',
-                  'bg-gray-300 text-gray-700': order.status === 'Cancelled',
-                }">
+                <span
+                  class="px-3 py-1 text-xs rounded-full"
+                  :class="{
+                    'bg-yellow-200 text-yellow-800': order.status === 'Pending',
+                    'bg-green-100 text-green-600': order.status === 'Delivered',
+                    'bg-gray-300 text-gray-700': order.status === 'Cancelled',
+                  }"
+                >
                   {{ order.status }}
                 </span>
                 <span class="text-sm text-gray-500">{{
                   formatDate(order.createdAt)
-                  }}</span>
+                }}</span>
               </div>
 
-              <div class="mt-2 flex flex-col md:flex-row items-center md:items-start">
-                <img :src="order.orderItems[0]?.productModel.images[0]?.optimizeUrl
-                  " alt="Product Image" class="w-16 h-16 rounded-md object-cover" />
+              <div
+                class="mt-2 flex flex-col md:flex-row items-center md:items-start"
+              >
+                <img
+                  :src="
+                    order.orderItems[0]?.productModel.images[0]?.optimizeUrl
+                  "
+                  alt="Product Image"
+                  class="w-16 h-16 rounded-md object-cover"
+                />
                 <div class="ml-0 md:ml-4 text-center md:text-left">
                   <p class="text-red-600 font-semibold">
                     Order ID: {{ order.id.slice(0, 8) }}
                   </p>
                   <p class="text-gray-700">
                     {{ order.orderItems[0].productModel.name }}
-                    <span v-if="order.orderItems.length > 1" class="text-blue-600">
-                      & {{ order.orderItems.length - 1 }} more items</span>
+                    <span
+                      v-if="order.orderItems.length > 1"
+                      class="text-blue-600"
+                    >
+                      & {{ order.orderItems.length - 1 }} more items</span
+                    >
                   </p>
                   <p class="text-gray-800 font-semibold mt-1">
                     KES {{ formattedPrice(order.total) }}
@@ -183,6 +253,10 @@ export default {
       },
       orders: [],
       wishlist: [],
+      items: [
+        { label: "Cart", route: "/cart" },
+        { label: "Checkout", route: "/checkout" },
+      ],
     };
   },
   computed: {

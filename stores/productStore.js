@@ -46,7 +46,7 @@ export const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/product-models");
-        console.log(response, "products ")
+        console.log(response, "products ");
         this.products = response.data.results; // Update the cart items
       } catch (error) {
         console.error("Error fetching cart items:", error);
@@ -59,6 +59,17 @@ export const useProductStore = defineStore("product", {
         this.models = response.data.results; // Update the cart items
       } catch (error) {
         console.error("Error fetching cart items:", error);
+      }
+    },
+    async getOrderDetails(order) {
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.get(`/product/orders/${order.id}`);
+        // this.orders = response.data; // Update the orders
+        return response; 
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        // return [];  // Return an empty array in case of error
       }
     },
     async getCategories() {
@@ -304,35 +315,39 @@ export const useProductStore = defineStore("product", {
         }
       }
     },
-  async removeFromWishlist(productId) {
-    const userStore = useUserStore();
-    try {
+    async removeFromWishlist(productId) {
+      const userStore = useUserStore();
+      try {
         const { $axios } = useNuxtApp();
 
         if (userStore.isLoggedIn) {
-            // If logged in, remove from the server-side wishlist
-            await $axios.delete(`/product/wishlist/remove/${productId}`);
+          // If logged in, remove from the server-side wishlist
+          await $axios.delete(`/product/wishlist/remove/${productId}`);
         } else {
-            // If not logged in, remove from the localStorage wishlist
-            let localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-            const updatedWishlist = localWishlist.filter(item => item.id !== productId);
-            localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+          // If not logged in, remove from the localStorage wishlist
+          let localWishlist =
+            JSON.parse(localStorage.getItem("wishlist")) || [];
+          const updatedWishlist = localWishlist.filter(
+            item => item.id !== productId
+          );
+          localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
         }
 
         // Fetch updated wishlist and update local state
         await this.getWishList();
 
         // Update the wishlist items and count
-        const index = this.wishListItems.findIndex(item => item.id === productId);
+        const index = this.wishListItems.findIndex(
+          item => item.id === productId
+        );
         if (index !== -1) {
-            this.wishListItems.splice(index, 1);
+          this.wishListItems.splice(index, 1);
         }
         this.wishListCount = this.wishListItems.length;
-        
-    } catch (error) {
+      } catch (error) {
         console.error("Error removing from wishlist:", error);
-    }
-},
+      }
+    },
 
     async placeOrder(user) {
       try {
