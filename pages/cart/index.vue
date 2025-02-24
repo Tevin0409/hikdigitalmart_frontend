@@ -152,8 +152,13 @@
                   Subtotal: Ksh {{ formattedPrice(cartTotal) }}
                 </p>
                 <hr class="my-2" />
+                <p class="text-gray-600">
+                  VAT (16%): Ksh {{ formattedPrice(getVat(cartTotal)) }}
+                </p>
+
+                <hr class="my-2" />
                 <p class="text-lg font-bold">
-                  Total: Ksh {{ formattedPrice(cartTotal) }}
+                  Total: Ksh {{ formattedPrice(cartTotal + getVat(cartTotal)) }}
                 </p>
                 <button
                   class="w-full bg-primary text-white py-2 mt-4 rounded-lg hover:bg-secondary"
@@ -237,6 +242,10 @@ const updateQuantity = async (id, quantity) => {
 // Remove an item from the cart
 const removeItem = async item => {
   await productStore.removeFromCart(item.id);
+};
+
+const getVat = cartTotal => {
+  return cartTotal * 0.16;
 };
 
 // Apply a discount coupon
