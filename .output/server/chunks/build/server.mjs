@@ -590,8 +590,11 @@ const wrapInKeepAlive = (props, children) => {
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-const __nuxt_page_meta$3 = {
+const __nuxt_page_meta$4 = {
   layout: "login"
+};
+const __nuxt_page_meta$3 = {
+  middleware: ["auth"]
 };
 const __nuxt_page_meta$2 = {
   middleware: ["auth"]
@@ -611,8 +614,8 @@ const _routes = [
   {
     name: "auth",
     path: "/auth",
-    meta: __nuxt_page_meta$3 || {},
-    component: () => import('./index-AcTvr3pP.mjs')
+    meta: __nuxt_page_meta$4 || {},
+    component: () => import('./index-CJOyp5cq.mjs')
   },
   {
     name: "cart",
@@ -645,10 +648,16 @@ const _routes = [
     component: () => import('./landing-Swq2ZXKe.mjs')
   },
   {
+    name: "my-account-id",
+    path: "/my-account/:id()",
+    meta: __nuxt_page_meta$3 || {},
+    component: () => import('./_id_-D_VcDnWI.mjs')
+  },
+  {
     name: "my-account",
     path: "/my-account",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./my-account-CIXckCgP.mjs')
+    component: () => import('./index-CbKyNZ3l.mjs')
   },
   {
     name: "products-id",
@@ -665,7 +674,7 @@ const _routes = [
     name: "Profile",
     path: "/Profile",
     meta: __nuxt_page_meta || {},
-    component: () => import('./Profile-BaubBKtW.mjs')
+    component: () => import('./Profile-BtEkvQ-3.mjs')
   },
   {
     name: "results-id",
@@ -2249,6 +2258,15 @@ const useProductStore = defineStore("product", {
         console.error("Error fetching cart items:", error);
       }
     },
+    async getOrderDetails(order) {
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.get(`/product/orders/${order.id}`);
+        return response;
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    },
     async getCategories() {
       try {
         const { $axios } = useNuxtApp();
@@ -2427,11 +2445,15 @@ const useProductStore = defineStore("product", {
           await $axios.delete(`/product/wishlist/remove/${productId}`);
         } else {
           let localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-          const updatedWishlist = localWishlist.filter((item) => item.id !== productId);
+          const updatedWishlist = localWishlist.filter(
+            (item) => item.id !== productId
+          );
           localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
         }
         await this.getWishList();
-        const index = this.wishListItems.findIndex((item) => item.id === productId);
+        const index = this.wishListItems.findIndex(
+          (item) => item.id === productId
+        );
         if (index !== -1) {
           this.wishListItems.splice(index, 1);
         }
@@ -2809,8 +2831,8 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-  default: defineAsyncComponent(() => import('./default-C4Q-6Wja.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-BIasWZ0b.mjs')),
+  default: defineAsyncComponent(() => import('./default-KoPikRA9.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-DMUtdJVw.mjs')),
   login: defineAsyncComponent(() => import('./login-D8XEc4AN.mjs'))
 };
 const LayoutLoader = defineComponent({
