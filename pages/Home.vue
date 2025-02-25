@@ -69,7 +69,7 @@
       <!-- Right Section -->
       <!-- <div class=""> -->
       <div
-        class="hidden md:block w-full md:w-1/3 pa-6 ma-5 pl-40 dark:border-orange-600"
+        class="hidden md:block bg-whit w-full md:w-1/3 pa-6 ma-5 pl-40 dark:border-orange-600"
       >
         <div class="border border-red-600 dark:border-orange-600 rounded p-4">
           <div class="mb-4 border-b pb-2 font-medium text-dark-600 text-center">
@@ -139,7 +139,7 @@
       class="feature__wrap grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mt-12"
     >
       <div
-        class="feature__item flex flex-col items-center text-center"
+        class="feature__item flex bg-white flex-col items-center text-center"
         v-for="(feature, index) in features"
         :key="index"
       >

@@ -4,16 +4,43 @@
       class="flash-sales mt-5 mx-2 full-screen"
       style="min-height: 900px"
     >
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-regular">
-          Search results for <span class="font-bold"> {{ searchTer }}</span>
-        </h2>
+      <Breadcrumb :home="home" :model="items">
+        <template #item="{ item, props }">
+          <router-link
+            v-if="item.route"
+            v-slot="{ href, navigate }"
+            :to="item.route"
+            custom
+          >
+            <a :href="href" v-bind="props.action" @click="navigate">
+              <span :class="[item.icon, 'text-color']" />
+              <span class="text-primary font-semibold">{{ item.label }}</span>
+            </a>
+          </router-link>
+          <a
+            v-else
+            :href="item.url"
+            :target="item.target"
+            v-bind="props.action"
+          >
+            <span class="text-surface-700 dark:text-surface-0">{{
+              item.label
+            }}</span>
+          </a>
+        </template>
+      </Breadcrumb>
+      <div class="flexjustify-between items-center mb-4">
         <div class="flex space-x-2">
           <!-- <button class="bg-red-500 text-white px-4 py-2">View All</button> -->
         </div>
       </div>
-      <div class="flex">
-        <FilterCard :features="features" />
+      <div class="flex flex-col sm:flex-row">
+        <!-- FilterCard -->
+        <FilterCard
+          :features="features"
+          class="w-full sm:w-auto mb-4 sm:mb-0"
+        />
+
         <!-- Right Section -->
         <div class="w-full">
           <div v-if="fetching && products.length < 1" class="text-center mt-6">
@@ -52,13 +79,6 @@
           </div>
 
           <div class="flex justify-center py-8" v-if="products.length != 0">
-            <!-- <button
-              :loading="fetching"
-              @click="showMoreProducts()"
-              class="bg-red-500 text-white px-4 py-2"
-            >
-              Show More
-            </button> -->
             <Button
               type="button"
               label="Show More"
@@ -140,6 +160,14 @@ export default {
       minutes: "00",
       seconds: "00",
     });
+    const home = ref({
+      icon: "pi pi-home",
+      route: "/dashboard",
+    });
+    const items = ref([
+      { label: "Products", route: "/dashboard" },
+      { label: `Seach Results for ${searchTer}`, route: "/checkout" },
+    ]);
     const goToProductPage = product => {
       // console.log("prodcet", product);
       router.push({
@@ -380,6 +408,8 @@ export default {
       features,
       category,
       searchTer,
+      home,
+      items,
     };
   },
 };

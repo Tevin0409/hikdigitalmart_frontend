@@ -111,24 +111,33 @@
         </div>
       </div>
       <div v-else>
-        <a
-          class="p-button-text text-primary hover:text-white cursor-pointer"
-          @click="detailedView = false"
-          style="
-            color: var(--secondary-color) !important;
-            text-decoration: underline;
-          "
-        >
-          Back to Orders
-        </a>
+        <div class="flex justify-between">
+          <a
+            class="p-button-text text-primary hover:text-white cursor-pointer flex items-center"
+            @click="detailedView = false"
+            style="color: var(--secondary-color) !important"
+          >
+            <i class="pi pi-arrow-left pr-2"></i>
+            Back to Orders
+          </a>
 
-        <div class="p-6 bg-white rounded-lg">
+          <button
+            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+            @click="printOrder"
+          >
+            <i class="pi pi-print"></i>
+            Print Order
+          </button>
+        </div>
+
+        <div class="p-6 bg-white rounded-lg order-details">
           <div class="flex justify-between">
-            <h2 class="text-2xl font-semibold">Order Details</h2>
+            <h2 class="text-lg md:text-2xl font-semibold">Order Details</h2>
+
             <div class="flex items-center gap-2">
               <p class="font-semibold">Status</p>
               <span
-                class="px-3 py-1 text-xs rounded-full"
+                class="px-2 py-0.5 md:px-3 md:py-1 text-xs rounded-full"
                 :class="{
                   'bg-yellow-400 text-yellow-800':
                     orderDetails.status === 'Pending',
@@ -142,17 +151,21 @@
               >
                 {{ orderDetails.status }}
               </span>
+
+              <!-- Print Order Button -->
             </div>
           </div>
           <Divider />
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <p class="font-semibold">Order ID</p>
-              <p>{{ orderDetails.id }}</p>
+              <p class="font-mono">{{ orderDetails.id.slice(0, 8) }}</p>
             </div>
             <div>
               <p class="font-semibold">Customer Name</p>
-              <p>{{ orderDetails.first_name }} {{ orderDetails.last_name }}</p>
+              <p class="font-mono">
+                {{ orderDetails.first_name }} {{ orderDetails.last_name }}
+              </p>
             </div>
             <div>
               <p class="font-semibold">Company Name</p>
@@ -160,32 +173,40 @@
             </div>
             <div>
               <p class="font-semibold">Address</p>
-              <p>{{ orderDetails.street_address }}, {{ orderDetails.town }}</p>
+              <p class="font-mono">
+                {{ orderDetails.street_address }}, {{ orderDetails.town }}
+              </p>
             </div>
             <div>
               <p class="font-semibold">Phone Number</p>
-              <p>{{ orderDetails.phone_number }}</p>
+              <p class="font-mono">{{ orderDetails.phone_number }}</p>
             </div>
             <div>
               <p class="font-semibold">Email</p>
-              <p>{{ orderDetails.email }}</p>
+              <p class="font-mono">{{ orderDetails.email }}</p>
             </div>
 
             <div>
               <p class="font-semibold">Order Price</p>
-              <p>Ksh {{ formattedPrice(orderDetails.orderPrice) }}</p>
+              <p class="font-mono">
+                Ksh {{ formattedPrice(orderDetails.orderPrice) }}
+              </p>
             </div>
             <div>
               <p class="font-semibold">VAT</p>
-              <p>Ksh {{ formattedPrice(orderDetails.vat) }}</p>
+              <p class="font-mono">
+                Ksh {{ formattedPrice(orderDetails.vat) }}
+              </p>
             </div>
             <div>
               <p class="font-semibold">Total</p>
-              <p>Ksh {{ formattedPrice(orderDetails.total) }}</p>
+              <p class="font-mono">
+                Ksh {{ formattedPrice(orderDetails.total) }}
+              </p>
             </div>
             <div>
               <p class="font-semibold">Order Date</p>
-              <p>{{ formatDate(orderDetails.createdAt) }}</p>
+              <p class="font-mono">{{ formatDate(orderDetails.createdAt) }}</p>
             </div>
           </div>
 
@@ -231,6 +252,8 @@
 <script>
 import { useUserStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 definePageMeta({
   middleware: ["auth"],
 });
@@ -291,6 +314,33 @@ export default {
   },
 
   methods: {
+    async printOrder() {
+      const orderElement = document.querySelector(".order-details"); // Select the order details container
+      if (!orderElement) return;
+
+      const canvas = await html2canvas(orderElement, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const imgWidth = 190; // PDF width in mm
+      const pageHeight = 295; // PDF height in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`Order_${this.orderDetails.id.slice(0, 8)}.pdf`);
+    },
+
     statusStyle(status) {
       switch (status.toLowerCase()) {
         case "awaiting payment":

@@ -372,6 +372,7 @@ export const useProductStore = defineStore("product", {
 
         const response = await $axios.post("/product/orders", order);
         this.clearCart();
+        // this.router.push('/orders')
         return response;
       } catch (error) {
         console.error("Error placing order:", error);

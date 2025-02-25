@@ -170,10 +170,19 @@
             Subtotal
             <strong class="text-lg">{{ formattedPrice(cartTotal) }}</strong>
           </p>
+          <p class="text-gray-600 flex justify-between">
+            VAT (16%):
+
+            <strong> {{ formattedPrice(getVat(cartTotal)) }} </strong>
+          </p>
+
+          <hr class="my-2" />
           <hr class="my-2" />
           <p class="flex justify-between text-lg font-semibold">
             Total
-            <strong class="text-lg">Ksh {{ formattedPrice(cartTotal) }}</strong>
+            <strong class="text-lg"
+              >Ksh {{ formattedPrice(cartTotal + getVat(cartTotal)) }}</strong
+            >
           </p>
 
           <!-- Payment Methods -->
@@ -250,6 +259,9 @@ export default {
       } catch (error) {
         console.error("Error fetching cart items:", error);
       }
+    };
+    const getVat = cartTotal => {
+      return cartTotal * 0.16;
     };
 
     const coupon = ref("");
@@ -384,6 +396,7 @@ export default {
       defaultImage,
       home,
       items,
+      getVat,
     };
   },
 };

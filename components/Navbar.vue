@@ -11,31 +11,38 @@
             class="h-16 object-contain"
           />
         </NuxtLink>
-
-        <!-- Search Input (Full Width in Between) -->
-        <AutoComplete
-          v-model="searchTerm"
-          @input="fetchProducts"
-          :suggestions="filteredItems"
-          @complete="searchItems"
-          optionLabel="name"
-          placeholder="I'm Searching for ..."
-          class="flex-grow mx-2 p-input-icon-left"
-          @item-select="navigateToProduct"
-        >
-          <template #option="slotProps">
-            <div class="flex items-center w-full">
-              <img
-                :alt="slotProps.option.name"
-                :src="slotProps.option.images"
-                class="mr-2 rounded-md"
-                style="width: 40px; height: 40px; object-fit: cover"
-              />
-              <div class="w-full">{{ slotProps.option.name }}</div>
-            </div>
-          </template>
-        </AutoComplete>
-
+        <div class="flex-row justify-center">
+          <!-- <Select
+            v-model="selectedCategory"
+            :options="categories"
+            optionLabel="name"
+            placeholder="Choose Category"
+            class="mb-4 flex-grow mx-2 w-full"
+          /> -->
+          <!-- Search Input (Full Width in Between) -->
+          <AutoComplete
+            v-model="searchTerm"
+            @input="fetchProducts"
+            :suggestions="filteredItems"
+            @complete="searchItems"
+            optionLabel="name"
+            placeholder="I'm Searching for ..."
+            class="flex-grow mx-2 p-input-icon-left"
+            @item-select="navigateToProduct"
+          >
+            <template #option="slotProps">
+              <div class="flex items-center w-full">
+                <img
+                  :alt="slotProps.option.name"
+                  :src="slotProps.option.images"
+                  class="mr-2 rounded-md"
+                  style="width: 40px; height: 40px; object-fit: cover"
+                />
+                <div class="w-full">{{ slotProps.option.name }}</div>
+              </div>
+            </template>
+          </AutoComplete>
+        </div>
         <!-- Menu Button -->
         <Button
           type="button"

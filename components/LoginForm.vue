@@ -5,7 +5,7 @@
       background-image: url('https://www.sdl.co.ke/assets/images/icons/vector-1.png');
     "
   >
-    <div class="flex w-full h-screen flex-col items-center justify-center">
+    <div class="flex w-full h-screen flex-col items-center justify-center p-16">
       <div class="flex justify-center items-center absolute top-16 left-8">
         <a
           href="/dashboard"
@@ -19,7 +19,7 @@
         >
       </div>
       <div
-        class="border shadow-xl p-36 rounded-xl bg-white flex flex-col items-center"
+        class="border shadow-xl p-12 lg:p-36 rounded-xl bg-white flex flex-col items-center"
       >
         <img src="@/assets/images/logoo.png" alt="Login" class="h-28 w-28" />
 

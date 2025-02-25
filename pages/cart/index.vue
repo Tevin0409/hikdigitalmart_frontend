@@ -164,7 +164,7 @@
                   class="w-full bg-primary text-white py-2 mt-4 rounded-lg hover:bg-secondary"
                   @click="proceedToCheckout"
                 >
-                  Checkout ({{ formattedPrice(cartTotal) }})
+                  Checkout ({{ formattedPrice(cartTotal + getVat(cartTotal)) }})
                 </button>
               </div>
             </div>
