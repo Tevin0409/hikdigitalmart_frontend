@@ -615,32 +615,32 @@ const _routes = [
     name: "auth",
     path: "/auth",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./index-CJOyp5cq.mjs')
+    component: () => import('./index-BujsFQfR.mjs')
   },
   {
     name: "cart",
     path: "/cart",
-    component: () => import('./index-BGAX_xre.mjs')
+    component: () => import('./index-cug_Rz2-.mjs')
   },
   {
     name: "checkout",
     path: "/checkout",
-    component: () => import('./index-DX7K-VpI.mjs')
+    component: () => import('./index-q5aX9uev.mjs')
   },
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-DQ9aRBrn.mjs')
+    component: () => import('./Dashboard-Bs8genGD.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./Home-B5_lTy3O.mjs')
+    component: () => import('./Home-ABz6mdi4.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-D1RtGSTR.mjs')
+    component: () => import('./index-7UEDIZgv.mjs')
   },
   {
     name: "landing",
@@ -651,13 +651,13 @@ const _routes = [
     name: "my-account-id",
     path: "/my-account/:id()",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./_id_-D_VcDnWI.mjs')
+    component: () => import('./_id_-BB50cLg7.mjs')
   },
   {
     name: "my-account",
     path: "/my-account",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./index-CbKyNZ3l.mjs')
+    component: () => import('./index-DU2yCHj7.mjs')
   },
   {
     name: "products-id",
@@ -679,7 +679,7 @@ const _routes = [
   {
     name: "results-id",
     path: "/results/:id()",
-    component: () => import('./_id_-cHoRpnCT.mjs')
+    component: () => import('./_id_-B-9Znjhv.mjs')
   },
   {
     name: "wishlist",
@@ -2747,7 +2747,8 @@ const axios_sVCuMR6hEC = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   const userStore = useUserStore();
   const router = useRouter();
   const axiosInstance = axios.create({
-    baseURL: "https://hickdigitalmart-backend.onrender.com/api",
+    // baseURL: "https://hickdigitalmart-backend.onrender.com/api",
+    baseURL: "http://164.92.217.115:4500/api",
     headers: {
       "Content-Type": "application/json"
     }
@@ -2831,8 +2832,8 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-  default: defineAsyncComponent(() => import('./default-KoPikRA9.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-DMUtdJVw.mjs')),
+  default: defineAsyncComponent(() => import('./default-DIRXNKTo.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-BK4SiAgK.mjs')),
   login: defineAsyncComponent(() => import('./login-D8XEc4AN.mjs'))
 };
 const LayoutLoader = defineComponent({

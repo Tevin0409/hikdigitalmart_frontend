@@ -119,7 +119,11 @@
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
-                    <strong>{{ item.description }}</strong>
+                    <strong>
+                      {{
+                        item.features.map(feat => feat.description).join(", ")
+                      }}
+                    </strong>
                   </p>
 
                   <!-- Image Thumbnails Carousel -->
@@ -200,7 +204,11 @@
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
-                    <strong>{{ item.description }}</strong>
+                    <strong>
+                      {{
+                        item.features.map(feat => feat.description).join(", ")
+                      }}
+                    </strong>
                   </p>
                 </div>
               </div>
@@ -225,7 +233,11 @@
                     <span class=""> {{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
-                    <strong>{{ item.description }}</strong>
+                    <strong>
+                      {{
+                        item.features.map(feat => feat.description).join(", ")
+                      }}
+                    </strong>
                   </p>
                   <div class="carousel flex items-center mt-2 space-x-4">
                     <div class="flex items-center space-x-2 overflow-x-auto">
