@@ -208,7 +208,7 @@ import { useUserStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
 import Toast from "primevue/toast";
 definePageMeta({
-  middleware: ["auth"],
+  // middleware: ["auth"],
 });
 export default {
   data() {

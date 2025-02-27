@@ -34,7 +34,6 @@
                   />
                 </div>
               </div>
-
               <div class="mb-4 font-medium flex justify-around">
                 {{ slotProps.data.name }}
               </div>
@@ -104,7 +103,8 @@
             <div
               v-for="item in featuredProducts.slice(0, 2)"
               :key="item.name"
-              class="border rounded-sm p-4 shadow-sm flex-1"
+              class="border rounded-sm p-4 shadow-sm flex-1 cursor-pointer"
+              @click="goToPage(item)"
             >
               <div class="flex items-center">
                 <!-- Main Product Image -->
@@ -114,7 +114,12 @@
                 />
 
                 <div class="ml-4 flex flex-col w-full">
-                  <h3 class="text-lg font-medium">{{ item.name }}</h3>
+                  <h3 class="text-lg font-medium">
+                    {{ item.product.name }}
+                  </h3>
+                  <span class="text-sm">
+                    {{ item.name }}
+                  </span>
                   <div class="mt-2 text-primary font-bold text-lg">
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
@@ -132,9 +137,9 @@
                       <img
                         v-for="(image, index) in item.images"
                         :key="index"
-                        :src="image"
+                        :src="image.uploadUrl"
                         :alt="'Product ' + (index + 1)"
-                        @click="selectImage(item, image)"
+                        @click="selectImage(item, image.uploadUrl)"
                         class="w-10 h-10 md:w-10 md:h-10 rounded-md border border-gray-300 cursor-pointer hover:border-orange-500"
                         :class="{
                           'border-orange-500': item.image === image,
@@ -169,7 +174,8 @@
             <div
               v-for="item in featuredProducts.slice(2, 3)"
               :key="item.name"
-              class="border rounded-sm p-4 shadow-sm h-full relative group transition duration-300"
+              class="border rounded-sm p-4 shadow-sm h-full relative group transition duration-300 cursor-pointer"
+              @click="goToPage(item)"
             >
               <div class="flex justify-between">
                 <Tag severity="warn" value="New"></Tag>
@@ -191,6 +197,7 @@
 
               <div class="flex flex-col items-center h-full">
                 <div class="relative">
+                  <!-- {{ item }} -->
                   <img
                     :src="item.image"
                     class="object-cover rounded-md w-full h-48"
@@ -199,7 +206,12 @@
                 </div>
 
                 <div class="text-center items-center pt-4 flex flex-col">
-                  <h3 class="text-lg font-medium">{{ item.name }}</h3>
+                  <h3 class="text-lg font-medium">
+                    {{ item.product.name }}
+                  </h3>
+                  <span class="text-sm">
+                    {{ item.name }}
+                  </span>
                   <div class="mt-2 text-primary font-bold text-lg">
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
@@ -220,7 +232,8 @@
             <div
               v-for="item in featuredProducts.slice(3, 5)"
               :key="item.name"
-              class="border rounded-sm p-4 shadow-sm flex-1"
+              class="border rounded-sm p-4 shadow-sm flex-1 cursor-pointer"
+              @click="goToPage(item)"
             >
               <div class="flex items-center">
                 <img
@@ -228,7 +241,12 @@
                   class="w-28 h-28 object-cover rounded-md"
                 />
                 <div class="ml-4 flex flex-col w-full">
-                  <h3 class="text-lg font-medium">{{ item.name }}</h3>
+                  <h3 class="text-lg font-medium">
+                    {{ item.product.name }}
+                  </h3>
+                  <span class="text-sm">
+                    {{ item.name }}
+                  </span>
                   <div class="mt-2 text-primary font-bold text-lg">
                     <span class=""> {{ formattedPrice(item.price) }}</span>
                   </div>
@@ -244,9 +262,9 @@
                       <img
                         v-for="(image, index) in item.images"
                         :key="index"
-                        :src="image"
+                        :src="image.uploadUrl"
                         :alt="'Product ' + (index + 1)"
-                        @click="selectImage(item, image)"
+                        @click="selectImage(item, image.uploadUrl)"
                         class="w-10 h-10 md:w-10 md:h-10 rounded-md border border-gray-300 cursor-pointer hover:border-orange-500"
                         :class="{
                           'border-orange-500': item.image === image,
@@ -284,6 +302,7 @@
 import { ref } from "vue";
 import Carousel from "primevue/carousel";
 import { useProductStore } from "@/stores/productStore";
+import { useRouter } from "vue-router";
 
 export default {
   components: { Carousel },
@@ -295,6 +314,7 @@ export default {
       "New Arrivals",
       "Top Rating",
     ]);
+    const router = useRouter();
     const carousel = ref(null);
     const selectedTab = ref("Recent");
     const products = ref([
@@ -342,6 +362,11 @@ export default {
 
     const selectImage = (item, image) => {
       item.image = image;
+    };
+    const goToPage = item => {
+      router.push({
+        path: `/products/${item.id}`,
+      });
     };
     const addToFavorites = async product => {
       // console.log(productId, "Attempting to add to wishlist");
@@ -440,9 +465,9 @@ export default {
       const products = productStore.products;
       const totalItems = 20;
 
-      const defaultImage =
-        "https://html.themexriver.com/radios/assets/img/product/img_53.png";
-      // Array of default images
+      // const defaultImage =
+      //   "https://html.themexriver.com/radios/assets/img/product/img_53.png";
+      // // Array of default images
       const defaultImages = [
         "https://html.themexriver.com/radios/assets/img/product/img_53.png",
         "https://html.themexriver.com/radios/assets/img/product/img_54.png",
@@ -456,13 +481,23 @@ export default {
       while (repeatedProducts.length < totalItems) {
         repeatedProducts.push(...products);
       }
+      let productImages = products.map(el => {
+        // const { image, name } = el;
+        const products = {
+          image: el.images[0]?.uploadUrl,
+          images: el.images,
+          ...el,
+        };
+        return products;
+      });
 
       // Slice the array to ensure exactly 20 items and assign default images in a rotating manner
-      return repeatedProducts.slice(0, totalItems).map((product, index) => ({
-        ...product,
-        image: product.image || defaultImage,
-        images: defaultImages,
-      }));
+      return productImages;
+      //  repeatedProducts.slice(0, totalItems).map((product, index) => ({
+      //   ...product,
+      //   image: product.image || defaultImage,
+      //   images: defaultImages,
+      // }));
     });
 
     return {
@@ -476,6 +511,7 @@ export default {
       selectImage,
       addToFavorites,
       addToCart,
+      goToPage,
     };
   },
 };

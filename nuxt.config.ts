@@ -2,6 +2,7 @@ import Aura from "@primevue/themes/aura";
 import Lara from "@primevue/themes/lara";
 
 export default defineNuxtConfig({
+  ssr: true,
   app: {
     head: {
       title: "Secure Digital  ",
@@ -15,6 +16,7 @@ export default defineNuxtConfig({
         },
       ],
     },
+    layoutTransition: { name: "layout", mode: "out-in" },
   },
   runtimeConfig: {
     public: {
