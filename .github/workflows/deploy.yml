@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
-        run: npm run build
-
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -56,10 +53,10 @@ jobs:
             cd $PROJECT_DIR
 
             # Install dependencies
-            npm install --production
+            npm install 
 
-            # Build the project
-            # npm run build
+            # Build the project (this will be done only on the remote server now)
+            npm run build
 
             # Restart the application using PM2
             pm2 restart all || pm2 start npm --name "hickdigitalmart_frontend" -- start
