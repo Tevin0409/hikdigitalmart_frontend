@@ -24,7 +24,7 @@ if (!globalThis.$fetch) {
     baseURL: baseURL()
   });
 }
-const appLayoutTransition = false;
+const appLayoutTransition = { "name": "layout", "mode": "out-in" };
 const appPageTransition = false;
 const appKeepalive = false;
 const nuxtLinkDefaults = { "componentName": "NuxtLink", "prefetch": true, "prefetchOn": { "visibility": true } };
@@ -615,54 +615,54 @@ const _routes = [
     name: "auth",
     path: "/auth",
     meta: __nuxt_page_meta$4 || {},
-    component: () => import('./index-BujsFQfR.mjs')
+    component: () => import('./index-GXjqdkOL.mjs')
   },
   {
     name: "cart",
     path: "/cart",
-    component: () => import('./index-cug_Rz2-.mjs')
+    component: () => import('./index-D9P6Cz0Y.mjs')
   },
   {
     name: "checkout",
     path: "/checkout",
-    component: () => import('./index-q5aX9uev.mjs')
+    component: () => import('./index-PLcicWCl.mjs')
   },
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-Bs8genGD.mjs')
+    component: () => import('./Dashboard-Co1V7vVf.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./Home-ABz6mdi4.mjs')
+    component: () => import('./index-BD5y6LMV.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-7UEDIZgv.mjs')
+    component: () => import('./index-e8jV3Clj.mjs')
   },
   {
     name: "landing",
     path: "/landing",
-    component: () => import('./landing-Swq2ZXKe.mjs')
+    component: () => import('./landing-CJCRBBqJ.mjs')
   },
   {
     name: "my-account-id",
     path: "/my-account/:id()",
     meta: __nuxt_page_meta$3 || {},
-    component: () => import('./_id_-BB50cLg7.mjs')
+    component: () => import('./_id_-lqNWOkEh.mjs')
   },
   {
     name: "my-account",
     path: "/my-account",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./index-DU2yCHj7.mjs')
+    component: () => import('./index-CrvnoOC9.mjs')
   },
   {
     name: "products-id",
     path: "/products/:id()",
-    component: () => import('./_id_-DpUWZh6F.mjs')
+    component: () => import('./_id_-Ce5prfUB.mjs')
   },
   {
     name: "products",
@@ -679,12 +679,12 @@ const _routes = [
   {
     name: "results-id",
     path: "/results/:id()",
-    component: () => import('./_id_-B-9Znjhv.mjs')
+    component: () => import('./_id_-B7T8d3NX.mjs')
   },
   {
     name: "wishlist",
     path: "/wishlist",
-    component: () => import('./index-B2vhDWFA.mjs')
+    component: () => import('./index-DAEPz3SE.mjs')
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -812,7 +812,7 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-  auth: () => import('./auth-BUiUSHg3.mjs')
+  auth: () => import('./auth-DC4OI3RP.mjs')
 };
 const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
@@ -1117,10 +1117,6 @@ var FilterMatchMode = {
   DATE_IS_NOT: "dateIsNot",
   DATE_BEFORE: "dateBefore",
   DATE_AFTER: "dateAfter"
-};
-var FilterOperator = {
-  AND: "and",
-  OR: "or"
 };
 function _createForOfIteratorHelper(r, e) {
   var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"];
@@ -2832,9 +2828,9 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-  default: defineAsyncComponent(() => import('./default-DIRXNKTo.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-BK4SiAgK.mjs')),
-  login: defineAsyncComponent(() => import('./login-D8XEc4AN.mjs'))
+  default: defineAsyncComponent(() => import('./default-BjTTBBbO.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-BAeakmbt.mjs')),
+  login: defineAsyncComponent(() => import('./login-DUx2zHTQ.mjs'))
 };
 const LayoutLoader = defineComponent({
   name: "LayoutLoader",
@@ -3128,7 +3124,7 @@ const _sfc_main$1 = {
     const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-    const _Error404 = defineAsyncComponent(() => import('./error-404-76xhX6ZH.mjs'));
+    const _Error404 = defineAsyncComponent(() => import('./error-404-De324-Kw.mjs'));
     const _Error = defineAsyncComponent(() => import('./error-500-B3NJt1Sp.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
@@ -3210,5 +3206,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-export { BaseStyle as B, FilterService as F, PrimeVueService as P, ToastEventBus as T, _export_sfc as _, useNuxtApp as a, useProductStore as b, useRouter as c, resolveRouteObject as d, entry$1 as default, navigateTo as e, useRuntimeConfig as f, useToast as g, FilterOperator as h, injectHead as i, FilterMatchMode as j, defineNuxtRouteMiddleware as k, __nuxt_component_0 as l, nuxtLinkDefaults as n, resolveUnrefHeadInput as r, useUserStore as u };
+export { BaseStyle as B, FilterService as F, PrimeVueService as P, ToastEventBus as T, _export_sfc as _, useNuxtApp as a, useProductStore as b, useToast as c, useRouter as d, entry$1 as default, resolveRouteObject as e, navigateTo as f, useRuntimeConfig as g, defineNuxtRouteMiddleware as h, injectHead as i, __nuxt_component_0 as j, nuxtLinkDefaults as n, resolveUnrefHeadInput as r, useUserStore as u };
 //# sourceMappingURL=server.mjs.map

@@ -129,7 +129,7 @@
                 </div>
               </template>
             </AutoComplete>
-            <Button icon="pi pi-filter" class="ml-3 p-0" aria-label="Filter" />
+            <!-- <Button icon="pi pi-filter" class="ml-3 p-0" aria-label="Filter" /> -->
             <!-- Search Button on the Right -->
             <!-- <button
               @click="handleSearch"

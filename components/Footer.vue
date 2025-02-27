@@ -51,10 +51,10 @@
 
         <!-- Links -->
         <div>
-          <h3 class="font-semibold mb-4">Opening hrs</h3>
+          <h3 class="font-semibold mb-4">Opening Hours</h3>
           <ul class="space-y-2 text-sm text-gray-600">
-            <li>8:00am to 5:30pm (MON - FRI)</li>
-            <li>8:30am to 1:00pm (SAT)</li>
+            <li>8:00 am to 5:30pm (MON - FRI)</li>
+            <li>8:30 am to 1:00pm (SAT)</li>
             <li>Closed on Sundays and Public Holidays</li>
           </ul>
         </div>
@@ -125,8 +125,8 @@
   </footer>
 </template>
 
-<script>
+<script setup lang="ts">
 definePageMeta({
-  layout: false,
+  layout: "login",
 });
 </script>

@@ -1,28 +1,55 @@
 <template>
   <div class="container mx-auto p-6">
     <!-- Header -->
-    <h1 class="text-2xl font-semibold mb-6">Product Details</h1>
+    <Breadcrumb :home="home" :model="items">
+      <template #item="{ item, props }">
+        <router-link
+          v-if="item.route"
+          v-slot="{ href, navigate }"
+          :to="item.route"
+          custom
+        >
+          <a :href="href" v-bind="props.action" @click="navigate">
+            <span :class="[item.icon, 'text-color']" />
+            <span class="text-primary font-semibold">{{ item.label }}</span>
+          </a>
+        </router-link>
+        <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+          <span class="text-surface-700 dark:text-surface-0">{{
+            item.label
+          }}</span>
+        </a>
+      </template>
+    </Breadcrumb>
+
+    <!-- <h1 class="text-2xl font-semibold mb-6">Product Details</h1> -->
 
     <!-- Product Display -->
     <div v-if="product" class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Product Images Section -->
-      <div class="flex flex-col items-center">
+      <div class="flexflex-col md:flex-row items-center">
         <!-- Main Image -->
-        <img
-          :src="product.image"
-          alt="Product Image"
-          class="w-full h-full object-cover mb-4 border rounded-lg"
-        />
+        <div
+          class="w-full h-96 mb-4 md:mb-0 md:mr-4 border rounded-lg overflow-hidden"
+        >
+          <img
+            :src="product.image"
+            alt="Product Image"
+            class="w-full h-full object-contain"
+          />
+        </div>
 
         <!-- Thumbnails -->
-        <div class="grid grid-cols-5 gap-2">
+        <div
+          class="flex mt-8 md:flex-row gap-2 justify-center md:overflow-visible"
+        >
           <img
-            v-for="(img, index) in product.images"
+            v-for="(img, index) in product.images.slice(-4)"
             :key="index"
-            :src="img.autoCropUrl"
+            :src="img"
             alt="Thumbnail"
-            @click="setMainImage(img.autoCropUrl)"
-            class="w-16 h-16 object-cover border rounded-lg cursor-pointer hover:border-gray-500"
+            @click="setMainImage(img)"
+            class="w-20 h-20 md:w-32 md:h-32 object-cover border rounded-lg cursor-pointer hover:border-gray-500"
           />
         </div>
       </div>
@@ -67,17 +94,35 @@
             v-model="quantity"
             class="w-16 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
           />
-          <Button @click="addToCart" :loading="loadingAdd" label="Add to Cart">
-          </Button>
+          <Button
+            @click="addToCart"
+            :loading="loadingAdd"
+            label="Add to Cart"
+          ></Button>
+          <Button
+            @click="addToWishlist"
+            :loading="loadingWish"
+            icon="pi pi-heart"
+            severity="success"
+            aria-label="Search"
+            rounded
+            class="favicon"
+          />
         </div>
 
         <!-- Delivery Info -->
-        <!-- <div class="mt-4 space-y-2">
+        <div class="mt-4 space-y-2">
+          <p class="text-black-600"><i class="fas fa-truck"></i> Description</p>
+          <p
+            class="text-gray-600"
+            v-html="formatDescription(product.description)"
+          ></p>
           <p class="text-gray-600">
-            <i class="fas fa-truck"></i> Free Delivery
+            <i class="fas fa-undo"></i>
+
+            <!-- <p v-for="feature in product.features">{{ feature.description }}</p> -->
           </p>
-          <p class="text-gray-600"><i class="fas fa-undo"></i> Easy Returns</p>
-        </div> -->
+        </div>
       </div>
     </div>
 
@@ -270,14 +315,14 @@
 
         <div class="flex overflow-x-auto gap-4 p-2">
           <div
-            v-for="(product, index) in randomizedProducts"
+            v-for="(product, index) in productList"
             :key="index"
             class="min-w-[200px] md:min-w-[220px] bg-white rounded-md shadow-md cursor-pointer p-2"
             @click="goToProductPage(product)"
           >
             <div class="relative">
               <img
-                :src="product.images[0]?.optimizeUrl"
+                :src="product.images[0]?.uploadUrl"
                 :alt="product.name"
                 class="w-full h-36 object-cover rounded-md"
               />
@@ -292,7 +337,7 @@
               {{ product.name }}
             </h3>
             <p class="text-lg font-semibold text-gray-900">
-              {{ formatPrice(product.price) }}
+              <!-- {{ formatPrice(product.price) }} -->
             </p>
             <p class="text-gray-500 text-xs line-through">
               {{ product.oldPrice }}
@@ -301,6 +346,7 @@
         </div>
       </div>
     </section>
+    <Toast position="bottom-right" group="br" />
   </div>
 </template>
 
@@ -310,18 +356,22 @@ import { ref, onMounted } from "vue";
 // import formatPrice from "~/plugins/formatPrice";
 import { useProductStore } from "@/stores/productStore";
 
-// const productStore = useProductStore();
 const { $formatPrice } = useNuxtApp();
 
 const formattedPrice = price => {
   return $formatPrice(price);
 };
+const toast = useToast();
+
+const productStore = useProductStore();
 
 const route = useRoute();
 const quantity = ref(1);
 const activeTab = ref("details");
 const products = ref([]);
-// const productList = computed(() => productStore.products);
+
+const productList = computed(() => productStore.products);
+
 const reviews = [
   {
     id: 1,
@@ -362,6 +412,7 @@ const setMainImage = image => {
 const formatDescription = description => {
   return description ? description.replace(/\r\n/g, "<br>") : "";
 };
+// addToWishlist;
 const addToCart = async () => {
   const userStore = useUserStore();
 
@@ -376,8 +427,21 @@ const addToCart = async () => {
       userId: user.id,
     };
     const response = await $axios.post(`/product/cart/add`, body);
+
     loadingAdd.value = false; // Stop loading on error
+    toast.add({
+      severity: "success",
+      summary: "Product Added to cart",
+      group: "br",
+      life: 3000,
+    });
   } catch (error) {
+    toast.add({
+      severity: "danger",
+      summary: "error adding to cart, Please try again",
+      group: "br",
+      life: 3000,
+    });
     loadingAdd.value = false; // Stop loading on error
     console.error("Error adding product to cart:", error);
   }
@@ -391,13 +455,15 @@ const getProductByID = async () => {
     // Extract the primary image and all images from the response
     const primaryImage = response.data.images.find(
       image => image.isPrimary
-    )?.optimizeUrl;
-    const allImages = response.data.images.map(image => image.optimizeUrl);
+    )?.uploadUrl;
+    const allImages = response.data.images.map(image => image.uploadUrl);
+
+    console.log("fd", allImages);
 
     product.value = {
       ...response.data,
       image: primaryImage, // Use the primary image or fall back to dummy
-      images: response.data.images, // Use real images or fall back to dummy
+      images: allImages, // Use real images or fall back to dummy
       description: response.data.description, // Use real description or fall back to dummy
       colors: response.data.colors, // Use real colors or fall back to dummy
     };
@@ -407,12 +473,19 @@ const getProductByID = async () => {
     console.error("Error fetching product by ID:", error);
   }
 };
-
-const randomizedProducts = computed(() => {
-  return [...products.value] // Create a shallow copy
-    .sort(() => Math.random() - 0.5) // Shuffle array
-    .slice(0, 6); // Limit to 6 items
+const home = ref({
+  icon: "pi pi-home",
+  route: "/dashboard",
 });
+const items = ref([
+  { label: "Products", route: "/dashboard" },
+  // { label: `${product.name}`, route: "" },
+]);
+// const randomizedProducts = computed(() => {
+//   return [...productList.value] // Create a shallow copy
+//     .sort(() => Math.random() - 0.5) // Shuffle array
+//     .slice(0, 6); // Limit to 6 items
+// });
 const tabClass = tab => ({
   "text-black border-b-2 border-black": activeTab.value === tab,
   "text-gray-600": activeTab.value !== tab,
