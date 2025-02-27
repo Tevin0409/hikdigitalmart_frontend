@@ -13,14 +13,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
       - name: Deploy to DigitalOcean
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -35,9 +27,6 @@ jobs:
             eval "$(ssh-agent -s)"
             mkdir -p ~/.ssh
             chmod 700 ~/.ssh
-
-            # Create the backend folder if it doesn't exist
-            mkdir -p $PROJECT_DIR
 
             # Clone repository if it doesn’t exist, otherwise pull updates
             if [ ! -d "$PROJECT_DIR/.git" ]; then
@@ -54,9 +43,6 @@ jobs:
 
             # Install dependencies
             npm install 
-
-            # Build the project (this will be done only on the remote server now)
-            npm run build
 
             # Restart the application using PM2
             pm2 restart all || pm2 start npm --name "hickdigitalmart_frontend" -- start
