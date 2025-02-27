@@ -45,7 +45,7 @@ jobs:
             # Clone repository if it doesn’t exist, otherwise pull updates
             if [ ! -d "$PROJECT_DIR/.git" ]; then
               echo "Repository not found. Cloning..."
-              git clone https://github.com/Tevin0409/hikdigitalmart_frontend.git $PROJECT_DIR
+              git clone git@github.com:Tevin0409/hikdigitalmart_frontend.git $PROJECT_DIR
             else
               echo "Repository exists. Pulling latest changes..."
               cd $PROJECT_DIR
