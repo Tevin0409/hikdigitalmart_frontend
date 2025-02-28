@@ -50,7 +50,7 @@
               class="mt-2 flex flex-col md:flex-row items-center md:items-start"
             >
               <img
-                :src="order.orderItems[0]?.productModel.images[0]?.optimizeUrl"
+                :src="order.orderItems[0]?.productModel.images[0]?.uploadUrl"
                 alt="Product Image"
                 class="w-16 h-16 rounded-md object-cover"
               />
@@ -214,15 +214,17 @@
 
           <h3 class="text-xl font-semibold mb-2">Order Items</h3>
           <div class="space-y-4">
+            <!-- {{ orderDetaclils }} -->
             <div
               v-for="(item, index) in orderDetails.orderItems"
               :key="index"
               class="border rounded-lg p-4"
             >
               <div class="flex items-center space-x-4">
+                {{ item.productModel.images }}
                 <img
                   :src="
-                    item.productModel.images?.[0]?.optimizeUrl ||
+                    item.productModel.images?.[0]?.uploadUrl ||
                     'https://via.placeholder.com/100'
                   "
                   alt="Product Image"

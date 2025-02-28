@@ -5,43 +5,97 @@
       background-image: url(' https://www.sdl.co.ke/assets/images/icons/vector-1.png');
     "
   >
-    <!-- style="
-      background-image: url('https://media.istockphoto.com/id/1255070620/photo/modern-house-with-garden-and-solar-panels.jpg?s=2048x2048&w=is&k=20&c=o-q6PLV-jwspJrtYwC-98d6bsBMW139OLXppJiglVcU=');
-    " -->
-    <div class="flex flex-wrap justify-center items-start">
-      <!-- Left Section -->
-      <div class="product-details w-full md:w-1/3 mb-6 md:mb-0">
-        <div class="badge text-primary text-sm font-semibold mb-2">
-          <!-- 100% Best Product -->
+    <div class="flex flex-col md:flex-row items-center p-8">
+      <!-- Left section with text -->
+      <div class="w-full md:w-1/2 mb-8 md:mb-0 pr-8">
+        <h1 class="text-6xl text-pretty text-primary font-regular mb-4">
+          Secure Your Home with State-of-the-Art CCTV Cameras
+        </h1>
+        <p class="text-gray-600 font-bold mb-6">
+          Transform your home and business with sophisticated and stylish
+          gadgets, and create a secure and inviting home.
+        </p>
+        <NuxtLink to="/dashboard">
+          <button
+            to="/dashboard"
+            class="bg-black text-white px-6 py-3 rounded-lg mb-4"
+          >
+            Shop now
+          </button>
+        </NuxtLink>
+
+        <div class="flex space-x-4 text-gray-600">
+          <span class="flex items-center" v-for="i in features">
+            <i :class="i.icon"></i>
+            <p class="p-3">
+              {{ i.description }}
+            </p>
+          </span>
         </div>
+      </div>
+
+      <!-- Right section with images and cards -->
+      <div class="w-full md:w-1/2 grid grid-cols-2 gap-4">
+        <div class="relative bg-gray-100 p-4 rounded-lg">
+          <span
+            class="absolute top-2 left-2 bg-white px-2 py-1 text-sm font-semibold"
+            >$20.00</span
+          >
+          <!-- <img
+            src=""
+            alt="Chair"
+            class="w-full h-auto rounded-lg"
+          /> -->
+          <img
+            src="https://www.hikvision.com/content/dam/hikvision/uk/products-image-portal/images/DS-2CD6D54FWD-IZHSNFC.png"
+            alt="Selected Product"
+            class="w-full max-w-xs rounded-md border-0"
+          />
+          <p class="mt-2 text-sm">Single comfort chair</p>
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded-lg flex flex-col justify-between">
+          <p class="text-lg font-semibold">Modern & stylish</p>
+          <img
+            src="https://www.hikvision.com/content/dam/hikvision/uk/products-image-portal/images/DS-2CD3146G2.png"
+            alt="Furniture"
+            class="mt-2 rounded-lg"
+          />
+        </div>
+
+        <div class="bg-gray-100 p-4 rounded-lg">
+          <div class="flex items-center">
+            <img
+              src="https://www.hikvision.com/content/dam/hikvision/uk/products-image-portal/images/DS-2DE7A220MCG.png"
+              alt="Person"
+              class="rounded-full mr-3"
+            />
+            <div>
+              <p class="font-semibold">DS-2DE7A220MCGsr</p>
+              <!-- <p class="text-sm text-gray-500">Agent grocery</p> -->
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
+        >
+          <p class="text-lg font-semibold">120,000+ items sold out</p>
+          <i class="pi pi-users text-2xl text-gray-600"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="flex flex-wrap justify-center items-start">
+      <div class="product-details w-full md:w-1/3 mb-6 md:mb-0">
+        <div class="badge text-primary text-sm font-semibold mb-2"></div>
         <h1 class="text-2xl text-primary md:text-4xl font-bold mb-4">
           Secure Your Home with State-of-the-Art CCTV Cameras
         </h1>
-        <!-- <p class="text-gray-500 text-base md:text-lg mb-6">Wide Angle</p> -->
         <div
           class="price flex items-center text-xl md:text-2xl font-semibold text-red-600 mb-4"
-        >
-          <!-- {{ price }}
-          <span class="line-through text-gray-400 text-lg ml-4">Ksh 2,860</span> -->
-        </div>
-        <!-- <div class="discount flex items-center mb-6">
-          <div class="flex items-center text-lg text-primary mr-4">
-            <span class="text-xl font-bold">29%</span> off
-          </div>
-        </div> -->
-        <!-- <div class="stock flex items-center text-sm text-gray-600 mb-6">
-          <div class="w-full max-w-xs">
-            <div class="relative">
-              <div class="h-2 bg-gray-300 rounded">
-                <div class="h-2 bg-primary rounded w-2/3"></div>
-              </div>
-            </div>
-            <div class="flex justify-between text-xs mt-2">
-              <span>Available: 334</span>
-              <span>Stock: 180</span>
-            </div>
-          </div>
-        </div> -->
+        ></div>
+
         <NuxtLink to="/dashboard">
           <button
             class="px-6 py-3 bg-primary text-white rounded-lg shadow-lg hover:bg-secondary"
@@ -52,7 +106,6 @@
         </NuxtLink>
       </div>
 
-      <!-- Dynamic Image Section -->
       <div
         class="dynamic-image flex justify-center items-center w-full md:w-1/3 mb-6 md:mb-0"
       >
@@ -61,15 +114,8 @@
           alt="Selected Product"
           class="w-full max-w-xs rounded-md border-0"
         />
-        <!-- <div
-          class="absolute bottom-0 left-0 text-white bg-primary text-sm px-3 py-1 rounded-full transform -translate-x-1/2 translate-y-1/2"
-        >
-          29% off
-        </div> -->
+       
       </div>
-
-      <!-- Right Section -->
-      <!-- <div class=""> -->
       <div
         class="hidden md:block bg-whit w-full md:w-1/3 pa-6 ma-5 pl-40 dark:border-orange-600"
       >
@@ -100,14 +146,13 @@
                   {{ slotProps.data.price }}
                 </div>
                 <div class="stock flex items-center text-sm text-gray-600 mb-4">
-                  <!-- <span>Available: 334</span> | <span>Stock: 180</span> -->
                 </div>
               </div>
             </template>
           </Carousel>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Carousel Section -->
     <div class="carousel flex justify-center items-center mt-8 space-x-4">

@@ -22,7 +22,7 @@
       </NuxtLink>
     </div>
     <div v-else class="mx-auto container">
-      <Breadcrumb :home="home" :model="items">
+      <Breadcrumb :home="home" :model="items" class="">
         <template #item="{ item, props }">
           <router-link
             v-if="item.route"
@@ -66,7 +66,7 @@
           <div class="bg-white grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-9">
               <div
-                class="rounded-lg p-4 gap-3 pb-4 mb-2 border"
+                class="rounded-lg p-4 gap-3 pb-4 mb-2 border cursor-pointer"
                 v-for="item in cartItems"
                 :key="item.id"
               >
@@ -76,8 +76,9 @@
                     class="w-20 h-20 object-contain"
                     :src="
                       item.productModel?.images.find(image => image.isPrimary)
-                        ?.optimizeUrl ??
-                      item.images?.find(image => image.isPrimary)?.optimizeUrl
+                        ?.uploadUrl ??
+                      item.images?.find(image => image.isPrimary)?.uploadUrl
+                      // item.images[0]
                     "
                     alt="Product Image"
                   />
@@ -87,17 +88,18 @@
                     <h2 class="text-lg font-medium">
                       {{ item.productModel?.name ?? item.name }}
                     </h2>
-                    <!-- <p class="text-gray-600">
-                    Seller: <span class="font-bold">Jumia</span>
-                  </p> -->
-                    <p class="text--500 text-sm">
-                      {{ item.productModel?.features[0]?.description }}
+                    <p class="text-gray-600 truncate">
+                      <!-- {{ item.productModel?.description ?? item.description }} -->
+                      <span
+                        class="font-bold"
+                        v-for="item in item.features ||
+                        item.productModel.features"
+                        >{{ item.description }}</span
+                      >
                     </p>
-                    <!-- <img
-                    src="https://upload.wikimedia.org/wikipedia/commons/9/99/Jumia_Express_Logo.png"
-                    class="w-20"
-                    alt="Jumia Express"
-                  /> -->
+                    <!-- <p class="text--500 text-sm" v-for="item in pro">
+                      {{ item.productModel?.features[0]?.description }}
+                    </p> -->
                   </div>
 
                   <!-- Price -->
@@ -146,25 +148,60 @@
             <!-- Cart Total & Checkout - Takes 4 Columns -->
             <!-- Cart Total & Checkout - Takes 4 Columns -->
             <div class="col-span-12 md:col-span-3">
-              <div class="cart-total rounded-lg">
-                <h3 class="text-lg font-semibold">Cart Total</h3>
+              <div class="cart-total rounded-lg p-4 bg-white shadow">
+                <h3 class="text-lg font-semibold mb-2">Cart Total</h3>
+
                 <p class="text-gray-600">
                   Subtotal: Ksh {{ formattedPrice(cartTotal) }}
                 </p>
+
+                <!-- VAT Toggle -->
+                <div class="flex items-center justify-between my-4">
+                  <label class="text-gray-600">Apply VAT (16%)</label>
+
+                  <label
+                    class="relative inline-flex items-center cursor-pointer"
+                  >
+                    <input
+                      type="checkbox"
+                      v-model="applyVat"
+                      class="sr-only peer"
+                    />
+                    <div
+                      class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-primary transition-colors"
+                    ></div>
+                    <div
+                      class="absolute left-1 top-1 bg-white border border-gray-300 w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"
+                    ></div>
+                  </label>
+                </div>
+
                 <hr class="my-2" />
-                <p class="text-gray-600">
+
+                <p class="text-gray-600" v-if="applyVat">
                   VAT (16%): Ksh {{ formattedPrice(getVat(cartTotal)) }}
                 </p>
 
                 <hr class="my-2" />
+
                 <p class="text-lg font-bold">
-                  Total: Ksh {{ formattedPrice(cartTotal + getVat(cartTotal)) }}
+                  Total: Ksh
+                  {{
+                    formattedPrice(
+                      cartTotal + (applyVat ? getVat(cartTotal) : 0)
+                    )
+                  }}
                 </p>
+
                 <button
-                  class="w-full bg-primary text-white py-2 mt-4 rounded-lg hover:bg-secondary"
+                  class="w-full bg-primary text-white py-2 mt-4 rounded-lg hover:bg-secondary transition"
                   @click="proceedToCheckout"
                 >
-                  Checkout ({{ formattedPrice(cartTotal + getVat(cartTotal)) }})
+                  Checkout ({{
+                    formattedPrice(
+                      cartTotal + (applyVat ? getVat(cartTotal) : 0)
+                    )
+                  }})
                 </button>
               </div>
             </div>
@@ -198,7 +235,7 @@ const coupon = ref("");
 // Computed properties
 const cartTotal = computed(() => productStore.cartTotal);
 const cartItems = computed(() => productStore.cartItems);
-
+const applyVat = ref(false);
 const home = ref({
   icon: "pi pi-home",
   route: "/dashboard",

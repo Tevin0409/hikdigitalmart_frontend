@@ -16,7 +16,7 @@
       <p class="text-gray-500 text-sm mb-4">
         Browse our categories and discover our best deals!
       </p>
-      <NuxtLink to="/">
+      <NuxtLink to="/dashboard">
         <button
           class="bg-primary hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded"
         >
@@ -39,9 +39,9 @@
           <div class="relative">
             <img
               :src="
-                item.productModel?.images.find(image => image.isPrimary)
-                  ?.optimizeUrl ??
-                item.images?.find(image => image.isPrimary)?.optimizeUrl
+                item.productModel?.images?.find(image => image.isPrimary)
+                  ?.uploadUrl ??
+                item?.images?.find(image => image.isPrimary)?.uploadUrl
               "
               :alt="item.productModel?.name || 'Product Image'"
               class="w-full h-40 object-cover"
@@ -54,10 +54,11 @@
               -{{ item.discount }}%
             </span>
             <button
-              class="absolute top-2 right-2 bg-gray-100 text-gray-500 rounded-full p-1 hover:text-red-500"
+              class="absolute top-2 right-2 rounded-full p-1 hover:text-red-500"
               @click="removeFromWishlist(item)"
             >
-              <i class="pi pi-trash"></i>
+              <i class="pi pi-trash text-red-700" style="font-size: 1.4rem"></i>
+              <!-- <i class="pi pi-heart-fill text-red-600"></i> -->
             </button>
           </div>
           <div class="p-4">
@@ -71,6 +72,7 @@
 
             <p class="text-gray-500 mb-2">
               <span class="text-red-500 font-bold">
+                <i class="pi pi-wallet"></i>
                 Ksh {{ formattedPrice(item.productModel?.price ?? item.price) }}
               </span>
 
@@ -97,7 +99,7 @@
       </div>
     </div>
 
-    <div class="bg-white shadow-lg rounded-lg p-4">
+    <div class="bg-white border rounded-lg p-4">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-gray-700">Recently Viewed</h3>
         <NuxtLink to="/cart">
@@ -113,17 +115,17 @@
         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
       >
         <div
-          v-for="(item, index) in cartItems"
+          v-for="(item, index) in randomizedProducts(products)"
           :key="index"
           class="border rounded-lg p-3"
         >
           <img
             :src="
               item.productModel?.images.find(image => image.isPrimary)
-                ?.optimizeUrl ??
-              item.images?.find(image => image.isPrimary)?.optimizeUrl
+                ?.uploadUrl ??
+              item?.images?.find(image => image.isPrimary)?.uploadUrl
             "
-            :alt="item.productModel?.name || 'Product Image'"
+            :alt="item.productModel?.name || item.name"
             class="w-full h-40 object-cover"
           />
 
@@ -136,7 +138,7 @@
         </div>
       </div>
     </div>
-    <div class="bg-white shadow-lg rounded-lg p-4 mt-4">
+    <div class="bg-white border rounded-lg p-4 mt-4">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-gray-700">Top Selling Items</h3>
         <NuxtLink to="/cart">
@@ -152,17 +154,17 @@
         class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
       >
         <div
-          v-for="(item, index) in cartItems"
+          v-for="(item, index) in products"
           :key="index"
           class="border rounded-lg p-3"
         >
           <img
             :src="
               item.productModel?.images.find(image => image.isPrimary)
-                ?.optimizeUrl ??
-              item.images?.find(image => image.isPrimary)?.optimizeUrl
+                ?.uploadUrl ??
+              item?.images?.find(image => image.isPrimary)?.uploadUrl
             "
-            :alt="item.productModel?.name || 'Product Image'"
+            :alt="item.productModel?.name || item.name"
             class="w-full h-40 object-cover"
           />
 
@@ -202,6 +204,9 @@ export default {
       productStore.getWishList();
     });
 
+    // const isInWishList = () => {
+    //   wishList.find(item => item.id);
+    // };
     // Methods
     const formattedPrice = price => {
       const { $formatPrice } = useNuxtApp();
@@ -214,15 +219,20 @@ export default {
 
     const addToCart = async product => {
       const productId = product.productModel?.id ?? product.id;
-
-      console.log(productId, "productId");
-      // let user = userStore.user;
-      console.log(product, "tes");
       try {
-        const response = await productStore.addToCart(product, 1);
-
+        if (userStore.isLoggedIn) {
+          const response = await productStore.addToCart(
+            product.productModel,
+            1
+          );
+          console.log(product);
+          await productStore.removeFromWishlist(product.id);
+        } else {
+          const response = await productStore.addToCart(product, 1);
+          await productStore.removeFromWishlist(product.id);
+        }
         // To remove the product from the wishlist
-        const res = await productStore.addToWishlist(productId);
+        // const res = await productStore.addToWishlist(productId);
 
         // Notify user on successful addition
         toast.add({
@@ -243,6 +253,14 @@ export default {
       }
     };
 
+    const randomizedProducts = products => {
+      if (!Array.isArray(products) || products.length === 0) {
+        console.warn("Invalid or empty products array:", products);
+        return [];
+      }
+      return [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
+    };
+
     return {
       wishList,
       cartItems,
@@ -252,6 +270,7 @@ export default {
       removeFromWishlist,
       addToCart,
       products,
+      randomizedProducts,
     };
   },
 };

@@ -26,34 +26,6 @@
 
     <!-- Product Display -->
     <div v-if="product" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <!-- Product Images Section -->
-      <div class="flexflex-col md:flex-row items-center">
-        <!-- Main Image -->
-        <div
-          class="w-full h-96 mb-4 md:mb-0 md:mr-4 border rounded-lg overflow-hidden"
-        >
-          <img
-            :src="product.image"
-            alt="Product Image"
-            class="w-full h-full object-contain"
-          />
-        </div>
-
-        <!-- Thumbnails -->
-        <div
-          class="flex mt-8 md:flex-row gap-2 justify-center md:overflow-visible"
-        >
-          <img
-            v-for="(img, index) in product.images.slice(-4)"
-            :key="index"
-            :src="img"
-            alt="Thumbnail"
-            @click="setMainImage(img)"
-            class="w-20 h-20 md:w-32 md:h-32 object-cover border rounded-lg cursor-pointer hover:border-gray-500"
-          />
-        </div>
-      </div>
-
       <!-- Product Info Section -->
       <div class="flex flex-col space-y-4">
         <h2 class="text-3xl font-bold">{{ product.name }}</h2>
@@ -94,25 +66,45 @@
             v-model="quantity"
             class="w-16 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
           />
+          <p class="text-gray-600">
+            <i class="pi pi-wallet mr-4"></i> Ksh
+            {{ formattedPrice(product.price * quantity) }}
+          </p>
+          <p>
+            <button @click="addToWishlist(product)" :loading="loadingWish">
+              <i
+                v-if="!isInWishList(product)"
+                class="pi pi-heart cursor-pointer mr-2"
+                style="font-size: 2.3rem"
+              ></i>
+              <i
+                v-else
+                class="pi pi-heart-fill cursor-pointer mr-2"
+                style="font-size: 2.3rem; color: red"
+              ></i>
+            </button>
+          </p>
+
           <Button
-            @click="addToCart"
+            @click="addToCart(product)"
             :loading="loadingAdd"
             label="Add to Cart"
           ></Button>
-          <Button
-            @click="addToWishlist"
-            :loading="loadingWish"
+          <!-- <Button
+          
             icon="pi pi-heart"
             severity="success"
             aria-label="Search"
             rounded
             class="favicon"
-          />
+          /> -->
         </div>
 
         <!-- Delivery Info -->
         <div class="mt-4 space-y-2">
-          <p class="text-black-600"><i class="fas fa-truck"></i> Description</p>
+          <p class="text-bl font-bold">
+            <i class="fas fa-truck"></i> Description
+          </p>
           <p
             class="text-gray-600"
             v-html="formatDescription(product.description)"
@@ -122,6 +114,34 @@
 
             <!-- <p v-for="feature in product.features">{{ feature.description }}</p> -->
           </p>
+        </div>
+      </div>
+
+      <!-- Product Images Section -->
+      <div class="flexflex-col md:flex-row items-center">
+        <!-- Main Image -->
+        <div
+          class="w-full h-96 mb-4 md:mb-0 md:mr-4 border rounded-lg overflow-hidden"
+        >
+          <img
+            :src="product.image"
+            alt="Product Image"
+            class="w-full h-full object-contain"
+          />
+        </div>
+
+        <!-- Thumbnails -->
+        <div
+          class="flex mt-8 md:flex-row gap-2 justify-center md:overflow-visible"
+        >
+          <img
+            v-for="(img, index) in product.images.slice(-4)"
+            :key="index"
+            :src="img"
+            alt="Thumbnail"
+            @click="setMainImage(img)"
+            class="w-20 h-20 md:w-32 md:h-32 object-cover border rounded-lg cursor-pointer hover:border-gray-500"
+          />
         </div>
       </div>
     </div>
@@ -357,11 +377,12 @@ import { ref, onMounted } from "vue";
 import { useProductStore } from "@/stores/productStore";
 
 const { $formatPrice } = useNuxtApp();
-
+const router = useRouter();
 const formattedPrice = price => {
   return $formatPrice(price);
 };
 const toast = useToast();
+const userStore = useUserStore(); // Access the user store for authentication state
 
 const productStore = useProductStore();
 
@@ -369,9 +390,23 @@ const route = useRoute();
 const quantity = ref(1);
 const activeTab = ref("details");
 const products = ref([]);
+const wishList = computed(() => productStore.wishListItems);
 
 const productList = computed(() => productStore.products);
-
+const isInWishList = item => {
+  if (!item || !item.id) {
+    return false;
+  }
+  if (userStore.isLoggedIn) {
+    const exists = wishList.value.some(
+      wish => wish.productModel.id === item.id
+    );
+    return exists;
+  } else {
+    const exists = wishList.value.some(wish => wish.id === item.id);
+    return exists;
+  }
+};
 const reviews = [
   {
     id: 1,
@@ -399,7 +434,12 @@ const product = ref(null);
 const loading = ref(false);
 const loadingAdd = ref(false);
 const { $axios } = useNuxtApp();
-
+const goToProductPage = product => {
+  // console.log("prodcet", product);
+  router.push({
+    path: `/products/${product.id}`,
+  });
+};
 onMounted(() => {
   // product.value = route.state?.product || dummyProduct;
   getProductByID();
@@ -413,39 +453,89 @@ const formatDescription = description => {
   return description ? description.replace(/\r\n/g, "<br>") : "";
 };
 // addToWishlist;
-const addToCart = async () => {
-  const userStore = useUserStore();
+const addToWishlist = async product => {
+  const productStore = useProductStore(); // Access the store
 
-  let user = userStore.user;
-
-  loadingAdd.value = true;
-  const productID = route.params.id;
   try {
-    const body = {
-      productModelId: productID,
-      quantity: quantity.value,
-      userId: user.id,
-    };
-    const response = await $axios.post(`/product/cart/add`, body);
+    if (userStore.isLoggedIn) {
+      const res = await productStore.addToWishlist(product.id);
+      await productStore.getWishList(); // Refresh wishlist from the server
 
-    loadingAdd.value = false; // Stop loading on error
+      toast.add({
+        severity: "success",
+        summary: res.data.message,
+        group: "br",
+        life: 3000,
+      });
+    } else {
+      // Not logged in: Save to or remove from localStorage wishlist
+      const localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+      // Check if the product is already in the local wishlist
+      const existingIndex = localWishlist.findIndex(
+        item => item.id === product.id
+      );
+      if (existingIndex === -1) {
+        // Product is not in the wishlist, add it
+        localWishlist.push(product);
+        localStorage.setItem("wishlist", JSON.stringify(localWishlist));
+
+        await productStore.getWishList();
+
+        toast.add({
+          severity: "success",
+          summary: "Your Wishlist has been saved locally.",
+          group: "br",
+          life: 3000,
+        });
+      } else {
+        // Product is already in the wishlist, remove it
+        localWishlist.splice(existingIndex, 1); // Remove the item from the array
+        localStorage.setItem("wishlist", JSON.stringify(localWishlist));
+        await productStore.getWishList();
+
+        toast.add({
+          severity: "info",
+          summary: "The item has been removed from your local wishlist.",
+          group: "br",
+          life: 3000,
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error processing wishlist:", error);
+
+    toast.add({
+      severity: "error",
+      summary: "An error occurred while managing your wishlist.",
+      detail: error.message,
+      group: "br",
+      life: 5000,
+    });
+  }
+};
+const addToCart = async product => {
+  loading.value = true;
+  try {
+    await productStore.addToCart(product, quantity.value);
     toast.add({
       severity: "success",
-      summary: "Product Added to cart",
+      summary: "Product Added to Cart",
       group: "br",
       life: 3000,
     });
+    loading.value = false;
   } catch (error) {
+    loading.value = false;
     toast.add({
       severity: "danger",
       summary: "error adding to cart, Please try again",
       group: "br",
       life: 3000,
     });
-    loadingAdd.value = false; // Stop loading on error
-    console.error("Error adding product to cart:", error);
   }
 };
+
 const getProductByID = async () => {
   const productID = route.params.id;
 

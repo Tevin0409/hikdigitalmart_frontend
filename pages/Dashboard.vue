@@ -336,6 +336,7 @@ export default {
         fetching.value = false;
         fetchingMore.value = false;
         products.value = [...products.value, ...response.data.results];
+        console.log(products.value, "getting");
       } catch (error) {
         console.error("Error fetching products:", error);
         fetching.value = false;

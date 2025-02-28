@@ -357,14 +357,13 @@ const searchItems = async event => {
       response = await $axios.get("/product", {
         params: { searchTerm: query, categoryId: categoryIds },
       });
-      console.log("response: ", response.data.results);
       filteredItems.value = response.data.results.flatMap(product =>
         product.models.map(model => ({
           id: model.id,
           name: `${product.name} - (${model.name})`,
           images:
             model.images.length > 0
-              ? model.images.map(img => img.autoCropUrl)
+              ? model.images.map(img => img.uploadUrl)
               : [defaultImage],
         }))
       );
@@ -380,7 +379,8 @@ const searchItems = async event => {
         category: product.product?.subCategory?.category?.name ?? "Unknown",
         images:
           product.images.length > 0
-            ? product.images.map(image => image.autoCropUrl)
+            ? product.images.find(image => image.isPrimary)?.uploadUrl ||
+              defaultImage
             : [defaultImage],
       }));
     }

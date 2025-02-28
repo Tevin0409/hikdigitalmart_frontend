@@ -14,7 +14,7 @@
         <Carousel
           :d_circular="true"
           :autoplayInterval="10000"
-          :value="products"
+          :value="topProducts"
           :numVisible="1"
           :numScroll="1"
           orientation="horizontal"
@@ -25,12 +25,15 @@
           <template #item="slotProps">
             <div>
               <div class="mb-4">
-                <div class="relative mx-auto">
+                <div class="relative mx-auto h-">
                   <img
                     :src="slotProps.data.image"
                     :alt="slotProps.data.name"
                     class="object-cover rounded"
-                    style="max-width: 100%"
+                    style="
+                      max-width: 100% !important;
+                      min-height: 300px !important;
+                    "
                   />
                 </div>
               </div>
@@ -43,7 +46,40 @@
                 </div>
               </div>
 
-              <div
+              <p class="py-4">
+                <span
+                  class="text-gray-600 text-sm text-truncate mb-4"
+                  v-for="item in slotProps.data.features"
+                >
+                  {{ item.description }}
+                </span>
+              </p>
+              <p class="flex justify-around items-center">
+                <button
+                  class="w-3/4 px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-orange-600 focus:outline-none focus:shadow-outline"
+                  @click="addToCart(slotProps.data)"
+                >
+                  Add to Cart
+                </button>
+                <button
+                  class="w-1/4"
+                  @click="addToFavorites(slotProps.data)"
+                  :loading="loadingWish"
+                >
+                  <i
+                    v-if="!isInWishList(slotProps.data)"
+                    class="pi pi-heart cursor-pointer mr-2"
+                    style="font-size: 1.5rem"
+                  ></i>
+                  <i
+                    v-else
+                    class="pi pi-heart-fill cursor-pointer mr-2"
+                    style="font-size: 1.5rem; color: red"
+                  ></i>
+                </button>
+              </p>
+
+              <!-- <div
                 class="stock flex items-center text-sm text-gray-600 mb-6 justify-around"
               >
                 <div
@@ -60,7 +96,7 @@
                     label
                   }}</span>
                 </div>
-              </div>
+              </div> -->
             </div>
           </template>
         </Carousel>
@@ -99,12 +135,13 @@
           class="flex flex-col md:flex-row justify-between space-y-4 md:space-x-4 md:space-y-0"
         >
           <!-- Left Products -->
-          <div class="flex flex-col space-y-4 w-full md:w-1/3">
+          <div
+            class="flex flex-col space-y-4 w-full md:w-1/3 hover:text-primary transition-colors duration-200"
+          >
             <div
               v-for="item in featuredProducts.slice(0, 2)"
               :key="item.name"
               class="border rounded-sm p-4 shadow-sm flex-1 cursor-pointer"
-              @click="goToPage(item)"
             >
               <div class="flex items-center">
                 <!-- Main Product Image -->
@@ -113,14 +150,16 @@
                   class="w-28 h-28 object-cover rounded-md"
                 />
 
-                <div class="ml-4 flex flex-col w-full">
+                <div @click="goToPage(item)" class="ml-4 flex flex-col w-full">
                   <h3 class="text-lg font-medium">
                     {{ item.product.name }}
                   </h3>
                   <span class="text-sm">
                     {{ item.name }}
                   </span>
-                  <div class="mt-2 text-primary font-bold text-lg">
+                  <div
+                    class="mt-2 hover:text-primary transition-colors duration-200 text-primary font-bold text-lg"
+                  >
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
@@ -153,17 +192,26 @@
                 <div
                   class="gap-5 relative left-0 top-0 align-start justify-end"
                 >
-                  <button
-                    class="p-2 rounded-full transition-colors"
-                    @click="addToFavorites(item)"
-                  >
-                    <i class="pi pi-heart text-primary"></i>
+                  <button @click="addToFavorites(item)" :loading="loadingWish">
+                    <i
+                      v-if="!isInWishList(item)"
+                      class="pi pi-heart cursor-pointer mr-2"
+                      style="font-size: 1.3rem"
+                    ></i>
+                    <i
+                      v-else
+                      class="pi pi-heart-fill cursor-pointer mr-2"
+                      style="font-size: 1.3rem; color: red"
+                    ></i>
                   </button>
                   <button
-                    class="p-2 rounded-full transition-colors"
+                    class="rounded-full transition-colors"
                     @click="addToCart(item)"
                   >
-                    <i class="pi pi-shopping-cart text-primary"></i>
+                    <i
+                      class="pi pi-shopping-cart text- pt-4"
+                      style="font-size: 1.3rem"
+                    ></i>
                   </button>
                 </div>
               </div>
@@ -175,27 +223,38 @@
               v-for="item in featuredProducts.slice(2, 3)"
               :key="item.name"
               class="border rounded-sm p-4 shadow-sm h-full relative group transition duration-300 cursor-pointer"
-              @click="goToPage(item)"
             >
               <div class="flex justify-between">
                 <Tag severity="warn" value="New"></Tag>
                 <div class="gap-5">
-                  <button
-                    class="p-2 rounded-full transition-colors"
-                    @click="addToFavorites(item)"
-                  >
-                    <i class="pi pi-heart text-primary"></i>
+                  <button @click="addToFavorites(item)" :loading="loadingWish">
+                    <i
+                      v-if="!isInWishList(item)"
+                      class="pi pi-heart transition-colors cursor-pointer mr-2"
+                      style="font-size: 1.3rem"
+                    ></i>
+                    <i
+                      v-else
+                      class="pi pi-heart-fill transition-colors cursor-pointer mr-2"
+                      style="font-size: 1.3rem; color: red"
+                    ></i>
                   </button>
                   <button
-                    class="p-2 rounded-full transition-colors"
+                    class="rounded-full transition-colors transition-colors"
                     @click="addToCart(item)"
                   >
-                    <i class="pi pi-shopping-cart text-primary"></i>
+                    <i
+                      class="pi pi-shopping-cart transition-colors text- pt-4"
+                      style="font-size: 1.3rem"
+                    ></i>
                   </button>
                 </div>
               </div>
 
-              <div class="flex flex-col items-center h-full">
+              <div
+                @click="goToPage(item)"
+                class="flex flex-col items-center h-full"
+              >
                 <div class="relative">
                   <!-- {{ item }} -->
                   <img
@@ -212,7 +271,9 @@
                   <span class="text-sm">
                     {{ item.name }}
                   </span>
-                  <div class="mt-2 text-primary font-bold text-lg">
+                  <div
+                    class="mt-2 text-primary hover:text-primary transition-colors duration-200 font-bold text-lg"
+                  >
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
@@ -233,8 +294,8 @@
               v-for="item in featuredProducts.slice(3, 5)"
               :key="item.name"
               class="border rounded-sm p-4 shadow-sm flex-1 cursor-pointer"
-              @click="goToPage(item)"
             >
+              <!-- @click="goToPage(item)" -->
               <div class="flex items-center">
                 <img
                   :src="item.image"
@@ -247,7 +308,9 @@
                   <span class="text-sm">
                     {{ item.name }}
                   </span>
-                  <div class="mt-2 text-primary font-bold text-lg">
+                  <div
+                    class="mt-2 text-primary hover:text-primary transition-colors duration-200font-bold text-lg"
+                  >
                     <span class=""> {{ formattedPrice(item.price) }}</span>
                   </div>
                   <p class="text-gray-500 mt-1">
@@ -276,17 +339,26 @@
                 <div
                   class="gap-5 relative left-0 top-0 align-start justify-end"
                 >
-                  <button
-                    class="p-2 rounded-full transition-colors"
-                    @click="addToFavorites(item)"
-                  >
-                    <i class="pi pi-heart text-primary"></i>
+                  <button @click="addToFavorites(item)" :loading="loadingWish">
+                    <i
+                      v-if="!isInWishList(item)"
+                      class="pi pi-heart cursor-pointer mr-2"
+                      style="font-size: 1.3rem"
+                    ></i>
+                    <i
+                      v-else
+                      class="pi pi-heart-fill cursor-pointer mr-2"
+                      style="font-size: 1.3rem; color: red"
+                    ></i>
                   </button>
                   <button
-                    class="p-2 rounded-full transition-colors"
+                    class="rounded-full transition-colors"
                     @click="addToCart(item)"
                   >
-                    <i class="pi pi-shopping-cart text-primary"></i>
+                    <i
+                      class="pi pi-shopping-cart pt-4"
+                      style="font-size: 1.3rem"
+                    ></i>
                   </button>
                 </div>
               </div>
@@ -314,29 +386,45 @@ export default {
       "New Arrivals",
       "Top Rating",
     ]);
+    const userStore = useUserStore(); // Access the user store for authentication state
+
     const router = useRouter();
     const carousel = ref(null);
     const selectedTab = ref("Recent");
-    const products = ref([
-      {
-        image:
-          "https://html.themexriver.com/radios/assets/img/product/img_53.png",
-        name: "Bullet Camera",
-        rating: 3,
-        reviews: 26,
-        oldPrice: 28.52,
-        price: 3052,
-      },
-      {
-        image:
-          "https://html.themexriver.com/radios/assets/img/product/img_53.png",
-        name: "Bullet HD Camera",
-        rating: 4,
-        reviews: 42,
-        oldPrice: 19.53,
-        price: 2153,
-      },
-    ]);
+    const topProducts = ref([]);
+    // const products = ref([
+    //   // {
+    //   //   image:
+    //   //     "https://html.themexriver.com/radios/assets/img/product/img_53.png",
+    //   //   name: "Bullet Camera",
+    //   //   rating: 3,
+    //   //   reviews: 26,
+    //   //   oldPrice: 28.52,
+    //   //   price: 3052,
+    //   // },
+    //   // {
+    //   //   image:
+    //   //     "https://html.themexriver.com/radios/assets/img/product/img_53.png",
+    //   //   name: "Bullet HD Camera",
+    //   //   rating: 4,
+    //   //   reviews: 42,
+    //   //   oldPrice: 19.53,
+    //   //   price: 2153,
+    //   // },
+    // ]);
+    const products = computed(() => productStore.products);
+    const getTopProducts = () => {
+      topProducts.value = products.value
+        .sort((a, b) => b.price - a.price) // Sort products by price in descending order
+        .slice(0, 3) // Select the top 3 products
+        .map(product => ({
+          name: product.name, // Ensure the product name is included
+          price: product.price,
+          image: product.images?.[0]?.uploadUrl || "",
+          ...product,
+        }));
+    };
+
     const toast = useToast();
     const { $formatPrice } = useNuxtApp();
     const productStore = useProductStore();
@@ -359,7 +447,22 @@ export default {
           return null;
       }
     };
+    const wishList = computed(() => productStore.wishListItems);
 
+    const isInWishList = item => {
+      if (!item || !item.id) {
+        return false;
+      }
+      if (userStore.isLoggedIn) {
+        const exists = wishList.value.some(
+          wish => wish.productModel.id === item.id
+        );
+        return exists;
+      } else {
+        const exists = wishList.value.some(wish => wish.id === item.id);
+        return exists;
+      }
+    };
     const selectImage = (item, image) => {
       item.image = image;
     };
@@ -433,7 +536,11 @@ export default {
         });
       }
     };
+    onMounted(() => {
+      getTopProducts();
+    });
     const addToCart = async product => {
+      console.log(product);
       const userStore = useUserStore();
       let user = userStore.user;
       try {
@@ -512,6 +619,9 @@ export default {
       addToFavorites,
       addToCart,
       goToPage,
+      isInWishList,
+      getTopProducts,
+      topProducts,
     };
   },
 };

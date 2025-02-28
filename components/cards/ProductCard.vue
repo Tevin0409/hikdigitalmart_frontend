@@ -63,19 +63,32 @@
 
     <!-- Hover Buttons -->
     <div
-      class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity"
+      class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0group-hover:opacity-100 transition-opacity"
     >
-      <button
-        @click="addToCart(item)"
-        class="bg-white p-2 rounded-full shadow hover:bg-gray-100"
-      >
-        <i class="pi pi-shopping-cart text-gray-600"></i>
+      <button @click="addToCart(item)" class="p-2 rounded-full">
+        <i
+          class="pi pi-shopping-cart text-gray-600"
+          style="font-size: 1.2rem"
+        ></i>
       </button>
-      <button
+      <!-- <button
         @click="wishProduct(item)"
         class="bg-white p-2 rounded-full shadow hover:bg-gray-100"
       >
         <i class="pi pi-heart text-gray-600"></i>
+      </button> -->
+
+      <button @click="wishProduct(item)" :loading="loadingWish">
+        <i
+          v-if="!isInWishList(item)"
+          class="pi pi-heart cursor-pointer text-gray-600"
+          style="font-size: 1.2rem"
+        ></i>
+        <i
+          v-else
+          class="pi pi-heart-fill cursor-pointer text-gray-600"
+          style="font-size: 1.2rem; color: red"
+        ></i>
       </button>
     </div>
     <Toast position="bottom-right" group="br" />
@@ -112,8 +125,8 @@ const emit = defineEmits(["wishlist-updated"]);
 
 // defineEmits(["wishlist-updated"]);
 // const wishList = ref([])
-const wishList = productStore.wishListItems; // Initialize wishlist as a reactive array
-// const wishList = computed(() => productStore.wishListItems);
+// const wishList = productStore.wishListItems; // Initialize wishlist as a reactive array
+const wishList = computed(() => productStore.wishListItems);
 // const cartCount = computed(() => productStore.cartCount);
 
 // const location = ref('North Pole')
@@ -142,6 +155,20 @@ const getWishList = async () => {
   }
 };
 
+const isInWishList = item => {
+  if (!item || !item.id) {
+    return false;
+  }
+  if (userStore.isLoggedIn) {
+    const exists = wishList.value.some(
+      wish => wish.productModel.id === item.id
+    );
+    return exists;
+  } else {
+    const exists = wishList.value.some(wish => wish.id === item.id);
+    return exists;
+  }
+};
 // Helper function to check if the user is logged in
 const checkUserLoggedIn = async () => {
   if (userStore.isLoggedIn) {
@@ -150,14 +177,6 @@ const checkUserLoggedIn = async () => {
     return false;
   }
 };
-
-function isInWishlist(productId) {
-  let wish = wishList.value;
-  if (Array.isArray(wish)) {
-    return wishList.value.some(item => item === productId);
-  }
-  return false;
-}
 
 const wishProduct = async product => {
   // console.log(productId, "Attempting to add to wishlist");
@@ -225,6 +244,7 @@ const wishProduct = async product => {
 };
 
 const addToCart = async product => {
+  console.log(product, "product");
   const userStore = useUserStore();
   let user = userStore.user;
   try {

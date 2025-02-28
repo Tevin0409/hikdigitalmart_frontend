@@ -225,6 +225,9 @@ export const useUserStore = defineStore("user", {
         localStorage.removeItem("user");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("product");
+        localStorage.removeItem("cart");
+        localStorage.removeItem("wishlist");
+        // localStorage.removeItem("cate");
       }
 
       // Optional: Navigate to the auth page

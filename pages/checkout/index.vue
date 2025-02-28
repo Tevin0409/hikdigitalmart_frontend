@@ -144,8 +144,13 @@
             class="cart-item flex flex-col sm:flex-row items-center gap-4 border-b pb-3"
           >
             <img
-              :src="item?.productModel?.images[0]?.optimizeUrl ?? defaultImage"
-              class="w-16 h-16 object-cover rounded"
+              :src="
+                item.productModel?.images?.find(image => image.isPrimary)
+                  ?.uploadUrl ??
+                item?.images?.find(image => image.isPrimary)?.uploadUrl
+              "
+              :alt="item.productModel?.name || 'Product Image'"
+              class="w-full h-40 object-cover"
             />
             <div class="flex-1 text-center sm:text-left">
               <p class="text-sm">
