@@ -39,7 +39,7 @@
         <div class="relative bg-gray-100 p-4 rounded-lg">
           <span
             class="absolute top-2 left-2 bg-white px-2 py-1 text-sm font-semibold"
-            >$20.00</span
+            >Ksh 12,000</span
           >
           <!-- <img
             src=""
@@ -200,6 +200,56 @@
       </div>
     </div>
 
+    <div class="bg-gray-100 py-12">
+      <!-- Section Title -->
+      <h2 class="text-3xl font-semibold text-center mb-8">
+        Don't Take Our Word For It
+      </h2>
+
+      <!-- Testimonials Container -->
+      <div class="relative max-w-5xl mx-auto">
+        <div
+          class="flex overflow-hidden transition-transform duration-300 ease-in-out"
+          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+        >
+          <div
+            v-for="(testimonial, index) in testimonials"
+            :key="index"
+            class="w-full flex-shrink-0 p-6"
+          >
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+              <div class="text-yellow-500 text-lg">★★★★★</div>
+              <p class="text-gray-700 mt-3">
+                {{ testimonial.text }}
+              </p>
+              <div class="mt-4 flex flex-col items-center">
+                <img
+                  :src="testimonial.image"
+                  alt="User"
+                  class="w-12 h-12 rounded-full object-cover"
+                />
+                <h3 class="font-semibold mt-2">{{ testimonial.name }}</h3>
+                <span class="text-gray-500 text-sm">{{
+                  testimonial.position
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carousel Dots -->
+        <div class="flex justify-center mt-6 space-x-2">
+          <div
+            v-for="(dot, index) in testimonials.length"
+            :key="index"
+            class="w-3 h-3 rounded-full cursor-pointer"
+            :class="currentIndex === index ? 'bg-gray-900' : 'bg-gray-400'"
+            @click="currentIndex = index"
+          ></div>
+        </div>
+      </div>
+    </div>
+
     <!-- <NewArrivals class="py-12" /> -->
     <!-- <CardsHome /> -->
     <!-- <TopDeal /> -->
@@ -288,6 +338,27 @@ const prevImage = () => {
       ? images.value[currentIndex - 1]
       : images.value[images.value.length - 1];
 };
+const currentIndex = ref(0);
+const testimonials = ref([
+  {
+    text: "At Jimmy Fairly, we believe every pair of glasses tells a unique story.",
+    name: "Tarame L.",
+    position: "Jimmy Fairly CEO",
+    image: "https://randomuser.me/api/portraits/women/1.jpg",
+  },
+  {
+    text: "Our customers inspire us to create eyewear that combines timeless design.",
+    name: "Karimsa",
+    position: "Jimmy Fairly CEO",
+    image: "https://randomuser.me/api/portraits/women/2.jpg",
+  },
+  {
+    text: "Their kind words motivate us to keep redefining what eyewear can be.",
+    name: "Trampal",
+    position: "Jimmy Fairly CEO",
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+  },
+]);
 </script>
 
 <style scoped>

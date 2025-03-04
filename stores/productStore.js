@@ -107,7 +107,21 @@ export const useProductStore = defineStore("product", {
             existingItem.quantity += quantity; // Update quantity if already exists
             await this.getCartItems();
           } else {
-            localCart.push({ ...product, quantity }); // Add new item
+
+             const productMod = {
+          id: product.id,
+          name: product.name,
+          created_at: new Date().toISOString(),
+          userId: "user.id",
+          productModelId: product.id,
+          productModel: {
+            ...product,
+          },
+        };
+        // Product is not in the wishlist, add it
+        // localWishlist.push(productMod);
+
+            localCart.push({ ...productMod, quantity }); // Add new item
             await this.getCartItems();
           }
           localStorage.setItem("cart", JSON.stringify(localCart));

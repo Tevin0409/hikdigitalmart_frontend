@@ -40,8 +40,7 @@
             <img
               :src="
                 item.productModel?.images?.find(image => image.isPrimary)
-                  ?.uploadUrl ??
-                item?.images?.find(image => image.isPrimary)?.uploadUrl
+                  ?.uploadUrl
               "
               :alt="item.productModel?.name || 'Product Image'"
               class="w-full h-40 object-cover"
@@ -63,17 +62,17 @@
           </div>
           <div class="p-4">
             <h3 class="text-md font-semibold truncate">
-              {{ item.productModel?.name ?? item?.product.name }}
+              {{ item.productModel?.name }}
               <br />
               <span class="text-sm font-light">
-                {{ item.productModel?.name ?? item?.name }}
+                {{ item.productModel?.name }}
               </span>
             </h3>
 
             <p class="text-gray-500 mb-2">
               <span class="text-red-500 font-bold">
                 <i class="pi pi-wallet"></i>
-                Ksh {{ formattedPrice(item.productModel?.price ?? item.price) }}
+                Ksh {{ formattedPrice(item.productModel?.price) }}
               </span>
 
               <span
@@ -120,20 +119,16 @@
           class="border rounded-lg p-3"
         >
           <img
-            :src="
-              item.productModel?.images.find(image => image.isPrimary)
-                ?.uploadUrl ??
-              item?.images?.find(image => image.isPrimary)?.uploadUrl
-            "
-            :alt="item.productModel?.name || item.name"
+            :src="item?.images?.find(image => image.isPrimary)?.uploadUrl"
+            :alt="item.name"
             class="w-full h-40 object-cover"
           />
 
           <p class="text-sm font-medium">
-            {{ item.productModel?.name ?? item.name }}
+            {{ item.name }}
           </p>
           <p class="text-primary font-semibold text-lg">
-            Ksh {{ formattedPrice(item.productModel?.price ?? item.price) }}
+            Ksh {{ formattedPrice(item.price) }}
           </p>
         </div>
       </div>
@@ -159,20 +154,16 @@
           class="border rounded-lg p-3"
         >
           <img
-            :src="
-              item.productModel?.images.find(image => image.isPrimary)
-                ?.uploadUrl ??
-              item?.images?.find(image => image.isPrimary)?.uploadUrl
-            "
+            :src="item?.images?.find(image => image.isPrimary)?.uploadUrl"
             :alt="item.productModel?.name || item.name"
             class="w-full h-40 object-cover"
           />
 
           <p class="text-sm font-medium">
-            {{ item.productModel?.name ?? item.name }}
+            {{ item.name }}
           </p>
           <p class="text-primary font-semibold text-lg">
-            KES {{ formattedPrice(item.productModel?.price ?? item.price) }}
+            KES {{ formattedPrice(item.price) }}
           </p>
         </div>
       </div>
