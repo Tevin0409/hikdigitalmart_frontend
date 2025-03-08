@@ -3,13 +3,13 @@
     {{ images }}
     <Carousel
       :verticalViewPortHeight="2000"
+      :autoplayInterval="4000"
       :value="images"
       :numVisible="1"
       :numScroll="1"
       :showIndicators="false"
       :showNavigators="false"
       circular
-      autoplayInterval="4000"
       class="rounded-lg w-full hidden sm:block"
     >
       <template #item="slotProps">

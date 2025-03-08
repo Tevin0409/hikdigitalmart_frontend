@@ -498,8 +498,18 @@ export default {
             item => item.id === product.id
           );
           if (existingIndex === -1) {
+            const productMod = {
+              id: product.id,
+              name: product.name,
+              created_at: new Date().toISOString(),
+              userId: "user.id",
+              productModelId: product.id,
+              productModel: {
+                ...product,
+              },
+            };
             // Product is not in the wishlist, add it
-            localWishlist.push(product);
+            localWishlist.push(productMod);
             localStorage.setItem("wishlist", JSON.stringify(localWishlist));
 
             await productStore.getWishList();

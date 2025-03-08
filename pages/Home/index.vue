@@ -1,14 +1,14 @@
 <template>
   <div
-    class="product-section pt-20"
+    class="product-section pt-8"
     style="
       background-image: url(' https://www.sdl.co.ke/assets/images/icons/vector-1.png');
     "
   >
-    <div class="flex flex-col md:flex-row items-center p-8">
+    <div class="flex flex-col md:flex-row items-center">
       <!-- Left section with text -->
       <div class="w-full md:w-1/2 mb-8 md:mb-0 pr-8">
-        <h1 class="text-6xl text-pretty text-primary font-regular mb-4">
+        <h1 class="text-4xl text-pretty text-primary font-regular mb-4">
           Secure Your Home with State-of-the-Art CCTV Cameras
         </h1>
         <p class="text-gray-600 font-bold mb-6">
@@ -35,53 +35,66 @@
       </div>
 
       <!-- Right section with images and cards -->
-      <div class="w-full md:w-1/2 grid grid-cols-2 gap-4">
-        <div class="relative bg-gray-100 p-4 rounded-lg">
-          <span
-            class="absolute top-2 left-2 bg-white px-2 py-1 text-sm font-semibold"
-            >Ksh 12,000</span
-          >
-          <!-- <img
-            src=""
-            alt="Chair"
-            class="w-full h-auto rounded-lg"
-          /> -->
+      <div class="w-full md:w-1/2">
+        <div
+          class="md:1/2 p-4 rounded-lg flex flex-col items-center text-center"
+        >
+          <p class="text-lg font-semibold">Modern & stylish</p>
           <img
             src="https://www.hikvision.com/content/dam/hikvision/uk/products-image-portal/images/DS-2CD6D54FWD-IZHSNFC.png"
             alt="Selected Product"
-            class="w-full max-w-xs rounded-md border-0"
-          />
-          <p class="mt-2 text-sm">Single comfort chair</p>
-        </div>
-
-        <div class="bg-gray-100 p-4 rounded-lg flex flex-col justify-between">
-          <p class="text-lg font-semibold">Modern & stylish</p>
-          <img
-            src="https://www.hikvision.com/content/dam/hikvision/uk/products-image-portal/images/DS-2CD3146G2.png"
-            alt="Furniture"
-            class="mt-2 rounded-lg"
+            class="mt-2 rounded-lg w-1/2 bg-gray-50"
           />
         </div>
+      </div>
+    </div>
 
-        <div class="bg-gray-100 p-4 rounded-lg">
-          <div class="flex items-center">
-            <img
-              src="https://www.hikvision.com/content/dam/hikvision/uk/products-image-portal/images/DS-2DE7A220MCG.png"
-              alt="Person"
-              class="rounded-full mr-3"
-            />
-            <div>
-              <p class="font-semibold">DS-2DE7A220MCGsr</p>
-              <!-- <p class="text-sm text-gray-500">Agent grocery</p> -->
-            </div>
-          </div>
+    <div class="flex flex-col items-center py-8">
+      <!-- Header Text -->
+      <p class="text-gray-600 text-center mb-4 font-bold">
+        Trusted by over <span class="font-bold text-black">3k+</span>
+        Technicians and over
+        <span class="font-bold text-black">5k+</span>
+        <span class="font-bold"> Shop owners</span> like
+      </p>
+
+      <!-- Logo Container -->
+      <div class="flex flex-wrap justify-center gap-6 md:gap-10">
+        <img
+          v-for="(logo, index) in logos"
+          :key="index"
+          :src="logo.src"
+          :alt="logo.alt"
+          class="h-10 md:h-12 object-contain"
+        />
+      </div>
+    </div>
+
+    <div class="flex justify-center text-center py-8">
+      <div>
+        <p class="text-2xl font-bold text-gray-900">
+          Are you a Technician, Wholesaler, or Retailer?
+        </p>
+        <span class="text-gray-600">
+          We’ve got you covered Sign up with us today to enjoy discounted
+          prices.
+        </span>
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-4">
+      <div
+        @click="$router.push('/auth')"
+        class="feature__item flex bg-white flex-col items-center text-center cursor-pointer"
+        v-for="(feature, index) in featuresSIgn"
+        :key="index"
+      >
+        <div class="icon text-4xl text-red-500">
+          <i :class="feature.icon"></i>
         </div>
-
-        <div
-          class="bg-gray-100 p-4 rounded-lg flex items-center justify-between"
-        >
-          <p class="text-lg font-semibold">120,000+ items sold out</p>
-          <i class="pi pi-users text-2xl text-gray-600"></i>
+        <div class="content mt-2">
+          <h3 class="text-lg font-semibold">{{ feature.title }}</h3>
+          <p class="text-sm text-gray-600">{{ feature.description }}</p>
         </div>
       </div>
     </div>
@@ -155,7 +168,7 @@
     </div> -->
 
     <!-- Carousel Section -->
-    <div class="carousel flex justify-center items-center mt-8 space-x-4">
+    <!-- <div class="carousel flex justify-center items-center mt-8 space-x-4">
       <button
         @click="prevImage"
         class="text-gray-600 hover:text-gray-800 px-3 py-2 bg-gray-100 rounded-full shadow-md"
@@ -179,34 +192,12 @@
       >
         →
       </button>
-    </div>
+    </div> -->
 
-    <!-- Feature Section -->
-    <div
-      class="feature__wrap grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 mt-12"
-    >
-      <div
-        class="feature__item flex bg-white flex-col items-center text-center"
-        v-for="(feature, index) in features"
-        :key="index"
-      >
-        <div class="icon text-4xl text-red-500">
-          <i :class="feature.icon"></i>
-        </div>
-        <div class="content mt-2">
-          <h3 class="text-lg font-semibold">{{ feature.title }}</h3>
-          <p class="text-sm text-gray-600">{{ feature.description }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-gray-100 py-12">
-      <!-- Section Title -->
+    <!-- <div class="bg-gray-100 py-12">
       <h2 class="text-3xl font-semibold text-center mb-8">
         Don't Take Our Word For It
       </h2>
-
-      <!-- Testimonials Container -->
       <div class="relative max-w-5xl mx-auto">
         <div
           class="flex overflow-hidden transition-transform duration-300 ease-in-out"
@@ -237,7 +228,6 @@
           </div>
         </div>
 
-        <!-- Carousel Dots -->
         <div class="flex justify-center mt-6 space-x-2">
           <div
             v-for="(dot, index) in testimonials.length"
@@ -248,7 +238,7 @@
           ></div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- <NewArrivals class="py-12" /> -->
     <!-- <CardsHome /> -->
@@ -273,6 +263,32 @@ const images = ref([
 
 const selectedImage = ref(images.value[0]);
 
+const logos = [
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/1/16/Orvis_logo.svg",
+    alt: "Orvis",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/1/10/Lands%27_End_Logo.svg",
+    alt: "Lands' End",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/0/00/Office_Depot_Logo.png",
+    alt: "Office Depot",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/4/4d/PetSmart_Logo.png",
+    alt: "PetSmart",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Costco_Wholesale_logo_2010-10-26.svg",
+    alt: "Costco",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.sv",
+    alt: "Walmart",
+  },
+];
 const products = ref([
   {
     name: "HD Camera Bullet",
@@ -291,11 +307,33 @@ const products = ref([
   },
 ]);
 
+const featuresSIgn = ref([
+  {
+    icon: "pi pi-cog",
+    title: "Technician",
+    description: "Sign up with us today to enjoy discounted prices.",
+  },
+  {
+    icon: "pi pi-users",
+    title: "Wholesaler",
+    description: "Sign up with us today to enjoy discounted prices.",
+  },
+  {
+    icon: "pi pi-shopping-cart",
+    title: "Retailer",
+    description: "Sign up with us today to enjoy discounted prices.",
+  },
+  {
+    icon: "pi pi-user",
+    title: "Shop Owner",
+    description: "Sign up with us today to enjoy request quotation.",
+  },
+]);
 const features = ref([
   {
     icon: "pi pi-truck",
     title: "Shipping",
-    description: "Shipping Guarantee",
+    description: "Certified Products",
   },
   {
     icon: "pi pi-lock",
@@ -307,11 +345,11 @@ const features = ref([
     title: "Support 24/7",
     description: "Quality Support",
   },
-  {
-    icon: "pi pi-money-bill",
-    title: "Money Back",
-    description: "Guaranteed Refund",
-  },
+  // {
+  //   icon: "pi pi-money-bill",
+  //   title: "Money Back",
+  //   description: "Guaranteed Refund",
+  // },
   {
     icon: "pi pi-thumbs-up",
     title: "Quality Products",

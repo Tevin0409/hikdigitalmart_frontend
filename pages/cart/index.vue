@@ -1,27 +1,6 @@
 <template>
   <div class="cart">
-    <div
-      class="flex flex-col items-center justify-center bg-white rounded-lg p-6 mb-6 container mx-auto"
-      v-if="cartItems.length < 1"
-    >
-      <img
-        src="@/assets/images/empty-cart.png"
-        alt="Empty Cart"
-        class="w-20 h-20 mb-4"
-      />
-      <h2 class="text-xl font-semibold text-gray-700">Your cart is empty!</h2>
-      <p class="text-gray-500 text-sm mb-4">
-        Browse our categories and discover our best deals!
-      </p>
-      <NuxtLink to="/">
-        <button
-          class="bg-primary hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded"
-        >
-          Start Shopping
-        </button>
-      </NuxtLink>
-    </div>
-    <div v-else class="mx-auto container">
+    <div class="mx-auto container">
       <Breadcrumb :home="home" :model="items" class="">
         <template #item="{ item, props }">
           <router-link
@@ -47,6 +26,29 @@
           </a>
         </template>
       </Breadcrumb>
+    </div>
+    <div
+      class="flex flex-col items-center bg-white rounded-lg p-6 mb-6 container mx-auto"
+      v-if="cartItems.length < 1"
+    >
+      <img
+        src="@/assets/images/empty-cart.png"
+        alt="Empty Cart"
+        class="w-20 h-20 mb-4"
+      />
+      <h2 class="text-xl font-semibold text-gray-700">Your cart is empty!</h2>
+      <p class="text-gray-500 text-sm mb-4">
+        Browse our categories and discover our best deals!
+      </p>
+      <NuxtLink to="/dashboard">
+        <button
+          class="bg-primary hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded"
+        >
+          Start Shopping
+        </button>
+      </NuxtLink>
+    </div>
+    <div v-else class="mx-auto container">
       <div class="bg-red-10 rounded-lg p-4">
         <div class="flex justify-between items-center mb-4">
           <h3 class="text-lg font-semibold text-gray-700">
@@ -57,7 +59,6 @@
               href="#"
               class="text-primary hover:text-orange-600 text-sm font-semibold flex items-center"
             >
-              <!-- See All <i class="ml-1 pi pi-angle-right"></i> -->
             </a>
           </NuxtLink>
         </div>
@@ -66,78 +67,69 @@
           <div class="bg-white grid grid-cols-12 gap-4">
             <div class="col-span-12 md:col-span-9">
               <div
-                class="rounded-lg p-4 gap-3 pb-4 mb-2 border cursor-pointer"
+                class="rounded-lg p-4 gap-3 pb-4 mb-2 border cursor-pointer bg-white shadow-sm"
                 v-for="item in cartItems"
                 :key="item.id"
               >
-                <div class="flex items-start">
-                  <!-- Product Image -->
+                <div class="flex flex-wrap items-start gap-4">
                   <img
-                    class="w-20 h-20 object-contain"
+                    class="w-16 h-16 sm:w-20 sm:h-20 object-contain"
                     :src="
                       item.productModel?.images.find(image => image.isPrimary)
                         ?.uploadUrl ??
                       item.images?.find(image => image.isPrimary)?.uploadUrl
-                      // item.images[0]
                     "
                     alt="Product Image"
                   />
-
-                  <!-- Product Details -->
-                  <div class="ml-4 flex-grow">
-                    <h2 class="text-lg font-medium">
+                  <div class="flex-grow min-w-0">
+                    <h2 class="text-base sm:text-lg font-medium truncate">
                       {{ item.productModel?.name ?? item.name }}
                     </h2>
-                    <p class="text-gray-600 truncate">
-                      <!-- {{ item.productModel?.description ?? item.description }} -->
+                    <p class="text-gray-600 text-sm sm:text-base truncate">
                       <span
                         class="font-bold"
-                        v-for="item in item.features ||
-                        item.productModel.features"
-                        >{{ item.description }}</span
+                        v-for="feature in item.features ||
+                        item.productModel?.features"
                       >
+                        {{ feature.description }}
+                      </span>
                     </p>
-                    <!-- <p class="text--500 text-sm" v-for="item in pro">
-                      {{ item.productModel?.features[0]?.description }}
-                    </p> -->
                   </div>
 
                   <!-- Price -->
                   <div class="text-right">
-                    <p class="text-xl font-semibold text-gray-900">
+                    <p class="text-lg sm:text-xl font-semibold text-gray-900">
                       Ksh
                       {{
                         formattedPrice(item.productModel?.price ?? item.price)
                       }}
                     </p>
-                    <!-- <p class="text-gray-500 line-through text-sm">KSh 1,300</p> -->
-                    <!-- <p class="text-primary text-sm font-bold">-20%</p> -->
                   </div>
                 </div>
 
                 <!-- Actions -->
-                <div class="flex items-center justify-between mt-4">
-                  <!-- Remove Button -->
+                <div class="flex flex-wrap items-center justify-between mt-4">
                   <button
                     @click="removeItem(item)"
-                    class="text-red-500 flex items-center"
+                    class="text-red-500 flex items-center text-sm sm:text-base"
                   >
                     <span class="mr-2">🗑️</span> Remove
                   </button>
 
-                  <!-- Quantity Control -->
                   <div class="flex items-center">
                     <button
                       @click="updateQuantity(item.id, item.quantity - 1)"
-                      class="bg-gray-300 px-3 py-1 rounded-lg"
+                      class="bg-gray-300 px-2 sm:px-3 py-1 rounded-lg disabled:opacity-50"
                       :disabled="item.quantity <= 1"
                     >
                       -
                     </button>
-                    <span class="px-4">{{ item.quantity }}</span>
+                    <span class="px-3 sm:px-4 text-sm sm:text-base">{{
+                      item.quantity
+                    }}</span>
                     <button
                       @click="updateQuantity(item.id, item.quantity + 1)"
-                      class="bg-primary text-white px-3 py-1 rounded-lg"
+                      class="bg-primary text-white px-2 sm:px-3 py-1 rounded-lg"
                     >
                       +
                     </button>
@@ -145,10 +137,9 @@
                 </div>
               </div>
             </div>
-            <!-- Cart Total & Checkout - Takes 4 Columns -->
-            <!-- Cart Total & Checkout - Takes 4 Columns -->
+
             <div class="col-span-12 md:col-span-3">
-              <div class="cart-total rounded-lg p-4 bg-white shadow">
+              <div class="cart-total rounded-lg p4 bg-white shadow">
                 <h3 class="text-lg font-semibold mb-2">Cart Total</h3>
 
                 <p class="text-gray-600">
@@ -388,7 +379,7 @@ onMounted(() => {
   width: 300px;
   background: #fff;
   border: 1px solid #ddd;
-  padding: 20px;
+  /* padding: 20px; */
   text-align: left;
 }
 
@@ -431,7 +422,7 @@ onMounted(() => {
   background: #fff;
   border: 1px solid #ddd;
   padding: 20px;
-  margin-top: 20px;
+  /* margin-top: 20px; */
   position: relative;
 }
 

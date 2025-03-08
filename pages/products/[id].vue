@@ -75,12 +75,12 @@
               <i
                 v-if="!isInWishList(product)"
                 class="pi pi-heart cursor-pointer mr-2"
-                style="font-size: 2.3rem"
+                style="font-size: 1.8rem"
               ></i>
               <i
                 v-else
                 class="pi pi-heart-fill cursor-pointer mr-2"
-                style="font-size: 2.3rem; color: red"
+                style="font-size: 1.8rem; color: red"
               ></i>
             </button>
           </p>
@@ -515,7 +515,7 @@ const addToWishlist = async product => {
   }
 };
 const addToCart = async product => {
-  loading.value = true;
+  loadingAdd.value = true;
   try {
     await productStore.addToCart(product, quantity.value);
     toast.add({
@@ -524,9 +524,9 @@ const addToCart = async product => {
       group: "br",
       life: 3000,
     });
-    loading.value = false;
+    loadingAdd.value = false;
   } catch (error) {
-    loading.value = false;
+    loadingAdd.value = false;
     toast.add({
       severity: "danger",
       summary: "error adding to cart, Please try again",

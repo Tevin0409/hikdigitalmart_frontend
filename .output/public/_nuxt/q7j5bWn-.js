@@ -1,1 +1,0 @@
-import{ah as o,x as t,ai as r}from"./DFYqaOGF.js";const i=o((a,s)=>{console.log("Auth middleware executed");const e=t();if(console.log("Auth middleware",e.isLoggedIn),!e.isLoggedIn)return console.log("User not logged in, redirecting to /auth"),r("/auth")});export{i as default};

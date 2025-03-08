@@ -590,11 +590,8 @@ const wrapInKeepAlive = (props, children) => {
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-const __nuxt_page_meta$4 = {
-  layout: "login"
-};
 const __nuxt_page_meta$3 = {
-  middleware: ["auth"]
+  layout: "login"
 };
 const __nuxt_page_meta$2 = {
   middleware: ["auth"]
@@ -614,13 +611,13 @@ const _routes = [
   {
     name: "auth",
     path: "/auth",
-    meta: __nuxt_page_meta$4 || {},
-    component: () => import('./index-GXjqdkOL.mjs')
+    meta: __nuxt_page_meta$3 || {},
+    component: () => import('./index-CsJusGmE.mjs')
   },
   {
     name: "cart",
     path: "/cart",
-    component: () => import('./index-DbU9dQy5.mjs')
+    component: () => import('./index-Hw33AW4E.mjs')
   },
   {
     name: "checkout",
@@ -630,17 +627,17 @@ const _routes = [
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-lx2CB8aV.mjs')
+    component: () => import('./Dashboard-ICn0XKyg.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./index-CKVZ1S6m.mjs')
+    component: () => import('./index-BTJJz_Ll.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-C6hpc-dD.mjs')
+    component: () => import('./index-CzfciuTU.mjs')
   },
   {
     name: "landing",
@@ -650,8 +647,7 @@ const _routes = [
   {
     name: "my-account-id",
     path: "/my-account/:id()",
-    meta: __nuxt_page_meta$3 || {},
-    component: () => import('./_id_-DvMxjCis.mjs')
+    component: () => import('./_id_-CK_9kJuG.mjs')
   },
   {
     name: "my-account",
@@ -662,7 +658,7 @@ const _routes = [
   {
     name: "products-id",
     path: "/products/:id()",
-    component: () => import('./_id_-B0hgSqnw.mjs')
+    component: () => import('./_id_-5QpukbN2.mjs')
   },
   {
     name: "products",
@@ -679,7 +675,7 @@ const _routes = [
   {
     name: "results-id",
     path: "/results/:id()",
-    component: () => import('./_id_-DVTY8Dg9.mjs')
+    component: () => import('./_id_-ChqBO6bm.mjs')
   },
   {
     name: "wishlist",
@@ -2230,7 +2226,7 @@ const useProductStore = defineStore("product", {
         this.cartItems = localWishlist;
         this.cartCount = localWishlist.length;
         this.cartTotal = localWishlist.reduce(
-          (total, item) => total + item.quantity * item.price,
+          (total, item) => total + item.quantity * item.productModel.price,
           0
         );
       }

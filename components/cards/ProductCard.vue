@@ -7,8 +7,6 @@
       class="h-32 mx-auto mb-2 transition-transform group-hover:scale-105"
       alt="Product Image"
     />
-
-    <!-- Product Name -->
     <div
       class="flex flex-col text-center p-2 hover:text-primary transition-colors duration-200"
       @click="goToProductPage(item)"
@@ -48,7 +46,7 @@
               </template>
             </div>
             <p class="ml-2 text-gray-500 text-sm text-center">
-              ({{ item.reviews }} reviews)
+              <!-- ({{ item.reviews }} reviews) -->
             </p>
           </div>
         </span>
@@ -78,7 +76,7 @@
         <i class="pi pi-heart text-gray-600"></i>
       </button> -->
 
-      <button @click="wishProduct(item)" :loading="loadingWish">
+      <button @click="wishProduct(item)">
         <i
           v-if="!isInWishList(item)"
           class="pi pi-heart cursor-pointer text-gray-600"

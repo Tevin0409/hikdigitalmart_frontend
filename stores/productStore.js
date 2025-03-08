@@ -36,7 +36,7 @@ export const useProductStore = defineStore("product", {
         this.cartItems = localWishlist;
         this.cartCount = localWishlist.length;
         this.cartTotal = localWishlist.reduce(
-          (total, item) => total + item.quantity * item.price,
+          (total, item) => total + item.quantity * item.productModel.price,
           0
         );
       }

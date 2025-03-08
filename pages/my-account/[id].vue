@@ -68,9 +68,9 @@ import Orders from "@/components/profile/Orders.vue";
 // import Wishlist from "@/components/profile/Wishlist.vue";
 import TabMenu from "primevue/tabmenu";
 
-definePageMeta({
-  middleware: ["auth"],
-});
+// definePageMeta({
+//   middleware: ["auth"],
+// });
 export default {
   components: { Profile, Orders, TabMenu },
   setup() {
