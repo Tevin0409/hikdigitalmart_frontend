@@ -627,7 +627,7 @@ const _routes = [
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-ICn0XKyg.mjs')
+    component: () => import('./Dashboard-DJghiVke.mjs')
   },
   {
     name: "Home",

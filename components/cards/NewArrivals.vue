@@ -109,10 +109,10 @@ const selectedTab = ref("Recent");
 
 const tabs = ref([
   "Recent",
-  "Best Seller",
-  "Top",
-  "New Arrivals",
-  "Top Rating",
+  // "Best Seller",
+  // "Top",
+  // "New Arrivals",
+  // "Top Rating",
 ]);
 
 const { $formatPrice } = useNuxtApp();

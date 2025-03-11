@@ -381,10 +381,10 @@ export default {
   setup() {
     const tabs = ref([
       "Recent",
-      "Best Seller",
-      "Top",
-      "New Arrivals",
-      "Top Rating",
+      // "Best Seller",
+      // "Top",
+      // "New Arrivals",
+      // "Top Rating",
     ]);
     const userStore = useUserStore(); // Access the user store for authentication state
 
