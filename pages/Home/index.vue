@@ -52,10 +52,10 @@
     <div class="flex flex-col items-center py-8">
       <!-- Header Text -->
       <p class="text-gray-600 text-center mb-4 font-bold">
-        Trusted by over <span class="font-bold text-black">3k+</span>
-        Technicians and over
+        Our Partners <span class="font-bold text-black"></span>
+        <!-- Technicians and over
         <span class="font-bold text-black">5k+</span>
-        <span class="font-bold"> Shop owners</span> like
+        <span class="font-bold"> Shop owners</span> like -->
       </p>
 
       <!-- Logo Container -->
@@ -65,12 +65,12 @@
           :key="index"
           :src="logo.src"
           :alt="logo.alt"
-          class="h-10 md:h-12 object-contain"
+          class="h-20 md:h-20 object-contain"
         />
       </div>
     </div>
 
-    <div class="flex justify-center text-center py-8">
+    <div class="flex justify-center text-center py-8 pb-10">
       <div>
         <p class="text-2xl font-bold text-gray-900">
           Are you a Technician, Wholesaler, or Retailer?
@@ -82,7 +82,7 @@
       </div>
     </div>
 
-    <div class="flex justify-center gap-4">
+    <div class="flex justify-center gap-4 pb-12">
       <div
         @click="$router.push('/auth')"
         class="feature__item flex bg-white flex-col items-center text-center cursor-pointer"
@@ -265,28 +265,12 @@ const selectedImage = ref(images.value[0]);
 
 const logos = [
   {
-    src: "https://upload.wikimedia.org/wikipedia/commons/1/16/Orvis_logo.svg",
-    alt: "Orvis",
+    src: "https://www.nemtek.co.za/wp-content/uploads/2021/07/NEMTEK_logo.svg",
+    alt: "NEMTEK",
   },
   {
-    src: "https://upload.wikimedia.org/wikipedia/commons/1/10/Lands%27_End_Logo.svg",
-    alt: "Lands' End",
-  },
-  {
-    src: "https://upload.wikimedia.org/wikipedia/commons/0/00/Office_Depot_Logo.png",
-    alt: "Office Depot",
-  },
-  {
-    src: "https://upload.wikimedia.org/wikipedia/commons/4/4d/PetSmart_Logo.png",
-    alt: "PetSmart",
-  },
-  {
-    src: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Costco_Wholesale_logo_2010-10-26.svg",
-    alt: "Costco",
-  },
-  {
-    src: "https://upload.wikimedia.org/wikipedia/commons/c/ca/Walmart_logo.sv",
-    alt: "Walmart",
+    src: "https://logos-world.net/wp-content/uploads/2023/01/Hikvision-Logo.png",
+    alt: "HIKVISION",
   },
 ];
 const products = ref([
@@ -313,14 +297,14 @@ const featuresSIgn = ref([
     title: "Technician",
     description: "Sign up with us today to enjoy discounted prices.",
   },
-  {
-    icon: "pi pi-users",
-    title: "Wholesaler",
-    description: "Sign up with us today to enjoy discounted prices.",
-  },
+  // {
+  //   icon: "pi pi-users",
+  //   title: "Wholesaler",
+  //   description: "Sign up with us today to enjoy discounted prices.",
+  // },
   {
     icon: "pi pi-shopping-cart",
-    title: "Retailer",
+    title: "User",
     description: "Sign up with us today to enjoy discounted prices.",
   },
   {

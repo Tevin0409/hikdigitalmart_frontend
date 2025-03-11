@@ -632,12 +632,12 @@ const _routes = [
   {
     name: "Home",
     path: "/Home",
-    component: () => import('./index-BTJJz_Ll.mjs')
+    component: () => import('./index-AT8Ddh2N.mjs')
   },
   {
     name: "index",
     path: "/",
-    component: () => import('./index-CzfciuTU.mjs')
+    component: () => import('./index-D_5KbUJ4.mjs')
   },
   {
     name: "landing",
