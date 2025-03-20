@@ -235,8 +235,22 @@
                     {{ item.productModel.name }}
                   </p>
                   <p class="text-gray-500">
-                    {{ item.productModel.description }}
+                    <span
+                      v-html="
+                        isExpanded
+                          ? item.productModel.description
+                          : truncatedDescription
+                      "
+                    ></span>
+                    <span
+                      v-if="shouldShowReadMore"
+                      @click="toggleExpand"
+                      class="text-blue-500 cursor-pointer"
+                    >
+                      {{ isExpanded ? "Read less" : "Read more" }}
+                    </span>
                   </p>
+
                   <p class="font-semibold">
                     Price: Ksh {{ formattedPrice(item.productModel.price) }}
                   </p>
@@ -262,6 +276,8 @@ definePageMeta({
 export default {
   data() {
     return {
+      isExpanded: true,
+      maxLength: 100,
       orderDetails: {},
       detailedView: false,
       selectedFilter: "All",
@@ -295,6 +311,14 @@ export default {
       if (this.selectedFilter === "All") return this.orders;
       return this.orders.filter(order => order.status === this.selectedFilter);
     },
+    truncatedDescription() {
+      return this.item?.productModel?.description
+        ? this.item.productModel.description.slice(0, this.maxLength) + "..."
+        : "";
+    },
+    shouldShowReadMore() {
+      return this.item?.productModel?.description?.length > this.maxLength;
+    },
   },
 
   async mounted() {
@@ -316,8 +340,11 @@ export default {
   },
 
   methods: {
+    toggleExpand() {
+      this.isExpanded = !this.isExpanded;
+    },
     async printOrder() {
-      const orderElement = document.querySelector(".order-details"); // Select the order details container
+      const orderElement = document.querySelector(".order-details");
       if (!orderElement) return;
 
       const canvas = await html2canvas(orderElement, { scale: 2 });

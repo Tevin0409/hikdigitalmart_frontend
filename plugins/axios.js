@@ -7,7 +7,9 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   const axiosInstance = axios.create({
     // baseURL: "https://hickdigitalmart-backend.onrender.com/api",
-    baseURL: "http://164.92.217.115:4500/api",
+    baseURL: "https://api.hikvisionkenyashop.com/api/",
+    // baseURL: "http://164.92.217.115:4500/api",
+   
     
     headers: {
       "Content-Type": "application/json",

@@ -475,9 +475,21 @@ const addToWishlist = async product => {
       const existingIndex = localWishlist.findIndex(
         item => item.id === product.id
       );
+      // if (existingIndex === -1) {
+
       if (existingIndex === -1) {
-        // Product is not in the wishlist, add it
-        localWishlist.push(product);
+        const productMod = {
+          id: product.id,
+          name: product.name,
+          created_at: new Date().toISOString(),
+          userId: "user.id",
+          productModelId: product.id,
+          productModel: {
+            ...product,
+          },
+        };
+        localWishlist.push(productMod);
+        // localWishlist.push(product);
         localStorage.setItem("wishlist", JSON.stringify(localWishlist));
 
         await productStore.getWishList();

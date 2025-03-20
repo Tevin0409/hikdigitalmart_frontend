@@ -64,8 +64,8 @@
             <h3 class="text-md font-semibold truncate">
               {{ item.productModel?.name }}
               <br />
-              <span class="text-sm font-light">
-                {{ item.productModel?.name }}
+              <span class="text-md font-light">
+                {{ item.productModel?.product?.name }}
               </span>
             </h3>
 
@@ -116,7 +116,8 @@
         <div
           v-for="(item, index) in randomizedProducts(products)"
           :key="index"
-          class="border rounded-lg p-3"
+          class="border rounded-lg p-3 cursor-pointer"
+          @click="goToPage(item)"
         >
           <img
             :src="item?.images?.find(image => image.isPrimary)?.uploadUrl"
@@ -151,7 +152,8 @@
         <div
           v-for="(item, index) in products"
           :key="index"
-          class="border rounded-lg p-3"
+          class="border rounded-lg p-3 cursor-pointer"
+          @click="goToPage(item)"
         >
           <img
             :src="item?.images?.find(image => image.isPrimary)?.uploadUrl"
@@ -163,7 +165,7 @@
             {{ item.name }}
           </p>
           <p class="text-primary font-semibold text-lg">
-            KES {{ formattedPrice(item.price) }}
+            Ksh {{ formattedPrice(item.price) }}
           </p>
         </div>
       </div>
@@ -176,6 +178,7 @@
 import { computed, onMounted } from "vue";
 import { useProductStore } from "@/stores/productStore";
 import { useUserStore } from "@/stores/auth";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
@@ -189,6 +192,7 @@ export default {
     const cartTotal = computed(() => productStore.cartTotal);
     const products = computed(() => productStore.products);
     const isLoggedIn = computed(() => userStore.isLoggedIn);
+    const router = useRouter();
 
     // Fetch wishlist on mount
     onMounted(() => {
@@ -251,6 +255,12 @@ export default {
       }
       return [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
     };
+    const goToPage = product => {
+      // console.log("prodcet", product);
+      router.push({
+        path: `/products/${product.id}`,
+      });
+    };
 
     return {
       wishList,
@@ -262,6 +272,7 @@ export default {
       addToCart,
       products,
       randomizedProducts,
+      goToPage,
     };
   },
 };

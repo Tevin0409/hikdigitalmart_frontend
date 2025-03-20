@@ -24,7 +24,7 @@
         >
           <template #item="slotProps">
             <div>
-              <div class="mb-4">
+              <div class="mb-4" @click="goToPage(slotProps.data)">
                 <div class="relative mx-auto h-">
                   <img
                     :src="slotProps.data.image"

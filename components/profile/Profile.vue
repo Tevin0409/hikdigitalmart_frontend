@@ -190,7 +190,7 @@
                     >
                   </p>
                   <p class="text-gray-800 font-semibold mt-1">
-                    KES {{ formattedPrice(order.total) }}
+                    Ksh {{ formattedPrice(order.total) }}
                   </p>
                 </div>
               </div>

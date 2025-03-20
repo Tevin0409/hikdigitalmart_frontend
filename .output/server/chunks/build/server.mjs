@@ -627,7 +627,7 @@ const _routes = [
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-DJghiVke.mjs')
+    component: () => import('./Dashboard-D4-WZFLz.mjs')
   },
   {
     name: "Home",
@@ -647,18 +647,18 @@ const _routes = [
   {
     name: "my-account-id",
     path: "/my-account/:id()",
-    component: () => import('./_id_-CK_9kJuG.mjs')
+    component: () => import('./_id_-ClUiceym.mjs')
   },
   {
     name: "my-account",
     path: "/my-account",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./index-DXuoSdL1.mjs')
+    component: () => import('./index-Ds8hWuls.mjs')
   },
   {
     name: "products-id",
     path: "/products/:id()",
-    component: () => import('./_id_-5QpukbN2.mjs')
+    component: () => import('./_id_-CjDGHm4-.mjs')
   },
   {
     name: "products",
@@ -680,7 +680,7 @@ const _routes = [
   {
     name: "wishlist",
     path: "/wishlist",
-    component: () => import('./index-UhnId7iG.mjs')
+    component: () => import('./index-DjucuJzS.mjs')
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -2750,7 +2750,8 @@ const axios_sVCuMR6hEC = /* @__PURE__ */ defineNuxtPlugin((nuxtApp) => {
   const router = useRouter();
   const axiosInstance = axios.create({
     // baseURL: "https://hickdigitalmart-backend.onrender.com/api",
-    baseURL: "http://164.92.217.115:4500/api",
+    baseURL: "https://api.hikvisionkenyashop.com/api/",
+    // baseURL: "http://164.92.217.115:4500/api",
     headers: {
       "Content-Type": "application/json"
     }
