@@ -175,18 +175,34 @@
             Subtotal
             <strong class="text-lg">{{ formattedPrice(cartTotal) }}</strong>
           </p>
-          <p class="text-gray-600 flex justify-between">
-            VAT (16%):
+          <div class="flex items-center justify-between my-4">
+            <label class="text-gray-600">Apply VAT (16%)</label>
 
-            <strong> {{ formattedPrice(getVat(cartTotal)) }} </strong>
-          </p>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" v-model="isVat" class="sr-only peer" />
+              <div
+                class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-primary transition-colors"
+              ></div>
+              <div
+                class="absolute left-1 top-1 bg-white border border-gray-300 w-4 h-4 rounded-full transition-transform peer-checked:translate-x-5"
+              ></div>
+            </label>
+          </div>
 
-          <hr class="my-2" />
+          <hr class="my-2" v-if="isVat" />
+          <div class="flex justify-between text-gray-600" v-if="isVat">
+            <span>VAT</span>
+            <span>Ksh {{ formattedPrice(getVat(cartTotal)) }}</span>
+          </div>
+
           <hr class="my-2" />
           <p class="flex justify-between text-lg font-semibold">
             Total
             <strong class="text-lg"
-              >Ksh {{ formattedPrice(cartTotal + getVat(cartTotal)) }}</strong
+              >Ksh
+              {{
+                formattedPrice(cartTotal + (isVat ? getVat(cartTotal) : 0))
+              }}</strong
             >
           </p>
 
@@ -231,7 +247,7 @@ export default {
     const productStore = useProductStore(); // Use the product store
     const cartTotal = computed(() => productStore.cartTotal);
     const cartItems = computed(() => productStore.cartItems);
-    // const $formatPrice = useNuxtApp()
+    const isVat = ref(false);
     // Pre-fill user details from the store
     const user = computed(() => userStore.user || {});
     const home = ref({
@@ -285,19 +301,31 @@ export default {
     const placeOrder = async () => {
       const userLoggedIn = userStore.isLoggedIn;
 
+      console.log("isVat.value,", isVat.value);
+
       if (userLoggedIn) {
+        user.value = {
+          ...user.value, // Spread existing user properties
+          isVat: isVat.value, // Add or update isVat
+        };
         try {
           loading.value = true;
-          const response = await productStore.placeOrder(user.value);
+          const response = await productStore.placeOrder(
+            user.value,
+            isVat.value
+          );
 
           let order = {
             orderId: response.data.id,
-            amount: 1,
+            amount: formattedPrice(
+              cartTotal + (isVat.value ? getVat(cartTotal) : 0)
+            ), // Include VAT if applicable
             phoneNumber: user.value.phoneNumber,
           };
+
           const mpesaResponse = await productStore.checkOut(order);
 
-          console.log(mpesaResponse, "Mpesa");
+          // console.log(mpesaResponse, "Mpesa");
 
           loading.value = false;
 
@@ -343,23 +371,33 @@ export default {
         }
 
         try {
+          user.value = {
+            ...user.value,
+            isVat: isVat.value, // Add or update isVat
+          };
+
           // console.log("Order placed successfully.");
 
           loading.value = true;
           // console.log("cart", cartItems.value);
           // const {products} = cartItems.value
-          const response = await productStore.placeOrderAnonymous(user.value);
+          const response = await productStore.placeOrderAnonymous(
+            user.value,
+            isVat.value
+          );
           // console.log(response.data.id);
           // response.data.orderPrice
 
           let order = {
             orderId: response.data.id,
-            amount: 1,
+            amount: formattedPrice(
+              cartTotal + (isVat.value ? getVat(cartTotal) : 0)
+            ), // Include VAT if applicable
             phoneNumber: user.value.phoneNumber,
           };
           const mpesaResponse = await productStore.checkOut(order);
 
-          console.log(mpesaResponse, "Mpesa");
+          // console.log(mpesaResponse, "Mpesa");
 
           loading.value = false;
 
@@ -402,6 +440,7 @@ export default {
       home,
       items,
       getVat,
+      isVat,
     };
   },
 };

@@ -75,7 +75,7 @@
                   <img
                     class="w-16 h-16 sm:w-20 sm:h-20 object-contain"
                     :src="
-                      item.productModel?.images.find(image => image.isPrimary)
+                      item.productModel?.images?.find(image => image.isPrimary)
                         ?.uploadUrl ??
                       item.images?.find(image => image.isPrimary)?.uploadUrl
                     "
@@ -155,7 +155,7 @@
                   >
                     <input
                       type="checkbox"
-                      v-model="applyVat"
+                      v-model="isVat"
                       class="sr-only peer"
                     />
                     <div
@@ -167,20 +167,18 @@
                   </label>
                 </div>
 
-                <hr class="my-2" />
-
-                <p class="text-gray-600" v-if="applyVat">
-                  VAT (16%): Ksh {{ formattedPrice(getVat(cartTotal)) }}
-                </p>
+                <hr class="my-2" v-if="isVat" />
+                <div class="flex justify-between text-gray-600" v-if="isVat">
+                  <span>VAT</span>
+                  <span>Ksh {{ formattedPrice(getVat(cartTotal)) }}</span>
+                </div>
 
                 <hr class="my-2" />
 
                 <p class="text-lg font-bold">
                   Total: Ksh
                   {{
-                    formattedPrice(
-                      cartTotal + (applyVat ? getVat(cartTotal) : 0)
-                    )
+                    formattedPrice(cartTotal + (isVat ? getVat(cartTotal) : 0))
                   }}
                 </p>
 
@@ -189,9 +187,7 @@
                   @click="proceedToCheckout"
                 >
                   Checkout ({{
-                    formattedPrice(
-                      cartTotal + (applyVat ? getVat(cartTotal) : 0)
-                    )
+                    formattedPrice(cartTotal + (isVat ? getVat(cartTotal) : 0))
                   }})
                 </button>
               </div>
@@ -226,7 +222,7 @@ const coupon = ref("");
 // Computed properties
 const cartTotal = computed(() => productStore.cartTotal);
 const cartItems = computed(() => productStore.cartItems);
-const applyVat = ref(false);
+const isVat = ref(false);
 const home = ref({
   icon: "pi pi-home",
   route: "/dashboard",

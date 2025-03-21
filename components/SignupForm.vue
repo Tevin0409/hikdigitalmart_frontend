@@ -216,8 +216,10 @@ export default {
   methods: {
     handleRole() {
       if (this.form.role.name == "TECHNICIAN") {
-        console.log("role: ", this.form.role);
         this.$emit("show-questionnaire");
+      }
+      if (this.form.role.name == "WHOLESALER") {
+        this.$emit("show-wholesaler");
       }
     },
     async register() {

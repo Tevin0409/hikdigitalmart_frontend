@@ -363,7 +363,7 @@ export const useProductStore = defineStore("product", {
       }
     },
 
-    async placeOrder(user) {
+    async placeOrder(user, vat) {
       try {
         const { $axios } = useNuxtApp();
 
@@ -382,6 +382,8 @@ export const useProductStore = defineStore("product", {
           phone_number: user.phoneNumber,
           street_address: user.street_address,
           city: user.city,
+          isVat: vat
+
         };
 
         const response = await $axios.post("/product/orders", order);
@@ -394,7 +396,7 @@ export const useProductStore = defineStore("product", {
       }
     },
 
-    async placeOrderAnonymous(user) {
+    async placeOrderAnonymous(user, vat) {
       try {
         const { $axios } = useNuxtApp();
         let products = this.cartItems.map(item => ({
@@ -412,6 +414,7 @@ export const useProductStore = defineStore("product", {
           phone_number: user.phoneNumber,
           street_address: user.street_address,
           city: user.city,
+          isVat: vat
         };
 
         const response = await $axios.post("/product/orders/anonymous", order);
