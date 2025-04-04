@@ -27,7 +27,7 @@ import { ref } from "vue";
 import SignupForm from "~/components/SignupForm.vue";
 import LoginForm from "~/components/LoginForm.vue";
 import QuestionnaireForm from "~/components/stepper/QuestionnaireForm.vue";
-import WholesalerForm from "~/components/stepper/QuestionnaireForm.vue";
+import WholesalerForm from "~/components/stepper/WholesalerForm.vue";
 
 // Set the login layout using Nuxt 3's definePageMeta
 definePageMeta({

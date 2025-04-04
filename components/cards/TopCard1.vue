@@ -105,10 +105,17 @@
         <h4 class="text-primary font-bold">HOT DEALS</h4>
         <p class="text-gray-600 text-sm">Updated Daily</p>
       </div>
-      <div class="bg-primary text-white text-center p-6 rounded-lg">
-        <p class="font-bold text-lg">CALL OR WHATSAPP</p>
-        <p class="text-2xl font-bold">+254 727 909 060</p>
-        <p class="text-sm">TO ORDER</p>
+      <div
+        class="bg-primary text-white text-center p-6 rounded-lg max-w-md mx-auto"
+      >
+        <p class="font-bold text-lg md:text-xl">CALL OR WHATSAPP</p>
+        <p
+          class="text-xl md:text-sm font-bold flex items-center justify-center gap-2"
+        >
+          <i class="pi pi-whatsapp text-md md:text-2xl"></i>
+          +254 727 909 060
+        </p>
+        <p class="text-sm md:text-base">TO ORDER</p>
       </div>
     </div>
   </div>
@@ -116,16 +123,6 @@
 
 <script setup>
 const products = ref([]);
-// const define
-
-// export default {
-
-// props: {
-//     categories: {
-//         type: Array,
-//         required: false
-//     }
-// },
 const props = defineProps(["categories"]);
 // name: "HomePageLayout",
 const images = ref([
