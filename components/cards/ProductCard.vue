@@ -125,18 +125,6 @@ const emit = defineEmits(["wishlist-updated"]);
 // const wishList = ref([])
 // const wishList = productStore.wishListItems; // Initialize wishlist as a reactive array
 const wishList = computed(() => productStore.wishListItems);
-// const cartCount = computed(() => productStore.cartCount);
-
-// const location = ref('North Pole')
-
-// function updateLocation() {
-//   location.value = 'South Pole'
-// }
-
-// provide('location', {
-//   location,
-//   updateLocation
-// })
 
 const getWishList = async () => {
   try {

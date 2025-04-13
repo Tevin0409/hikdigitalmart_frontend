@@ -590,17 +590,14 @@ const wrapInKeepAlive = (props, children) => {
 function toArray(value) {
   return Array.isArray(value) ? value : [value];
 }
-const __nuxt_page_meta$3 = {
-  layout: "login"
-};
 const __nuxt_page_meta$2 = {
-  middleware: ["auth"]
+  layout: "login"
 };
 const __nuxt_page_meta$1 = {
-  layout: "login"
+  middleware: ["auth"]
 };
 const __nuxt_page_meta = {
-  middleware: ["auth"]
+  layout: "login"
 };
 const _routes = [
   {
@@ -611,57 +608,33 @@ const _routes = [
   {
     name: "auth",
     path: "/auth",
-    meta: __nuxt_page_meta$3 || {},
-<<<<<<< HEAD
-    component: () => import('./index-CNLgUmvo.mjs')
-=======
-    component: () => import('./index-D94nykrI.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
+    meta: __nuxt_page_meta$2 || {},
+    component: () => import('./index-DSxHd8Em.mjs')
   },
   {
     name: "cart",
     path: "/cart",
-<<<<<<< HEAD
-    component: () => import('./index-splmMZL5.mjs')
-=======
-    component: () => import('./index-oU8gMQ6F.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
+    component: () => import('./index-DnaIvZhp.mjs')
   },
   {
     name: "checkout",
     path: "/checkout",
-<<<<<<< HEAD
     component: () => import('./index-X6DBnAzQ.mjs')
-=======
-    component: () => import('./index-sapxkesM.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "Dashboard",
     path: "/Dashboard",
-<<<<<<< HEAD
-    component: () => import('./Dashboard-bTsl8nUJ.mjs')
-=======
-    component: () => import('./Dashboard-D4-WZFLz.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
+    component: () => import('./Dashboard-B6MeHsa1.mjs')
   },
   {
     name: "Home",
     path: "/Home",
-<<<<<<< HEAD
     component: () => import('./index-kp0g20_0.mjs')
-=======
-    component: () => import('./index-AT8Ddh2N.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "index",
     path: "/",
-<<<<<<< HEAD
     component: () => import('./index-CG583FFE.mjs')
-=======
-    component: () => import('./index-D_5KbUJ4.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "landing",
@@ -671,60 +644,44 @@ const _routes = [
   {
     name: "my-account-id",
     path: "/my-account/:id()",
-<<<<<<< HEAD
     component: () => import('./_id_-BPcre5JL.mjs')
-=======
-    component: () => import('./_id_-ClUiceym.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "my-account",
     path: "/my-account",
-    meta: __nuxt_page_meta$2 || {},
-<<<<<<< HEAD
+    meta: __nuxt_page_meta$1 || {},
     component: () => import('./index-DD_sve-U.mjs')
-=======
-    component: () => import('./index-Ds8hWuls.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "products-id",
     path: "/products/:id()",
-<<<<<<< HEAD
     component: () => import('./_id_-DtQAmifA.mjs')
-=======
-    component: () => import('./_id_-CjDGHm4-.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "products",
     path: "/products",
-    meta: __nuxt_page_meta$1 || {},
+    meta: __nuxt_page_meta || {},
     component: () => import('./index-CNPVZyvb.mjs')
   },
   {
     name: "Profile",
     path: "/Profile",
-    meta: __nuxt_page_meta || {},
-    component: () => import('./Profile-BtEkvQ-3.mjs')
+    component: () => import('./Profile-D91bUAS9.mjs')
+  },
+  {
+    name: "quotation",
+    path: "/quotation",
+    component: () => import('./index-BzlnyzU5.mjs')
   },
   {
     name: "results-id",
     path: "/results/:id()",
-<<<<<<< HEAD
     component: () => import('./_id_-m5VLXUYp.mjs')
-=======
-    component: () => import('./_id_-ChqBO6bm.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   },
   {
     name: "wishlist",
     path: "/wishlist",
-<<<<<<< HEAD
     component: () => import('./index-DWdFgWqX.mjs')
-=======
-    component: () => import('./index-DjucuJzS.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -852,11 +809,7 @@ const globalMiddleware = [
   manifest_45route_45rule
 ];
 const namedMiddleware = {
-<<<<<<< HEAD
-  auth: () => import('./auth-B-X1GrxN.mjs')
-=======
-  auth: () => import('./auth-DC4OI3RP.mjs')
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
+  auth: () => import('./auth-h5dp9c1v.mjs')
 };
 const plugin$1 = /* @__PURE__ */ defineNuxtPlugin({
   name: "nuxt:router",
@@ -2885,13 +2838,8 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-<<<<<<< HEAD
-  default: defineAsyncComponent(() => import('./default-92mDGJrl.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-CEG0NTG7.mjs')),
-=======
-  default: defineAsyncComponent(() => import('./default-B8C58TNS.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-ChWVgs32.mjs')),
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
+  default: defineAsyncComponent(() => import('./default-BKz1ogsB.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-BUaW4ug1.mjs')),
   login: defineAsyncComponent(() => import('./login-DUx2zHTQ.mjs'))
 };
 const LayoutLoader = defineComponent({
@@ -3186,11 +3134,7 @@ const _sfc_main$1 = {
     const statusMessage = _error.statusMessage ?? (is404 ? "Page Not Found" : "Internal Server Error");
     const description = _error.message || _error.toString();
     const stack = void 0;
-<<<<<<< HEAD
     const _Error404 = defineAsyncComponent(() => import('./error-404-76xhX6ZH.mjs'));
-=======
-    const _Error404 = defineAsyncComponent(() => import('./error-404-De324-Kw.mjs'));
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
     const _Error = defineAsyncComponent(() => import('./error-500-B3NJt1Sp.mjs'));
     const ErrorTemplate = is404 ? _Error404 : _Error;
     return (_ctx, _push, _parent, _attrs) => {
@@ -3272,9 +3216,5 @@ let entry;
 }
 const entry$1 = (ssrContext) => entry(ssrContext);
 
-<<<<<<< HEAD
 export { BaseStyle as B, FilterService as F, PrimeVueService as P, ToastEventBus as T, _export_sfc as _, useNuxtApp as a, useProductStore as b, useRouter as c, resolveRouteObject as d, entry$1 as default, navigateTo as e, useRuntimeConfig as f, useToast as g, defineNuxtRouteMiddleware as h, injectHead as i, __nuxt_component_0 as j, nuxtLinkDefaults as n, resolveUnrefHeadInput as r, useUserStore as u };
-=======
-export { BaseStyle as B, FilterService as F, PrimeVueService as P, ToastEventBus as T, _export_sfc as _, useNuxtApp as a, useProductStore as b, useToast as c, useRouter as d, entry$1 as default, resolveRouteObject as e, navigateTo as f, useRuntimeConfig as g, defineNuxtRouteMiddleware as h, injectHead as i, __nuxt_component_0 as j, nuxtLinkDefaults as n, resolveUnrefHeadInput as r, useUserStore as u };
->>>>>>> 52361ae4cd9555d856b253d93c4756f60787f4de
 //# sourceMappingURL=server.mjs.map

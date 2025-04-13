@@ -62,7 +62,7 @@
             @click="setActiveSection('orders')"
             class="font-bold text-red-500 mt-4 cursor-pointer"
           >
-            My Orders
+            My Orders 
           </li>
         </ul>
         <button
@@ -145,7 +145,11 @@
 
         <!-- Orders Section -->
         <div v-if="activeSection === 'orders'">
-          <h2 class="text-xl font-bold mb-4 text-red-500">My Orders</h2>
+          <h2 class="text-xl font-bold mb-4 text-red-500">
+            
+         {{isWholesaler ? 'My Quotations' :   ' My Orders '}}
+
+          </h2>
           <div class="p-4 bg-gray-100">
             <div class="flex space-x-4 mb-4 overflow-x-auto">
               <button
@@ -225,7 +229,7 @@
 import { useUserStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
 definePageMeta({
-  middleware: ["auth"],
+  // middleware: ["auth"],
 });
 export default {
   data() {
@@ -263,6 +267,10 @@ export default {
     filteredOrders() {
       if (this.selectedFilter === "All") return this.orders;
       return this.orders.filter(order => order.status === this.selectedFilter);
+    },
+    isWholesaler() {
+      const userStore = useUserStore();
+      return userStore.user?.isWholesaler;
     },
   },
 

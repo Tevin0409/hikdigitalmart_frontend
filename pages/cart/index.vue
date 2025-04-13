@@ -95,7 +95,6 @@
                       </span>
                     </p>
                   </div>
-
                   <!-- Price -->
                   <div class="text-right">
                     <p class="text-lg sm:text-xl font-semibold text-gray-900">
@@ -196,13 +195,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="cart-actions">
-      <div class="coupon">
-        <input v-model="coupon" type="text" placeholder="Coupon Code" />
-        <button @click="applyCoupon">Apply Coupon</button>
-      </div>
-    </div> -->
   </div>
 </template>
 <script setup>

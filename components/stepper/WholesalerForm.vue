@@ -677,23 +677,6 @@ export default {
     validateForm() {
       let isValid = true;
       this.errors = {};
-
-      // this.purchaseError = this.purchaseSource.length == 0;
-      // if (this.purchaseError) isValid = false;
-
-      // this.currentlyPurchaseError = !this.purchaseHikvision;
-      // if (this.currentlyPurchaseError) isValid = false;
-
-      // this.textareaFields.forEach(field => {
-      //   if (
-      //     !this.formData[field.model].trim() &&
-      //     field.id !== "businessSupport"
-      //   ) {
-      //     this.errors[field.model] = "This field cannot be empty.";
-      //     isValid = false;
-      //   }
-      // });
-
       return isValid;
     },
     hasErrors(obj) {
@@ -741,13 +724,7 @@ export default {
         }
       }
       if (x == 2) {
-    
-        // this.experienceAreasError = false;
-        // this.brandsWorkedWithError = false;
-        // this.integrationExperienceError = false;
-        // this.familiarWithStandardError = false;
-
-        // Validate Checkboxes
+          // Validate Checkboxes
         if(this.wholesalerBusinessInfo.selectedBusinessType.length === 0) {
           this.errors.wholesalerBusinessInfo.selectedBusinessType = "Business type is required.";
         }
@@ -757,18 +734,6 @@ export default {
         if (this.wholesalerBusinessInfo.selectedSecurityBrands.length === 0) {
           this.errors.wholesalerBusinessInfo.selectedSecurityBrands = "At least one security brand is required.";
         }
-
-        // if (this.selectedBrands.length === 0) {
-        //   this.experienceAreasError = true;
-        // }
-        // if (this.selectedBusinessType.length === 0) {
-        //   this.brandsWorkedWithError = true;
-        // }
-
-        // if (this.selectedSecurityBrands.length === 0) {
-        //   this.brandsWorkedWithError = true;
-        // }
-
         // Validate Radio Buttons
         if (!this.integrationExperience) {
           this.integrationExperienceError = true;

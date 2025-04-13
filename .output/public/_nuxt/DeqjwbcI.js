@@ -1,1 +1,0 @@
-import o from"./D3978l9g.js";import{Q as e,o as r,G as t}from"./BFuEayTv.js";import"./GBAy-wp2.js";import"./pPkUVtN8.js";const i=e({__name:"index",setup(a){return(n,p)=>(r(),t(o))}});export{i as default};

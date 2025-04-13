@@ -53,7 +53,7 @@
               <img
                 :src="product.images[0]?.uploadUrl"
                 :alt="product.name"
-                class="w-full h-36 object-cover rounded-md"
+                class="w-full h-36 object-cover rounded-md p-2"
               />
               <!-- <span
                 class="absolute top-2 right-2 bg-orange-400 text-white text-xs px-2 py-1 rounded-md"
@@ -127,13 +127,6 @@
           </div>
 
           <div class="flex justify-center py-8" v-if="products.length != 0">
-            <!-- <button
-              :loading="fetching"
-              @click="showMoreProducts()"
-              class="bg-red-500 text-white px-4 py-2"
-            >
-              Show More
-            </button> -->
             <Button
               type="button"
               label="Show More"
@@ -219,7 +212,7 @@ export default {
       minutes: "00",
       seconds: "00",
     });
-    const goToProductPage = product => {
+    const goToProductPage = (product) => {
       // console.log("prodcet", product);
       router.push({
         path: `/products/${product.id}`,
@@ -269,7 +262,7 @@ export default {
       "ACCESSORIES PRODUCTS": "pi pi-cog",
       Phones: "pi pi-mobile",
     };
-    const getIcon = name => {
+    const getIcon = (name) => {
       return iconMap[name] || "pi pi-question"; // Default icon if no match
     };
     const images = ref([]);
@@ -289,11 +282,11 @@ export default {
         (currentIndex.value - 1 + images.value.length) % images.value.length;
     };
 
-    const getItems = x => {
+    const getItems = (x) => {
       console.log("ca", x);
     };
 
-    const formatPrice = value => {
+    const formatPrice = (value) => {
       if (!value) return "0"; // Handle empty or null values
       return new Intl.NumberFormat("en-US", {
         style: "currency",
@@ -301,13 +294,13 @@ export default {
         minimumFractionDigits: 0,
       }).format(value);
     };
-    const getCategoryProducts = item => {
+    const getCategoryProducts = (item) => {
       categoryId.value = [item.id];
       getProduct();
     };
     // Example usage:
 
-    const goToSlide = index => {
+    const goToSlide = (index) => {
       currentIndex.value = index;
     };
     const getProduct = async () => {
@@ -376,7 +369,7 @@ export default {
       },
     ]);
 
-    const getSeverity = status => {
+    const getSeverity = (status) => {
       switch (status) {
         case "INSTOCK":
           return "success";

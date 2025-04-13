@@ -138,6 +138,20 @@
               <i class="pi pi-search" />
             </button> -->
           </div>
+          <button
+          v-if="isWholesaler"
+          @click="toggleQuotation"
+          class="relative text-3xl text-gray-700 hover:text-blue-600"
+        >
+          <i class="pi pi-clipboard" />
+          <span
+            v-if="quotationList.length"
+            class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1.5 rounded-full"
+          >
+            {{ quotationList.length }}
+          </span>
+        </button>
+
         </div>
 
         <nav
@@ -160,10 +174,39 @@
           </NuxtLink>
         </nav>
 
+        <button
+          v-if="isWholesaler"
+          @click="toggleQuotation"
+          class="relative text-3xl text-gray-700 hover:text-blue-600"
+        >
+          <i class="pi pi-clipboard" />
+          <span
+            v-if="quotationList.length"
+            class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1.5 rounded-full"
+          >
+            {{ quotationList.length }}
+          </span>
+        </button>
+
         <div class="ml-4 hidden sm:flex flex-col font-bold">
           <span class="text-xs text-gray-400">My Cart</span>
           <span>Ksh {{ formattedPrice(cartTotal) }}</span>
         </div>
+
+        <button
+          v-if="isWholesaler"
+          @click="toggleQuotation"
+          class="relative text-3xl text-gray-700 hover:text-blue-600"
+        >
+          <i class="pi pi-clipboard" />
+          <span
+            v-if="quotationList.length"
+            class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1.5 rounded-full"
+          >
+            {{ quotationList.length }}
+          </span>
+        </button>
+
       </div>
     </div>
     <hr />
@@ -255,7 +298,7 @@ const { $formatPrice } = useNuxtApp();
 
 const menu = ref();
 
-const toggle = event => {
+const toggle = (event) => {
   menu.value.toggle(event);
 };
 
@@ -267,7 +310,7 @@ const fetchCat = async () => {
     console.error("Error fetching categories:", error);
   }
 };
-const formattedPrice = price => {
+const formattedPrice = (price) => {
   return $formatPrice(price);
 };
 const cartItems = ref(0);
@@ -275,7 +318,7 @@ const cartItems = ref(0);
 const routeTo = () => {
   // const userStore = useUserStore();
 };
-const navigateToProduct = event => {
+const navigateToProduct = (event) => {
   console.log("ree", event);
 
   // Check if selectedCategory is empty or does not have an ID
@@ -334,7 +377,7 @@ const getCartItems = async () => {
   }
 };
 
-const searchItems = async event => {
+const searchItems = async (event) => {
   let query = event.query;
   filteredItems.value = [];
   const { $axios } = useNuxtApp();
@@ -345,7 +388,9 @@ const searchItems = async event => {
 
     // Extract category IDs, but ignore "All"
     const categoryIds = Array.isArray(selectedCategory?.value)
-      ? selectedCategory.value.filter(cat => cat.id !== null).map(cat => cat.id)
+      ? selectedCategory.value
+          .filter((cat) => cat.id !== null)
+          .map((cat) => cat.id)
       : selectedCategory?.value?.id && selectedCategory.value.id !== null
       ? [selectedCategory.value.id]
       : [];
@@ -357,13 +402,13 @@ const searchItems = async event => {
       response = await $axios.get("/product", {
         params: { searchTerm: query, categoryId: categoryIds },
       });
-      filteredItems.value = response.data.results.flatMap(product =>
-        product.models.map(model => ({
+      filteredItems.value = response.data.results.flatMap((product) =>
+        product.models.map((model) => ({
           id: model.id,
           name: `${product.name} - (${model.name})`,
           images:
             model.images.length > 0
-              ? model.images.map(img => img.uploadUrl)
+              ? model.images.map((img) => img.uploadUrl)
               : [defaultImage],
         }))
       );
@@ -372,14 +417,14 @@ const searchItems = async event => {
         params: { searchTerm: query },
       });
       const products = response.data?.results ?? [];
-      filteredItems.value = products.map(product => ({
+      filteredItems.value = products.map((product) => ({
         id: product.id,
         name: product.product.name,
         price: product.price,
         category: product.product?.subCategory?.category?.name ?? "Unknown",
         images:
           product.images.length > 0
-            ? product.images.find(image => image.isPrimary)?.uploadUrl ||
+            ? product.images.find((image) => image.isPrimary)?.uploadUrl ||
               defaultImage
             : [defaultImage],
       }));
@@ -428,9 +473,16 @@ const goToWishList = () => {
   });
 };
 const goToCart = () => {
-  router.push({
-    path: `/cart`,
-  });
+  console.log("cart", userStore.user);
+  if (userStore.user.wholesalerVerified) {
+    router.push({
+      path: `/quotation`,
+    });
+  } else {
+    router.push({
+      path: `/cart`,
+    });
+  }
 };
 const goToProfile = () => {
   router.push({
@@ -485,7 +537,7 @@ const getWishList = async () => {
     wishListCount.value = localWishlist.length;
   }
 };
-const wishProduct = async productId => {
+const wishProduct = async (productId) => {
   const productStore = useProductStore(); // Access the store
   const userStore = useUserStore(); // Access the user store for authentication state
 
