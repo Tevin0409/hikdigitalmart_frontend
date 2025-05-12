@@ -147,7 +147,7 @@
         <div v-if="activeSection === 'orders'">
           <h2 class="text-xl font-bold mb-4 text-red-500">
             
-         {{isWholesaler ? 'My Quotations' :   ' My Orders '}}
+         {{isWholesaler ? 'My Quotations' :   'My Orders'}}
 
           </h2>
           <div class="p-4 bg-gray-100">
@@ -270,7 +270,7 @@ export default {
     },
     isWholesaler() {
       const userStore = useUserStore();
-      return userStore.user?.isWholesaler;
+      return userStore.user?.shopOwnerVerified;
     },
   },
 

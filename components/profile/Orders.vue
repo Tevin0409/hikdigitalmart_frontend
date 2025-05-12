@@ -20,7 +20,7 @@
         <Divider />
         <!-- blue List -->
         <div
-          v-if="filteredOrders.length > 0"
+          v-if="filteredOrders.length > 0 && !userData.shopOwnerVerified"
           class="max-h-[600px] overflow-y-auto"
         >
           <div
@@ -76,7 +76,9 @@
         </div>
 
         <div
-          v-else
+          v-else-if="
+            filteredQuotation.length === 0 && !userData.shopOwnerVerified
+          "
           class="flex flex-col items-center justify-center min-h-[50vh] text-center"
         >
           <img
@@ -95,6 +97,61 @@
               Start Shopping
             </button>
           </NuxtLink>
+        </div>
+        <div
+          v-if="filteredQuotation.length > 0 && userData.shopOwnerVerified"
+          class="max-h-[600px] overflow-y-auto"
+        >
+          <div
+            v-for="(order, index) in filteredQuotation"
+            :key="index"
+            class="border rounded-lg mb-4 p-4 cursor-pointer"
+            @click="viewOrderDetails(order)"
+          >
+            <div class="flex justify-between items-center">
+              <span
+                class="px-3 py-1 text-xs rounded-full"
+                :class="{
+                  'bg-yellow-400 text-yellow-800': order.status === 'pending',
+                  'bg-blue-400 text-white': order.status === 'Awaiting Payment',
+                  'bg-green-100 text-green-600': order.status === 'Delivered',
+                  'bg-gray-300 text-gray-700': order.status === 'Cancelled',
+                }"
+              >
+                {{ order.status }}
+              </span>
+              <span class="text-sm text-gray-500">
+                {{ formatDate(order.createdAt) }}
+              </span>
+            </div>
+
+            <div class="mt-4">
+              <p class="text-red-600 font-semibold">
+                Order ID: {{ order.id.slice(0, 8) }}
+              </p>
+
+              <!-- Loop through all items in the order -->
+              <div
+                v-for="(item, itemIndex) in order.orderItems"
+                :key="itemIndex"
+                class="mt-2 flex items-center"
+              >
+                <img
+                  :src="item.productModel.images[0]?.uploadUrl"
+                  alt="Product Image"
+                  class="w-16 h-16 rounded-md object-cover"
+                />
+                <div class="ml-4">
+                  <p class="text-gray-700 font-medium">
+                    {{ item.productModel.name }}
+                  </p>
+                  <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
+                </div>
+              </div>
+
+              
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -304,12 +361,21 @@ export default {
       orders: [],
       wishlist: [],
       fetching: false,
+      quotation: [],
     };
   },
   computed: {
     filteredOrders() {
       if (this.selectedFilter === "All") return this.orders;
-      return this.orders.filter(order => order.status === this.selectedFilter);
+      return this.orders.filter(
+        (order) => order.status === this.selectedFilter
+      );
+    },
+    filteredQuotation() {
+      if (this.selectedFilter === "All") return this.quotation;
+      return this.quotation.filter(
+        (order) => order.status === this.selectedFilter
+      );
     },
     truncatedDescription() {
       return this.item?.productModel?.description
@@ -319,12 +385,18 @@ export default {
     shouldShowReadMore() {
       return this.item?.productModel?.description?.length > this.maxLength;
     },
+    // computed to get user from store
+    userData() {
+      const userStore = useUserStore();
+      return userStore.user;
+    },
   },
 
   async mounted() {
     await this.getUserData();
     await this.getWishList();
     await this.getOrders();
+    await this.getQuotation();
     // Example: Initialize user data from localStorage (if needed)
     // if (process.client) {
     //   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -436,6 +508,29 @@ export default {
       this.fetching = false;
 
       this.orders = orders;
+    },
+    async getQuotation() {
+      this.fetching = true;
+      const productStore = useProductStore();
+      const quotation = await productStore.getQuotation();
+      this.fetching = false;
+      this.quotation = quotation;
+    },
+    async addWish(product) {
+      const { $axios } = useNuxtApp();
+      this.loadingAdd = true;
+      setTimeout(() => {
+        this.loadingAdd = false;
+      }, 2000);
+      try {
+        const body = {
+          productId: product.id,
+        };
+        const response = await $axios.post(`/product/wishlist/add`, body);
+        this.loadingAdd = false;
+      } catch (error) {
+        this.loadingAdd = false;
+      }
     },
     async removeWish(id) {
       const { $axios } = useNuxtApp();

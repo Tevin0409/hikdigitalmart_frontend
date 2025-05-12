@@ -609,7 +609,7 @@ const _routes = [
     name: "auth",
     path: "/auth",
     meta: __nuxt_page_meta$2 || {},
-    component: () => import('./index-DSxHd8Em.mjs')
+    component: () => import('./index-Bs5tFjU3.mjs')
   },
   {
     name: "cart",
@@ -619,12 +619,12 @@ const _routes = [
   {
     name: "checkout",
     path: "/checkout",
-    component: () => import('./index-X6DBnAzQ.mjs')
+    component: () => import('./index-CGT0Iw-w.mjs')
   },
   {
     name: "Dashboard",
     path: "/Dashboard",
-    component: () => import('./Dashboard-B6MeHsa1.mjs')
+    component: () => import('./Dashboard-C7Uh4Goq.mjs')
   },
   {
     name: "Home",
@@ -639,23 +639,23 @@ const _routes = [
   {
     name: "landing",
     path: "/landing",
-    component: () => import('./landing-CJCRBBqJ.mjs')
+    component: () => import('./landing-Swq2ZXKe.mjs')
   },
   {
     name: "my-account-id",
     path: "/my-account/:id()",
-    component: () => import('./_id_-BPcre5JL.mjs')
+    component: () => import('./_id_-DGiK--_M.mjs')
   },
   {
     name: "my-account",
     path: "/my-account",
     meta: __nuxt_page_meta$1 || {},
-    component: () => import('./index-DD_sve-U.mjs')
+    component: () => import('./index-B2LfOsq6.mjs')
   },
   {
     name: "products-id",
     path: "/products/:id()",
-    component: () => import('./_id_-DtQAmifA.mjs')
+    component: () => import('./_id_-DSg_EYeP.mjs')
   },
   {
     name: "products",
@@ -666,7 +666,7 @@ const _routes = [
   {
     name: "Profile",
     path: "/Profile",
-    component: () => import('./Profile-D91bUAS9.mjs')
+    component: () => import('./Profile-D3Ib5Kqg.mjs')
   },
   {
     name: "quotation",
@@ -676,12 +676,12 @@ const _routes = [
   {
     name: "results-id",
     path: "/results/:id()",
-    component: () => import('./_id_-m5VLXUYp.mjs')
+    component: () => import('./_id_-CGLMjTLQ.mjs')
   },
   {
     name: "wishlist",
     path: "/wishlist",
-    component: () => import('./index-DWdFgWqX.mjs')
+    component: () => import('./index-CsBWaQfK.mjs')
   }
 ];
 const _wrapIf = (component, props, slots) => {
@@ -2207,7 +2207,8 @@ const useProductStore = defineStore("product", {
     categories: [],
     products: [],
     orders: [],
-    models: []
+    models: [],
+    quoatations: []
   }),
   actions: {
     // Fetch cart items from the server and update the cart state
@@ -2318,6 +2319,16 @@ const useProductStore = defineStore("product", {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/orders");
         this.orders = response.data;
+        return response.data;
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    },
+    async getQuotation() {
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.get("/product/quotation");
+        this.quoatations = response.data;
         return response.data;
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -2495,6 +2506,22 @@ const useProductStore = defineStore("product", {
         throw new Error((_c = (_b = (_a = error.response) == null ? void 0 : _a.data) == null ? void 0 : _b.error) == null ? void 0 : _c.message);
       }
     },
+    async makeQuotation(message, quotationList) {
+      try {
+        const { $axios } = useNuxtApp();
+        let products = quotationList.map((item) => ({
+          productModelId: item == null ? void 0 : item.id,
+          quantity: item.quantity
+        }));
+        const response = await $axios.post("/product/quotation", {
+          products,
+          message
+        });
+        console.log(response, "quotation response");
+      } catch (error) {
+        console.error("Error placing order:", error);
+      }
+    },
     async placeOrderAnonymous(user, vat) {
       var _a, _b, _c;
       try {
@@ -2550,7 +2577,8 @@ const useProductStore = defineStore("product", {
     getCategoriesList: (state) => state.categories,
     getProductList: (state) => state.products,
     getModelsList: (state) => state.models,
-    getOrdersList: (state) => state.orders
+    getOrdersList: (state) => state.orders,
+    getQuotationList: (state) => state.quoatations
   },
   persist: {
     storage: void 0
@@ -2838,8 +2866,8 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-  default: defineAsyncComponent(() => import('./default-BKz1ogsB.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-BUaW4ug1.mjs')),
+  default: defineAsyncComponent(() => import('./default-BDXsxtMc.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-Cfrgz7Ts.mjs')),
   login: defineAsyncComponent(() => import('./login-DUx2zHTQ.mjs'))
 };
 const LayoutLoader = defineComponent({

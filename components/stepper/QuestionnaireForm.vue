@@ -660,10 +660,14 @@
         </template>
       </Carousel>
     </div>
+  <Toast position="bottom-right" group="br" />
+
   </div>
 </template>
 
 <script>
+import Toast from "primevue/toast";
+
 export default {
   data() {
     return {
@@ -935,7 +939,20 @@ export default {
         if (response.status === 200) {
           // alert('Form submitted successfully!');
         }
+
+      this.$toast.add({
+          severity: "success",
+          summary:response.data.message,
+          group: "br",
+          life: 3000,
+        });
       } catch (error) {
+         this.$toast.add({
+          severity: "error",
+          summary:error.message,
+          group: "br",
+          life: 3000,
+        });
         // Handle error
         console.error("Error submitting form:", error);
         // alert('There was an error submitting the form. Please try again.');

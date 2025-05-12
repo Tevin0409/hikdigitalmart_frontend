@@ -185,7 +185,7 @@
 
                 <button
                   class="w-full bg-primary text-white py-2 mt-4 rounded-lg hover:bg-secondary transition"
-                  @click="proceedToCheckout"
+                  @click="proceedToQuote"
                 >
                 Request Quotation ({{
                     formattedPrice(cartTotal + (isVat ? getVat(cartTotal) : 0))
@@ -287,8 +287,25 @@ const returnToShop = () => {
   router.push("/");
 };
 
-const proceedToCheckout = () => {
-  router.push("/checkout");
+const proceedToQuote = async () => {
+ console.log(cartItems.value)
+// let products = cartItems.value.map((product)=>{
+//   productModelId: product.productModel,
+//   quantity: product.quantity
+// })
+ 
+ let payload = {
+  "products": products
+ }
+ console.log("cdsc", products)
+  try {
+    const response = await $axios.get(`/product/quotation`);
+   
+  } catch (error) {
+    console.error("Error fetching cart items:", error);
+  }
+
+
 };
 
 // Fetch cart items when the component is mounted

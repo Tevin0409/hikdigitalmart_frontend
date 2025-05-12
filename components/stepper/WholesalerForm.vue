@@ -104,7 +104,6 @@
                       {{ errors.wholesalerPersonalInfo.companyName }}
                     </small>
                   </div>
-
                 </div>
 
                 <!-- Form Fields for Section 1 -->
@@ -162,6 +161,7 @@
                       {{ errors.wholesalerPersonalInfo.phoneNumber2 }}
                     </small>
                   </div>
+                  
 
                 </div>
 
@@ -175,6 +175,14 @@
                     <small v-if="errors.wholesalerPersonalInfo.address" class="text-red-500">
                       {{ errors.wholesalerPersonalInfo.address }}
                     </small>
+                  </div>
+                   <div class="field w-1/2">
+                    <label for="wholesalerPersonalInfo.password" class="font-bold">Password</label>
+                    <InputText id="wholesalerPersonalInfo.password" v-model="wholesalerPersonalInfo.password"
+                      type="password" placeholder="Enter Password" class="w-full" />
+                    <!-- <small v-if="errors.wholesalerPersonalInfo.password" class="text-red-500">
+                      {{ errors.wholesalerPersonalInfo.password }}
+                    </small> -->
                   </div>
                 </div>
 
@@ -241,7 +249,6 @@
                   <label class="font-bold py-5">
                     Which of the following describes your business well?
                   </label>
-                  {{ wholesalerBusinessInfo.selectedBusinessType }}
                   <div v-for="type in businessTypes" :key="type.key" class="flex items-center gap-2">
                     <RadioButton v-model="wholesalerBusinessInfo.selectedBusinessType" :inputId="type.key" name="selectedBrands.businessType"
                       :value="type.name" />
@@ -321,7 +328,7 @@
               <!-- Navigation Buttons -->
               <div class="flex pt-6 justify-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="activateCallback(2)" />
-                <Button label="Submit" icon="pi pi-check" iconPos="right" @click="handleSubmit(activateCallback)" />
+                <Button label="Submit" icon="pi pi-check" iconPos="right" @click="handleSubmit(activateCallback, 4)" />
               </div>
             </StepPanel>
 
@@ -412,10 +419,14 @@
         </template>
       </Carousel>
     </div>
+  <Toast position="bottom-right" group="br" />
+
   </div>
 </template>
 
 <script>
+import Toast from "primevue/toast";
+
 export default {
   data() {
     return {
@@ -430,6 +441,7 @@ export default {
         email: "",
         email2: "",
         address: "",
+        password:""
       },
       wholesalerBusinessInfo: {
         selectedBusinessType: "",
@@ -450,6 +462,7 @@ export default {
           lastName: "",
           phoneNumber: "",
           email: "",
+          email2:"",
           address: "",
         },
         wholesalerBusinessInfo: {
@@ -621,6 +634,35 @@ export default {
       ],
     };
   },
+
+  // {
+//     "companyName": "Barma",
+//     "firstName": "test",
+//     "lastName": "`tt",
+//     "phoneNumber": "0758991000",
+//     "phoneNumber2": "0758991000",
+//     "email": "test@yopmail.com",
+//     "email2": "test@yopmail.com",
+//     "address": "teta2",
+//     "selectedBusinessType": "SUPPLY & INSTALL",
+//     "selectedBrands": [
+//         "DAHUA",
+//         "Other"
+//     ],
+//     "selectedSecurityBrands": [
+//         "HIKVISION",
+//         "DAHUA",
+//         "UNIVIEW"
+//     ],
+//     "otherBrand": "",
+//     "selectedCategories": [
+//         "ANALOGUE CCTV/ DVR",
+//         "INTERCOMS",
+//         "Other"
+//     ],
+//     "hikvisionChallenges": "test",
+//     "adviceToSecureDigital": "test"
+// }
   watch: {
     // wholesalerPersonalInfo: {
     //   handler(newValue) {
@@ -664,12 +706,11 @@ export default {
   },
 
   methods: {
-    handleSubmit(activateCallback) {
+    async handleSubmit(activateCallback, x) {
       const data = { ...this.wholesalerPersonalInfo, ...this.wholesalerBusinessInfo, ...this.wholesalerTechnicalInfo }
       if (this.validateForm()) {
-
-       console.log("Form Data:", data);
-        this.submitForm();
+       this.formData =data
+       await this.submitForm(activateCallback);
       } else {
         console.log("Validation failed");
       }
@@ -753,9 +794,7 @@ export default {
         }
       }
     },
-    async submitForm() {
-      // Prepare form data
-      console.log("cdscs", this.formData);
+    async submitForm(activateCallback) {
       const formData = {
         businessName: this.businessName,
         phoneNumber: this.phoneNumber,
@@ -772,24 +811,34 @@ export default {
         requiresTraining: this.requiresTraining,
       };
 
-      console.log("Form Data:", formData);
 
       try {
         // Make POST request to the backend API
         const { $axios } = useNuxtApp();
 
         const response = await $axios.post(
-          "/user/technician-questionnaire",
-          formData
+          "/user/shop-owners-questionnaire",
+          this.formData
         );
-
         // Handle success
         this.responseMessage = response.data.message;
-        this.activateCallback(4);
+         this.$toast.add({
+          severity: "success",
+          summary:response.data.message,
+          group: "br",
+          life: 3000,
+        });
+        // activateCallback(4);
         if (response.status === 200) {
-          // alert('Form submitted successfully!');
+          activateCallback(4);
         }
       } catch (error) {
+         this.$toast.add({
+          severity: "error",
+          summary:error.message,
+          group: "br",
+          life: 3000,
+        });
         // Handle error
         console.error("Error submitting form:", error);
         // alert('There was an error submitting the form. Please try again.');

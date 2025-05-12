@@ -92,6 +92,7 @@
           </NuxtLink>
         </div>
 
+
         <div class="w-full bg-red flex justify-center items-center py-4">
           <div class="relative flex items-center w-">
             <!-- Select Dropdown at the Beginning -->
@@ -138,20 +139,7 @@
               <i class="pi pi-search" />
             </button> -->
           </div>
-          <button
-          v-if="isWholesaler"
-          @click="toggleQuotation"
-          class="relative text-3xl text-gray-700 hover:text-blue-600"
-        >
-          <i class="pi pi-clipboard" />
-          <span
-            v-if="quotationList.length"
-            class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1.5 rounded-full"
-          >
-            {{ quotationList.length }}
-          </span>
-        </button>
-
+        
         </div>
 
         <nav
@@ -172,14 +160,12 @@
               <i class="pi pi-shopping-cart text-3xl" />
             </OverlayBadge>
           </NuxtLink>
-        </nav>
-
-        <button
-          v-if="isWholesaler"
+          <button
+          v-if="shopOwnerVerified"
           @click="toggleQuotation"
           class="relative text-3xl text-gray-700 hover:text-blue-600"
         >
-          <i class="pi pi-clipboard" />
+          <i class="pi pi-clipboard text-3xl" />
           <span
             v-if="quotationList.length"
             class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1.5 rounded-full"
@@ -187,29 +173,27 @@
             {{ quotationList.length }}
           </span>
         </button>
+
+        </nav>
 
         <div class="ml-4 hidden sm:flex flex-col font-bold">
           <span class="text-xs text-gray-400">My Cart</span>
           <span>Ksh {{ formattedPrice(cartTotal) }}</span>
         </div>
 
-        <button
-          v-if="isWholesaler"
-          @click="toggleQuotation"
-          class="relative text-3xl text-gray-700 hover:text-blue-600"
-        >
-          <i class="pi pi-clipboard" />
-          <span
-            v-if="quotationList.length"
-            class="absolute top-0 right-0 bg-red-500 text-white text-xs px-1.5 rounded-full"
-          >
-            {{ quotationList.length }}
-          </span>
-        </button>
+      
 
       </div>
     </div>
     <hr />
+      <!-- <Dialog v-model:visible="showQuoatation" modal header="Edit Profile" :style="{ width: '25rem' }"> -->
+
+      <QuotationDialog
+        v-model:visible="showQuoatation"
+        :quotationList="quotationList"
+      />
+    <!-- </Dialog> -->
+      <!-- @close="toggleQuotation" -->
   </header>
 
   <!-- Dropdown for categories -->
@@ -261,6 +245,7 @@ import { useNuxtApp } from "nuxt/app";
 import { useUserStore } from "@/stores/auth";
 // import { useProductStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
+import QuotationDialog from "~/components/cards/QuotationDialog.vue";
 
 // Define props
 const props = defineProps({
@@ -279,9 +264,9 @@ const props = defineProps({
 //     }
 //   }
 // );
-
+const showQuoatation = ref(false);
 const productStore = useProductStore();
-
+const quotationList= ref([]);
 const userStore = useUserStore();
 const searchTerm = ref(""); // Stores the search term
 const selectedCategory = ref([]);
@@ -289,6 +274,7 @@ const menuOpen = ref(false);
 const categories = ref([]);
 const cartCount = computed(() => productStore.cartCount);
 const cartTotal = computed(() => productStore.cartTotal);
+const shopOwnerVerified = computed(() => userStore.user.shopOwnerVerified);
 const filteredItems = ref([]);
 
 // Reactive wishlist count using computed
@@ -319,8 +305,6 @@ const routeTo = () => {
   // const userStore = useUserStore();
 };
 const navigateToProduct = (event) => {
-  console.log("ree", event);
-
   // Check if selectedCategory is empty or does not have an ID
   if (!selectedCategory.value || !selectedCategory.value.id) {
     // If selectedCategory is empty, go to products
@@ -338,6 +322,12 @@ const navigateToProduct = (event) => {
       },
     });
   }
+};
+const wholesalerVerifiedDialog =ref(false);
+const toggleQuotation = () => {
+  console.log("Toggling quotation dialog");
+  showQuoatation.value = true;
+  
 };
 
 const emit = defineEmits(["update:searchTerm"]);
@@ -473,8 +463,7 @@ const goToWishList = () => {
   });
 };
 const goToCart = () => {
-  console.log("cart", userStore.user);
-  if (userStore.user.wholesalerVerified) {
+  if (userStore.user.shopOwnerVerified) {
     router.push({
       path: `/quotation`,
     });
@@ -555,8 +544,10 @@ const wishProduct = async (productId) => {
     console.error("Error adding product to wishlist:", error);
   }
 };
+// const userVer = ref(false);
 // Fetch the data on component mount
 onMounted(async () => {
+  // shopOwnerVerified.value = await userStore.user.shopOwnerVerified;
   await productStore.getProducts();
   await productStore.getCategories();
   await productStore.getCartItems();
@@ -565,6 +556,7 @@ onMounted(async () => {
   await getCartItems();
   await getWishList();
   await fetchCat();
+  console.log("shopOwnerVerified", shopOwnerVerified);
 });
 </script>
 

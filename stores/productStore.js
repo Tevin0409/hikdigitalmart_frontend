@@ -13,6 +13,7 @@ export const useProductStore = defineStore("product", {
     products: [],
     orders: [],
     models: [],
+    quoatations: [],
   }),
 
   actions: {
@@ -136,6 +137,17 @@ export const useProductStore = defineStore("product", {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/orders");
         this.orders = response.data; // Update the orders
+        return response.data; // Return the data
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        // return [];  // Return an empty array in case of error
+      }
+    },
+    async getQuotation() {
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.get("/product/quotation");
+        this.quoatations = response.data; // Update the orders
         return response.data; // Return the data
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -396,6 +408,34 @@ export const useProductStore = defineStore("product", {
       }
     },
 
+    async makeQuotation(message, quotationList) {
+
+      try {
+        const { $axios } = useNuxtApp();
+        let products = quotationList.map(item => ({
+          productModelId: item?.id,
+          quantity: item.quantity,
+        }));
+        const response = await $axios.post("/product/quotation", {
+          products: products,
+          message: message,
+        });
+        console.log(response, "quotation response");
+
+        // this.clearCart();
+      }
+      catch (error) { 
+        console.error("Error placing order:", error);
+      }
+
+
+    //   message: message.value,
+    // items: quotationList.value.map((item) => ({
+    //   id: item.id,
+    //   quantity: item.quantity,
+    // })),
+    },
+
     async placeOrderAnonymous(user, vat) {
       try {
         const { $axios } = useNuxtApp();
@@ -457,6 +497,9 @@ export const useProductStore = defineStore("product", {
     getProductList: state => state.products,
     getModelsList: state => state.models,
     getOrdersList: state => state.orders,
+    getQuotationList: state => state.quoatations,
+    
+
   },
 
   persist: {
