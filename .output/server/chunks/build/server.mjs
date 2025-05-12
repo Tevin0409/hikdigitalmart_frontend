@@ -2866,8 +2866,8 @@ const plugins = [
   formatPrice_FnQJHrkeyC
 ];
 const layouts = {
-  default: defineAsyncComponent(() => import('./default-BDXsxtMc.mjs')),
-  landing: defineAsyncComponent(() => import('./landing-Cfrgz7Ts.mjs')),
+  default: defineAsyncComponent(() => import('./default-BBFj9pcq.mjs')),
+  landing: defineAsyncComponent(() => import('./landing-CQdjQnBU.mjs')),
   login: defineAsyncComponent(() => import('./login-DUx2zHTQ.mjs'))
 };
 const LayoutLoader = defineComponent({

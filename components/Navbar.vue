@@ -274,7 +274,8 @@ const menuOpen = ref(false);
 const categories = ref([]);
 const cartCount = computed(() => productStore.cartCount);
 const cartTotal = computed(() => productStore.cartTotal);
-const shopOwnerVerified = computed(() => userStore.user.shopOwnerVerified);
+const shopOwnerVerified = computed(() => userStore.user?.shopOwnerVerified ?? false);
+
 const filteredItems = ref([]);
 
 // Reactive wishlist count using computed
@@ -556,7 +557,7 @@ onMounted(async () => {
   await getCartItems();
   await getWishList();
   await fetchCat();
-  console.log("shopOwnerVerified", shopOwnerVerified);
+  // console.log("shopOwnerVerified", shopOwnerVerified);
 });
 </script>
 
