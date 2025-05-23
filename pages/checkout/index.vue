@@ -317,9 +317,10 @@ export default {
 
           let order = {
             orderId: response.data.id,
-            amount: formattedPrice(
-              cartTotal + (isVat.value ? getVat(cartTotal) : 0)
-            ), // Include VAT if applicable
+            amount: 1,
+            // formattedPrice(
+            //   cartTotal + (isVat.value ? getVat(cartTotal) : 0)
+            // ), // Include VAT if applicable
             phoneNumber: user.value.phoneNumber,
           };
 
@@ -390,9 +391,10 @@ export default {
 
           let order = {
             orderId: response.data.id,
-            amount: formattedPrice(
-              cartTotal + (isVat.value ? getVat(cartTotal) : 0)
-            ), // Include VAT if applicable
+            amount:1,
+            //  formattedPrice(
+            //   cartTotal + (isVat.value ? getVat(cartTotal) : 0)
+            // ), // Include VAT if applicable
             phoneNumber: user.value.phoneNumber,
           };
           const mpesaResponse = await productStore.checkOut(order);

@@ -35,6 +35,9 @@
                 :class="{
                   'bg-yellow-400 text-yellow-800': order.status === 'Pending',
                   'bg-blue-400 text-white': order.status === 'Awaiting Payment',
+                  'bg-amber-400 text-white':
+                    order.status === 'Awaiting Shipment',
+                  'bg-green-100 text-green-600': order.status === 'Shipped',
                   'bg-green-100 text-green-600': order.status === 'Delivered',
                   'bg-gray-300 text-gray-700': order.status === 'Cancelled',
                 }"
@@ -70,8 +73,11 @@
                 <p class="text-gray-800 font-semibold mt-1">
                   Ksh {{ formattedPrice(order.total) }}
                 </p>
+                <!-- add review button -->
+                <!-- review -->
               </div>
             </div>
+          
           </div>
         </div>
 
@@ -99,14 +105,18 @@
           </NuxtLink>
         </div>
         <div
-          v-if="filteredQuotation.length > 0 && userData.shopOwnerVerified"
+          v-if="
+            filteredQuotation.length > 0 &&
+            userData.shopOwnerVerified &&
+            !showQuotation
+          "
           class="max-h-[600px] overflow-y-auto"
         >
           <div
             v-for="(order, index) in filteredQuotation"
             :key="index"
             class="border rounded-lg mb-4 p-4 cursor-pointer"
-            @click="viewOrderDetails(order)"
+            @click="viewQuotation(order)"
           >
             <div class="flex justify-between items-center">
               <span
@@ -127,29 +137,93 @@
 
             <div class="mt-4">
               <p class="text-red-600 font-semibold">
-                Order ID: {{ order.id.slice(0, 8) }}
+                Quotation ID: {{ order.id.slice(0, 8) }}
               </p>
-
-              <!-- Loop through all items in the order -->
-              <div
-                v-for="(item, itemIndex) in order.orderItems"
-                :key="itemIndex"
-                class="mt-2 flex items-center"
+              <p class="text-black-600 font-">
+                Response: {{ order.response ? order.response : "No response" }}
+              </p>
+              <p class="text-black-600 font-">Message: {{ order.message }}</p>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="showQuotation"
+          class="flex flex-col items-cente min-h-[50vh] text-center"
+        >
+          <div class="quotation-details" ref="quotationRef">
+            <div class="flex justify-between">
+              <a
+                class="p-button-text text-primary hover:text-white cursor-pointer flex items-center"
+                @click="showQuotation = false"
+                style="color: var(--secondary-color) !important"
               >
-                <img
-                  :src="item.productModel.images[0]?.uploadUrl"
-                  alt="Product Image"
-                  class="w-16 h-16 rounded-md object-cover"
-                />
-                <div class="ml-4">
-                  <p class="text-gray-700 font-medium">
-                    {{ item.productModel.name }}
-                  </p>
-                  <p class="text-sm text-gray-500">Qty: {{ item.quantity }}</p>
-                </div>
+                <i class="pi pi-arrow-left pr-2"></i>
+                Back to Quotations
+              </a>
+
+              <button
+                class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                @click="printQuotation"
+              >
+                <i class="pi pi-print"></i>
+                Print Quotations
+              </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+              <div>
+                <p class="font-semibold">Order ID</p>
+                <p class="font-mono">{{ quotationItems.id.slice(0, 8) }}</p>
               </div>
 
-              
+              <div>
+                <p class="font-semibold">Message</p>
+                <p class="font-mono">
+                  {{ quotationItems.message }}
+                </p>
+              </div>
+              <div>
+                <p class="font-semibold">Date Created</p>
+                <p class="font-mono">
+                  {{ formatDate(quotationItems.createdAt) }}
+                </p>
+              </div>
+              <div>
+                <p class="font-semibold">Response</p>
+                <p class="font-mono">
+                  {{
+                    quotationItems.response
+                      ? quotationItems.response
+                      : "Not Available"
+                  }}
+                </p>
+              </div>
+              <p class="font-semibold pb-4">
+                Items ({{ quotationItems.quotationItems.length }})
+              </p>
+            </div>
+            <div>
+              <div class="space-y-4">
+                <div
+                  v-for="(item, index) in quotationItems.quotationItems"
+                  :key="index"
+                  class="border rounded-lg p-4 flex"
+                >
+                  <div class="flex items-center space-x-4 mr-4">
+                    {{ index + 1 }}
+                  </div>
+
+                  <div class="flex text-start items-start space-x-4">
+                    <div>
+                      {{ item.productModel.name }}
+
+                      <p class="text-xs font-">
+                        {{ item.productModel.description.slice(0, 200) }}
+                      </p>
+                      <p class="font-">Quantity: {{ item.quantity }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -196,10 +270,12 @@
               <span
                 class="px-2 py-0.5 md:px-3 md:py-1 text-xs rounded-full"
                 :class="{
-                  'bg-yellow-400 text-yellow-800':
-                    orderDetails.status === 'Pending',
+                  // 'bg-yellow-400 text-yellow-800':
+                  //   orderDetails.status === 'Pending',
                   'bg-yellow-400 text-blue-400':
                     orderDetails.status === 'Awaiting Payment',
+                  'bg-amber-100 text-green-600':
+                    orderDetails.status === 'Awaiting Shipment',
                   'bg-green-100 text-green-600':
                     orderDetails.status === 'Delivered',
                   'bg-gray-300 text-gray-700':
@@ -271,7 +347,6 @@
 
           <h3 class="text-xl font-semibold mb-2">Order Items</h3>
           <div class="space-y-4">
-            <!-- {{ orderDetaclils }} -->
             <div
               v-for="(item, index) in orderDetails.orderItems"
               :key="index"
@@ -308,17 +383,70 @@
                     </span>
                   </p>
 
-                  <p class="font-semibold">
-                    Price: Ksh {{ formattedPrice(item.productModel.price) }}
-                  </p>
-                  <p class="font-semibold">Quantity: {{ item.quantity }}</p>
+                  <div class="flex justify-between items-center">
+                    <div>
+
+                      <p class="font-semibold">
+                      Ksh {{ formattedPrice(item.productModel.price) }}
+                    </p>
+                    <p class="font-semibold">Quantity: {{ item.quantity }}</p>
+                    </div>
+              <span class="text-sm text-gray-500">
+                <button
+                  class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                  @click.stop="addReview(item)"
+                >
+                  <i class="pi pi-star"></i>
+                  Review Product
+                </button>
+              </span>
+            </div>
+                  
                 </div>
               </div>
+             
+
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- give me review popup dialog code -->
+    <div
+      v-if="reviewProduct"
+      class="fixed inset-0 flex items-center justify-center z-50"
+      style="background-color: rgba(0, 0, 0, 0.5)"
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/3"
+        @click.stop
+      >
+        <h2 class="text-xl font-semibold mb-4">Add Review</h2>
+        <p class="mb-4">
+          Please provide your feedback for the product:
+          {{ reviewItem.productModel.name }}
+        </p>
+        <textarea
+          v-model="reviewText"
+          rows="4"
+          class="w-full border rounded-md p-2 mb-4"
+          placeholder="Write your review here..."
+        ></textarea>
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+          @click="submitReview"
+        >
+          Submit Review
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 ml-2"
+          @click="reviewProduct = false"
+        >
+          Cancel
+        </button>
+      </div>
+      </div>
+
   </div>
 </template>
 
@@ -338,7 +466,14 @@ export default {
       orderDetails: {},
       detailedView: false,
       selectedFilter: "All",
-      filters: ["All", "Awaiting Payment", "Pending", "Delivered", "Cancelled"],
+      filters: [
+        "All",
+        "Awaiting Payment",
+        "Awaiting Shipment",
+        "Shipped",
+        "Delivered",
+        "Cancelled",
+      ],
       removeItem: false,
       loadingAdd: false,
       home: {
@@ -362,6 +497,9 @@ export default {
       wishlist: [],
       fetching: false,
       quotation: [],
+      showQuotation: false,
+      quotationItems: {},
+      reviewProduct:false
     };
   },
   computed: {
@@ -412,6 +550,11 @@ export default {
   },
 
   methods: {
+    addReview(item) {
+      console.log("Add review clicked for item:", item);
+      this.reviewProduct = true
+      this.$emit("addReview", item);
+    },  
     toggleExpand() {
       this.isExpanded = !this.isExpanded;
     },
@@ -441,6 +584,32 @@ export default {
 
       pdf.save(`Order_${this.orderDetails.id.slice(0, 8)}.pdf`);
     },
+    async printQuotation() {
+      const quotationElement = document.querySelector(".quotation-details");
+      if (!quotationElement) return;
+
+      const canvas = await html2canvas(quotationElement, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+
+      const imgWidth = 190;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`Quotation_${this.quotationItems.id.slice(0, 8)}.pdf`);
+    },
 
     statusStyle(status) {
       switch (status.toLowerCase()) {
@@ -461,24 +630,19 @@ export default {
       const productStore = useProductStore();
       try {
         const response = await productStore.getOrderDetails(order);
-        console.log("Order details:", response);
         const data = response.data;
         this.orderDetails = data;
         this.detailedView = true;
         this.fetching = false;
-        // this.$route.push("/")
-        // this.$router.push({
-        //   path: `/my-account/${order.id}`,
-        // });
       } catch (error) {
         this.fetching = false;
-
-        console.error("Error fetching order details:", error);
       }
     },
+    viewQuotation(quotation) {
+      this.showQuotation = true;
+      this.quotationItems = quotation;
+    },
     getProductImage(orderItem) {
-      console.log("Order Item:", orderItem);
-
       if (orderItem?.productModel?.images?.length > 0) {
         console.log(
           "Image found:",

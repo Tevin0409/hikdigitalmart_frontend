@@ -191,6 +191,7 @@
       <QuotationDialog
         v-model:visible="showQuoatation"
         :quotationList="quotationList"
+        @close="showQuoatation = false"
       />
     <!-- </Dialog> -->
       <!-- @close="toggleQuotation" -->
@@ -326,9 +327,7 @@ const navigateToProduct = (event) => {
 };
 const wholesalerVerifiedDialog =ref(false);
 const toggleQuotation = () => {
-  console.log("Toggling quotation dialog");
   showQuoatation.value = true;
-  
 };
 
 const emit = defineEmits(["update:searchTerm"]);
@@ -532,7 +531,6 @@ const wishProduct = async (productId) => {
   const userStore = useUserStore(); // Access the user store for authentication state
 
   const { res } = await productStore.addToWishlist(productId);
-  console.log(res, "Wishlist");
   await productStore.getWishList();
 
   try {
@@ -557,6 +555,7 @@ onMounted(async () => {
   await getCartItems();
   await getWishList();
   await fetchCat();
+  await productStore.getQuotation();
   // console.log("shopOwnerVerified", shopOwnerVerified);
 });
 </script>

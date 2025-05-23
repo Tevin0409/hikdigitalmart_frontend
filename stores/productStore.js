@@ -148,6 +148,7 @@ export const useProductStore = defineStore("product", {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/quotation");
         this.quoatations = response.data; // Update the orders
+        console.log( this.quoatations, "  this.quoatations");
         return response.data; // Return the data
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -420,9 +421,9 @@ export const useProductStore = defineStore("product", {
           products: products,
           message: message,
         });
-        console.log(response, "quotation response");
 
-        // this.clearCart();
+        console.log(response, " response");
+        return response
       }
       catch (error) { 
         console.error("Error placing order:", error);

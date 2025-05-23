@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     "~/plugins/axios",
     "~/plugins/initializeStore",
     "~/plugins/formatPrice.js",
+    "~/plugins/formatDate.js",
   ],
   modules: [
     "@nuxtjs/tailwindcss",

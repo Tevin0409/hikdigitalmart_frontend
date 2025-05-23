@@ -215,7 +215,7 @@ const coupon = ref("");
 
 // Computed properties
 const cartTotal = computed(() => productStore.cartTotal);
-const cartItems = computed(() => productStore.cartItems);
+const cartItems = computed(() => productStore.quoatations);
 const isVat = ref(false);
 const home = ref({
   icon: "pi pi-home",

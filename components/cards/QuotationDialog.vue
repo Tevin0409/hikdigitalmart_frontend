@@ -24,21 +24,6 @@
       </div>
     </template>
 
-    <!-- Step 1: Quotation Prompt -->
-    <template #content>
-      <div v-if="!quotationStarted" class="flex items-center gap-4">
-        <span class="text-xl font-bold">Quotation</span>
-      </div>
-      <div v-else class="flex items-center justify-between w-full">
-        <h3 class="text-xl font-semibold">Select Items</h3>
-        <InputText
-          v-model="search"
-          placeholder="Search items..."
-          class="w-1/2"
-        />
-      </div>
-    </template>
-
     <!-- Step 1 View -->
     <div
       v-if="!quotationStarted"
@@ -62,12 +47,8 @@
 
     <!-- Step 2 View -->
     <div v-else class="space-y-4">
-      <!-- Top Section: Filters & Search -->
       <div class="flex items-center w-full justify-between">
         <h3 class="text-xl font-semibold mr-4">Search items</h3>
-        <!-- <p class="text-sm font-semibold mr-2">
-        Category
-      </p> -->
         <div class="flex justify-end">
           <Select
             v-model="selectedCategory"
@@ -131,6 +112,7 @@
                 icon="pi pi-plus"
                 class="p-button-rounded p-button-sm !p-0.5 !h-6 !w-6 !text-xs"
                 @click="increaseQty(index)"
+                variant="outlined"
               />
               <InputText
                 v-model.number="item.quantity"
@@ -164,9 +146,15 @@
 
       <!-- Bottom Action Buttons -->
       <div class="flex justify-end space-x-2 pt-4 border-t mt-4">
-        <InputText type="text" v-model="message" placeholder="add message" />
-        <!-- <Button label="Save Quotation" class="p-button-outlined" @click="saveQuotation"
-          :disabled="quotationList.length === 0" /> -->
+        <div>
+          <InputText
+            type="text"
+            v-model="message"
+            placeholder="Attach Message"
+          />
+          <div v-if="error" class="text-red-600 text-sm ml-2">{{ error }}</div>
+        </div>
+
         <Button
           label="Place Quotation"
           class="p-button-success"
@@ -190,19 +178,12 @@ const productStore = useProductStore();
 const categories = ref([]);
 const message = ref("");
 onMounted(async () => {
-  // shopOwnerVerified.value = await userStore.user.shopOwnerVerified;
-  // await productStore.getProducts();
   await productStore.getCategories();
-  // await productStore.getCartItems();
-  // await productStore.getWishList();
-  // await checkUserLoggedIn();
-  // await getCartItems();
-  // await getWishList();
   await fetchCat();
 });
-
+const emit = defineEmits(["close"]);
 const quotationList = ref([]);
-
+const error = ref(null);
 const addProductToQuote = (event) => {
   const newProduct = event.value;
   const exists = quotationList.value.some((item) => item.id === newProduct.id);
@@ -239,13 +220,21 @@ const removeItem = (index) => {
 };
 
 const submitQuotation = async () => {
-  console.log("message:", message.value);
-  console.log("Quotation submitted:", quotationList.value);
+  if (!message.value.trim()) {
+    error.value = "Message cannot be empty!";
+  }
   const makeQuotation = await productStore.makeQuotation(
     message.value,
     quotationList.value
   );
-  isQuotationVisible.value = false;
+  if (makeQuotation.status == 201) {
+    isQuotationVisible.value = false;
+    message.value = "";
+    quotationList.value = [];
+    emit("close", false);
+  } else {
+    error.value = "Failed to submit quotation. Please try again.";
+  }
 };
 
 const saveQuotation = () => {

@@ -28,7 +28,7 @@
     <div v-if="product" class="grid grid-cols-1 md:grid-cols-2 gap-8">
       <!-- Product Info Section -->
       <div class="flex flex-col space-y-4">
-        <h2 class="text-3xl font-bold">{{ product.name }}</h2>
+        <h2 class="text-xl font-bold">{{ product.name }}</h2>
         <p class="text-lg text-gray-700 font-medium">
           Ksh {{ formattedPrice(product.price) }}
         </p>
@@ -102,6 +102,28 @@
 
         <!-- Delivery Info -->
         <div class="mt-4 space-y-2">
+            <div class="flex  space-x-1 align-center">
+                    <template v-for="i in 5">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        :fill="i <=  getAvg(product.Review) ? 'currentColor' : 'none'"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        class="w-4 h-4 text-yellow-400"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                        />
+                      </svg>
+                    </template> 
+                    <p class="text-gray-600 ml-2 pb-2">
+                   ({{ getAvg(product.Review) }} / 5 )
+                    </p>
+            </div>
+
           <p class="text-bl font-bold">
             <i class="fas fa-truck"></i> Description
           </p>
@@ -163,13 +185,7 @@
         >
           Reviews
         </h3>
-        <h3
-          class="cursor-pointer text-lg font-semibold"
-          :class="tabClass('discussion')"
-          @click="activeTab = 'discussion'"
-        >
-          Discussion
-        </h3>
+      
       </div>
 
       <!-- Details Section -->
@@ -193,41 +209,56 @@
 
       <!-- Reviews Section -->
       <div v-if="activeTab === 'reviews'" class="mt-6 space-y-8">
-        <div v-for="review in reviews" :key="review.id" class="border-b pb-4">
+        <div
+          v-for="review in product.Review"
+          :key="review.id"
+          class="border-b pb-4"
+        >
           <div class="flex items-center space-x-4">
-            <img
-              :src="review.avatar"
-              alt="User Avatar"
-              class="w-10 h-10 rounded-full"
+            <Avatar
+              :label="initials(review.user)"
+              class="bg-blue-100 text-blue-700 font-bold"
+              shape="circle"
+              size="xlarge"
             />
             <div>
-              <h4 class="font-bold text-gray-800">{{ review.name }}</h4>
-              <p class="text-sm text-gray-500">{{ review.date }}</p>
-              <div class="flex space-x-1 mt-1">
-                <template v-for="i in 5">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    :fill="i <= review.rating ? 'currentColor' : 'none'"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    class="w-4 h-4 text-yellow-400"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                    />
-                  </svg>
-                </template>
+              <div class="flex justify-between items-center mt-1">
+                <div class="flex space-x-1">
+                  <template v-for="i in 5">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      :fill="i <= review.rating ? 'currentColor' : 'none'"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      class="w-4 h-4 text-yellow-400"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                      />
+                    </svg>
+                  </template>
+                </div>
+
+                <!-- Date -->
+                <p class="text-sm text-gray-500 ml-4">
+                  {{ formattedDate(review.createdAt) }}
+                </p>
               </div>
+
+              <p class="mt-4 text-gray-800">{{ review.comment }}</p>
+              <h4 class="font-bold text-gray-800">
+                by {{ review.user.firstName + " " + review.user.lastName }}
+              </h4>
             </div>
           </div>
-          <p class="mt-4 text-gray-800">{{ review.comment }}</p>
+          <!-- <p class="mt-4 text-gray-800">{{ review.comment }}</p> -->
           <div class="flex items-center space-x-4 text-gray-500 text-sm mt-2">
-            <span class="cursor-pointer hover:text-gray-700">Reply</span>
-            <span>Likes: {{ review.likes }}</span>
-            <span>Replies: {{ review.replies }}</span>
+            <!-- <span class="cursor-pointer hover:text-gray-700">Reply</span> -->
+            <!-- <span>Likes: {{ review.likes }}</span>
+            <span>Replies: {{ review.replies }}</span> -->
           </div>
         </div>
       </div>
@@ -237,7 +268,6 @@
 
         <!-- Input to Add a Comment -->
         <div class="flex items-start space-x-4">
-          <!-- <img src="/path/to/default-avatar.jpg" alt="Your Avatar" class="w-10 h-10 rounded-full" /> -->
           <div class="flex-1">
             <textarea
               v-model="newComment"
@@ -249,7 +279,7 @@
               @click="addComment"
               class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
             >
-              Post Comment
+              Post Review
             </button>
           </div>
         </div>
@@ -378,8 +408,12 @@ import { useProductStore } from "@/stores/productStore";
 
 const { $formatPrice } = useNuxtApp();
 const router = useRouter();
-const formattedPrice = price => {
+const formattedPrice = (price) => {
   return $formatPrice(price);
+};
+const { $formatDate } = useNuxtApp();
+const formattedDate = (date) => {
+  return $formatDate(date);
 };
 const toast = useToast();
 const userStore = useUserStore(); // Access the user store for authentication state
@@ -393,17 +427,17 @@ const products = ref([]);
 const wishList = computed(() => productStore.wishListItems);
 
 const productList = computed(() => productStore.products);
-const isInWishList = item => {
+const isInWishList = (item) => {
   if (!item || !item.id) {
     return false;
   }
   if (userStore.isLoggedIn) {
     const exists = wishList.value.some(
-      wish => wish.productModel.id === item.id
+      (wish) => wish.productModel.id === item.id
     );
     return exists;
   } else {
-    const exists = wishList.value.some(wish => wish.id === item.id);
+    const exists = wishList.value.some((wish) => wish.id === item.id);
     return exists;
   }
 };
@@ -430,11 +464,18 @@ const reviews = [
   },
 ];
 
+const initials = (user) => {
+  const { firstName, lastName } = user;
+
+  return `${firstName?.charAt(0) || ""}${
+    lastName?.charAt(0) || ""
+  }`.toUpperCase();
+};
 const product = ref(null);
 const loading = ref(false);
 const loadingAdd = ref(false);
 const { $axios } = useNuxtApp();
-const goToProductPage = product => {
+const goToProductPage = (product) => {
   // console.log("prodcet", product);
   router.push({
     path: `/products/${product.id}`,
@@ -446,14 +487,20 @@ onMounted(() => {
   // getProducts()
 });
 
-const setMainImage = image => {
+const setMainImage = (image) => {
   product.value.image = image;
 };
-const formatDescription = description => {
+const formatDescription = (description) => {
   return description ? description.replace(/\r\n/g, "<br>") : "";
 };
+
+const getAvg = (reviews) => {
+  if (!reviews || reviews.length === 0) return 0;
+  const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+  return (total / reviews.length).toFixed(1);
+};
 // addToWishlist;
-const addToWishlist = async product => {
+const addToWishlist = async (product) => {
   const productStore = useProductStore(); // Access the store
 
   try {
@@ -473,7 +520,7 @@ const addToWishlist = async product => {
 
       // Check if the product is already in the local wishlist
       const existingIndex = localWishlist.findIndex(
-        item => item.id === product.id
+        (item) => item.id === product.id
       );
       // if (existingIndex === -1) {
 
@@ -526,7 +573,7 @@ const addToWishlist = async product => {
     });
   }
 };
-const addToCart = async product => {
+const addToCart = async (product) => {
   loadingAdd.value = true;
   try {
     await productStore.addToCart(product, quantity.value);
@@ -556,9 +603,9 @@ const getProductByID = async () => {
 
     // Extract the primary image and all images from the response
     const primaryImage = response.data.images.find(
-      image => image.isPrimary
+      (image) => image.isPrimary
     )?.uploadUrl;
-    const allImages = response.data.images.map(image => image.uploadUrl);
+    const allImages = response.data.images.map((image) => image.uploadUrl);
 
     console.log("fd", allImages);
 
@@ -588,7 +635,7 @@ const items = ref([
 //     .sort(() => Math.random() - 0.5) // Shuffle array
 //     .slice(0, 6); // Limit to 6 items
 // });
-const tabClass = tab => ({
+const tabClass = (tab) => ({
   "text-black border-b-2 border-black": activeTab.value === tab,
   "text-gray-600": activeTab.value !== tab,
 });
