@@ -77,7 +77,6 @@
                 <!-- review -->
               </div>
             </div>
-          
           </div>
         </div>
 
@@ -385,68 +384,29 @@
 
                   <div class="flex justify-between items-center">
                     <div>
-
                       <p class="font-semibold">
-                      Ksh {{ formattedPrice(item.productModel.price) }}
-                    </p>
-                    <p class="font-semibold">Quantity: {{ item.quantity }}</p>
+                        Ksh {{ formattedPrice(item.productModel.price) }}
+                      </p>
+                      <p class="font-semibold">Quantity: {{ item.quantity }}</p>
                     </div>
-              <span class="text-sm text-gray-500">
-                <button
-                  class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
-                  @click.stop="addReview(item)"
-                >
-                  <i class="pi pi-star"></i>
-                  Review Product
-                </button>
-              </span>
-            </div>
-                  
+                    <span class="text-sm text-gray-500">
+                      <button
+                        class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                        @click.stop="addReview(item)"
+                      >
+                        <i class="pi pi-star"></i>
+                        Review Product
+                      </button>
+                    </span>
+                  </div>
                 </div>
               </div>
-             
-
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- give me review popup dialog code -->
-    <div
-      v-if="reviewProduct"
-      class="fixed inset-0 flex items-center justify-center z-50"
-      style="background-color: rgba(0, 0, 0, 0.5)"
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/3"
-        @click.stop
-      >
-        <h2 class="text-xl font-semibold mb-4">Add Review</h2>
-        <p class="mb-4">
-          Please provide your feedback for the product:
-          {{ reviewItem.productModel.name }}
-        </p>
-        <textarea
-          v-model="reviewText"
-          rows="4"
-          class="w-full border rounded-md p-2 mb-4"
-          placeholder="Write your review here..."
-        ></textarea>
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700"
-          @click="submitReview"
-        >
-          Submit Review
-        </button>
-        <button
-          class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 ml-2"
-          @click="reviewProduct = false"
-        >
-          Cancel
-        </button>
-      </div>
-      </div>
-
+    <RatingCard v-model:visible="reviewProduct" :item="reviewItem" />
   </div>
 </template>
 
@@ -455,12 +415,18 @@ import { useUserStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import RatingCard from "../components/cards/RatingDialog.vue";
+
 definePageMeta({
   middleware: ["auth"],
 });
 export default {
+  components: {
+    RatingCard,
+  },
   data() {
     return {
+      quotationList: [],
       isExpanded: true,
       maxLength: 100,
       orderDetails: {},
@@ -499,7 +465,8 @@ export default {
       quotation: [],
       showQuotation: false,
       quotationItems: {},
-      reviewProduct:false
+      reviewProduct: false,
+      reviewItem: {},
     };
   },
   computed: {
@@ -552,9 +519,10 @@ export default {
   methods: {
     addReview(item) {
       console.log("Add review clicked for item:", item);
-      this.reviewProduct = true
+      this.reviewItem = item;
+      this.reviewProduct = true;
       this.$emit("addReview", item);
-    },  
+    },
     toggleExpand() {
       this.isExpanded = !this.isExpanded;
     },

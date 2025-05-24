@@ -39,7 +39,7 @@
           <div class="relative">
             <img
               :src="
-                item.productModel?.images?.find(image => image.isPrimary)
+                item.productModel?.images?.find((image) => image.isPrimary)
                   ?.uploadUrl
               "
               :alt="item.productModel?.name || 'Product Image'"
@@ -120,7 +120,7 @@
           @click="goToPage(item)"
         >
           <img
-            :src="item?.images?.find(image => image.isPrimary)?.uploadUrl"
+            :src="item?.images?.find((image) => image.isPrimary)?.uploadUrl"
             :alt="item.name"
             class="w-full h-40 object-cover"
           />
@@ -156,7 +156,7 @@
           @click="goToPage(item)"
         >
           <img
-            :src="item?.images?.find(image => image.isPrimary)?.uploadUrl"
+            :src="item?.images?.find((image) => image.isPrimary)?.uploadUrl"
             :alt="item.productModel?.name || item.name"
             class="w-full h-40 object-cover"
           />
@@ -203,16 +203,16 @@ export default {
     //   wishList.find(item => item.id);
     // };
     // Methods
-    const formattedPrice = price => {
+    const formattedPrice = (price) => {
       const { $formatPrice } = useNuxtApp();
       return $formatPrice(price);
     };
 
-    const removeFromWishlist = async item => {
+    const removeFromWishlist = async (item) => {
       await productStore.removeFromWishlist(item.id);
     };
 
-    const addToCart = async product => {
+    const addToCart = async (product) => {
       const productId = product.productModel?.id ?? product.id;
       try {
         if (userStore.isLoggedIn) {
@@ -248,14 +248,14 @@ export default {
       }
     };
 
-    const randomizedProducts = products => {
+    const randomizedProducts = (products) => {
       if (!Array.isArray(products) || products.length === 0) {
         console.warn("Invalid or empty products array:", products);
         return [];
       }
       return [...products].sort(() => 0.5 - Math.random()).slice(0, 5);
     };
-    const goToPage = product => {
+    const goToPage = (product) => {
       // console.log("prodcet", product);
       router.push({
         path: `/products/${product.id}`,

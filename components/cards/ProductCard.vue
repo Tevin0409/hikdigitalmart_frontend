@@ -17,48 +17,16 @@
         {{ item.product.name }} <br />
         <span class="font-medium text-sm"> ({{ item.name }})</span>
       </h3>
-
-      <!-- Rating -->
-      <div class="flex justify-center mt-">
-        <span v-for="star in 5" :key="star" class="text-yellow-400">
-          <i
-            :class="{
-              'pi pi-star-fill': star <= item.rating,
-              'pi pi-star': star > item.rating,
-            }"
-          ></i>
-        </span>
-        <span class="text-gray-500 ml-2">
-          <div class="flex items-center mt-2">
-            <div class="flex text-yellow-400">
-              <template v-for="i in 5" :key="i">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  stroke="none"
-                  class="w-4 h-4"
-                >
-                  <path
-                    d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                  />
-                </svg>
-              </template>
-            </div>
-            <p class="ml-2 text-gray-500 text-sm text-center">
-              <!-- ({{ item.reviews }} reviews) -->
-            </p>
-          </div>
-        </span>
+      <div class="flex justify-center text-center">
+        <RatingCard :reviews="item.Review" />
       </div>
-
       <!-- Price -->
-      <p class="text-red-500 font-semibold text-center">
+      <p
+        class="text-red-500 d-flex justify-center flex -1 font-semibold text-center"
+      >
         Ksh {{ formattedPrice(item.price) }}
-        <!-- <span class="line-through text-gray-400">{{ formattedPrice(item.oldPrice) }}</span> -->
       </p>
     </div>
-
     <!-- Hover Buttons -->
     <div
       class="absolute top-4 right-4 flex flex-col space-y-2 opacity-0group-hover:opacity-100 transition-opacity"
@@ -69,13 +37,6 @@
           style="font-size: 1.2rem"
         ></i>
       </button>
-      <!-- <button
-        @click="wishProduct(item)"
-        class="bg-white p-2 rounded-full shadow hover:bg-gray-100"
-      >
-        <i class="pi pi-heart text-gray-600"></i>
-      </button> -->
-
       <button @click="wishProduct(item)">
         <i
           v-if="!isInWishList(item)"
@@ -100,6 +61,8 @@ import { ref } from "vue";
 import { useNuxtApp } from "nuxt/app";
 import { useUserStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
+import RatingCard from "../ratings/index.vue";
+// import ProductCard from "../ProductCards/index.vue";
 
 const toast = useToast();
 const router = useRouter();
@@ -116,7 +79,7 @@ defineProps({
   },
 });
 
-const formattedPrice = price => {
+const formattedPrice = (price) => {
   return $formatPrice(price);
 };
 const emit = defineEmits(["wishlist-updated"]);
@@ -131,7 +94,7 @@ const getWishList = async () => {
     const isLoggedIn = await checkUserLoggedIn();
     if (isLoggedIn) {
       const response = await $axios.get("/product/wishlist");
-      wishList.value = response.data.map(item => item.productId); // Extract only product IDs
+      wishList.value = response.data.map((item) => item.productId); // Extract only product IDs
     } else {
       const localWishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
       wishList.value = localWishlist;
@@ -141,17 +104,22 @@ const getWishList = async () => {
   }
 };
 
-const isInWishList = item => {
+const getAvg = (reviews) => {
+  let avg = reviews.reduce((acc, init) => acc + init.rating, 0);
+  return avg / reviews.length || 0;
+};
+
+const isInWishList = (item) => {
   if (!item || !item.id) {
     return false;
   }
   if (userStore.isLoggedIn) {
     const exists = wishList.value.some(
-      wish => wish.productModel.id === item.id
+      (wish) => wish.productModel.id === item.id
     );
     return exists;
   } else {
-    const exists = wishList.value.some(wish => wish.id === item.id);
+    const exists = wishList.value.some((wish) => wish.id === item.id);
     return exists;
   }
 };
@@ -164,7 +132,7 @@ const checkUserLoggedIn = async () => {
   }
 };
 
-const wishProduct = async product => {
+const wishProduct = async (product) => {
   // console.log(productId, "Attempting to add to wishlist");
 
   const productStore = useProductStore(); // Access the store
@@ -187,7 +155,7 @@ const wishProduct = async product => {
 
       // Check if the product is already in the local wishlist
       const existingIndex = localWishlist.findIndex(
-        item => item.id === product.id
+        (item) => item.id === product.id
       );
       if (existingIndex === -1) {
         const productMod = {
@@ -239,7 +207,7 @@ const wishProduct = async product => {
   }
 };
 
-const addToCart = async product => {
+const addToCart = async (product) => {
   const userStore = useUserStore();
   let user = userStore.user;
   try {
@@ -267,7 +235,7 @@ const addToCart = async product => {
   }
 };
 
-const goToProductPage = product => {
+const goToProductPage = (product) => {
   // console.log("prodcet", product);
   router.push({
     path: `/products/${product.id}`,

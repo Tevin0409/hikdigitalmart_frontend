@@ -67,7 +67,7 @@ export const useProductStore = defineStore("product", {
         const { $axios } = useNuxtApp();
         const response = await $axios.get(`/product/orders/${order.id}`);
         // this.orders = response.data; // Update the orders
-        return response; 
+        return response;
       } catch (error) {
         console.error("Error fetching orders:", error);
         // return [];  // Return an empty array in case of error
@@ -103,24 +103,23 @@ export const useProductStore = defineStore("product", {
             "User is not logged in. Adding product to localStorage cart."
           );
           const localCart = JSON.parse(localStorage.getItem("cart")) || [];
-          const existingItem = localCart.find(item => item.id === product.id);
+          const existingItem = localCart.find((item) => item.id === product.id);
           if (existingItem) {
             existingItem.quantity += quantity; // Update quantity if already exists
             await this.getCartItems();
           } else {
-
-             const productMod = {
-          id: product.id,
-          name: product.name,
-          created_at: new Date().toISOString(),
-          userId: "user.id",
-          productModelId: product.id,
-          productModel: {
-            ...product,
-          },
-        };
-        // Product is not in the wishlist, add it
-        // localWishlist.push(productMod);
+            const productMod = {
+              id: product.id,
+              name: product.name,
+              created_at: new Date().toISOString(),
+              userId: "user.id",
+              productModelId: product.id,
+              productModel: {
+                ...product,
+              },
+            };
+            // Product is not in the wishlist, add it
+            // localWishlist.push(productMod);
 
             localCart.push({ ...productMod, quantity }); // Add new item
             await this.getCartItems();
@@ -148,7 +147,21 @@ export const useProductStore = defineStore("product", {
         const { $axios } = useNuxtApp();
         const response = await $axios.get("/product/quotation");
         this.quoatations = response.data; // Update the orders
-        console.log( this.quoatations, "  this.quoatations");
+        console.log(this.quoatations, "  this.quoatations");
+        return response.data; // Return the data
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        // return [];  // Return an empty array in case of error
+      }
+    },
+    async submitReview(payload) {
+      // return await $axios.post("/product/add-review", payload);
+
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post("/product/add-review", payload);
+        // this.quoatations = response.data; // Update the orders
+        console.log(response, "  this.quoatations");
         return response.data; // Return the data
       } catch (error) {
         console.error("Error fetching orders:", error);
@@ -172,7 +185,7 @@ export const useProductStore = defineStore("product", {
           const localCart = storedCart ? JSON.parse(storedCart) : [];
 
           // Map through the cart to update the quantity of the specific item
-          const updatedCart = localCart.map(item => {
+          const updatedCart = localCart.map((item) => {
             if (item.id === id) {
               return { ...item, quantity };
             }
@@ -205,7 +218,7 @@ export const useProductStore = defineStore("product", {
           const localCart = storedCart ? JSON.parse(storedCart) : [];
 
           // Filter out the item with the matching cartId
-          const updatedCart = localCart.filter(item => item.id !== cartId);
+          const updatedCart = localCart.filter((item) => item.id !== cartId);
 
           // Update the local storage
           localStorage.setItem("cart", JSON.stringify(updatedCart));
@@ -329,7 +342,7 @@ export const useProductStore = defineStore("product", {
             JSON.parse(localStorage.getItem("wishlist")) || [];
 
           // Prevent duplicate entries
-          if (!localWishlist.some(item => item.id === productModelId)) {
+          if (!localWishlist.some((item) => item.id === productModelId)) {
             localWishlist.push({ id: productModelId });
             localStorage.setItem("wishlist", JSON.stringify(localWishlist));
 
@@ -355,7 +368,7 @@ export const useProductStore = defineStore("product", {
           let localWishlist =
             JSON.parse(localStorage.getItem("wishlist")) || [];
           const updatedWishlist = localWishlist.filter(
-            item => item.id !== productId
+            (item) => item.id !== productId
           );
           localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
         }
@@ -365,7 +378,7 @@ export const useProductStore = defineStore("product", {
 
         // Update the wishlist items and count
         const index = this.wishListItems.findIndex(
-          item => item.id === productId
+          (item) => item.id === productId
         );
         if (index !== -1) {
           this.wishListItems.splice(index, 1);
@@ -380,7 +393,7 @@ export const useProductStore = defineStore("product", {
       try {
         const { $axios } = useNuxtApp();
 
-        let products = this.cartItems.map(item => ({
+        let products = this.cartItems.map((item) => ({
           productModelId: item?.productModel?.id ?? item?.id ?? "",
           quantity: item?.quantity ?? 1,
         }));
@@ -395,8 +408,7 @@ export const useProductStore = defineStore("product", {
           phone_number: user.phoneNumber,
           street_address: user.street_address,
           city: user.city,
-          isVat: vat
-
+          isVat: vat,
         };
 
         const response = await $axios.post("/product/orders", order);
@@ -410,10 +422,9 @@ export const useProductStore = defineStore("product", {
     },
 
     async makeQuotation(message, quotationList) {
-
       try {
         const { $axios } = useNuxtApp();
-        let products = quotationList.map(item => ({
+        let products = quotationList.map((item) => ({
           productModelId: item?.id,
           quantity: item.quantity,
         }));
@@ -423,24 +434,22 @@ export const useProductStore = defineStore("product", {
         });
 
         console.log(response, " response");
-        return response
-      }
-      catch (error) { 
+        return response;
+      } catch (error) {
         console.error("Error placing order:", error);
       }
 
-
-    //   message: message.value,
-    // items: quotationList.value.map((item) => ({
-    //   id: item.id,
-    //   quantity: item.quantity,
-    // })),
+      //   message: message.value,
+      // items: quotationList.value.map((item) => ({
+      //   id: item.id,
+      //   quantity: item.quantity,
+      // })),
     },
 
     async placeOrderAnonymous(user, vat) {
       try {
         const { $axios } = useNuxtApp();
-        let products = this.cartItems.map(item => ({
+        let products = this.cartItems.map((item) => ({
           productModelId: item?.productModel?.id ?? item?.id ?? "",
           quantity: item?.quantity ?? 1,
         }));
@@ -455,7 +464,7 @@ export const useProductStore = defineStore("product", {
           phone_number: user.phoneNumber,
           street_address: user.street_address,
           city: user.city,
-          isVat: vat
+          isVat: vat,
         };
 
         const response = await $axios.post("/product/orders/anonymous", order);
@@ -487,20 +496,18 @@ export const useProductStore = defineStore("product", {
 
   getters: {
     // Getter for cart item count
-    getCartCount: state => state.cartCount,
+    getCartCount: (state) => state.cartCount,
 
     // Getter for wishlist item count
-    getWishListCount: state => state.wishListCount,
+    getWishListCount: (state) => state.wishListCount,
 
     // Getter for cart total value
-    getCartTotal: state => state.cartTotal,
-    getCategoriesList: state => state.categories,
-    getProductList: state => state.products,
-    getModelsList: state => state.models,
-    getOrdersList: state => state.orders,
-    getQuotationList: state => state.quoatations,
-    
-
+    getCartTotal: (state) => state.cartTotal,
+    getCategoriesList: (state) => state.categories,
+    getProductList: (state) => state.products,
+    getModelsList: (state) => state.models,
+    getOrdersList: (state) => state.orders,
+    getQuotationList: (state) => state.quoatations,
   },
 
   persist: {

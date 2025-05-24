@@ -102,27 +102,27 @@
 
         <!-- Delivery Info -->
         <div class="mt-4 space-y-2">
-            <div class="flex  space-x-1 align-center">
-                    <template v-for="i in 5">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        :fill="i <=  getAvg(product.Review) ? 'currentColor' : 'none'"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-4 h-4 text-yellow-400"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                        />
-                      </svg>
-                    </template> 
-                    <p class="text-gray-600 ml-2 pb-2">
-                   ({{ getAvg(product.Review) }} / 5 )
-                    </p>
-            </div>
+          <div class="flex space-x-1 align-center">
+            <template v-for="i in 5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                :fill="i <= getAvg(product.Review) ? 'currentColor' : 'none'"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                class="w-4 h-4 text-yellow-400"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                />
+              </svg>
+            </template>
+            <p class="text-gray-600 ml-2 pb-2">
+              ({{ getAvg(product.Review) }} / 5 )
+            </p>
+          </div>
 
           <p class="text-bl font-bold">
             <i class="fas fa-truck"></i> Description
@@ -185,7 +185,6 @@
         >
           Reviews
         </h3>
-      
       </div>
 
       <!-- Details Section -->
@@ -209,63 +208,60 @@
 
       <!-- Reviews Section -->
       <div v-if="activeTab === 'reviews'" class="mt-6 space-y-8">
-        <div
-          v-for="review in product.Review"
-          :key="review.id"
-          class="border-b pb-4"
-        >
-          <div class="flex items-center space-x-4">
-            <Avatar
-              :label="initials(review.user)"
-              class="bg-blue-100 text-blue-700 font-bold"
-              shape="circle"
-              size="xlarge"
-            />
-            <div>
-              <div class="flex justify-between items-center mt-1">
-                <div class="flex space-x-1">
-                  <template v-for="i in 5">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      :fill="i <= review.rating ? 'currentColor' : 'none'"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      class="w-4 h-4 text-yellow-400"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
-                      />
-                    </svg>
-                  </template>
+        <div v-if="product.Review?.length">
+          <div
+            v-for="review in product.Review"
+            :key="review.id"
+            class="border-b pb-4"
+          >
+            <div class="flex items-center space-x-4">
+              <Avatar
+                :label="initials(review.user)"
+                class="bg-blue-100 text-blue-700 font-bold"
+                shape="circle"
+                size="xlarge"
+              />
+              <div>
+                <div class="flex justify-between items-center mt-1">
+                  <div class="flex space-x-1">
+                    <template v-for="i in 5">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        :fill="i <= review.rating ? 'currentColor' : 'none'"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        class="w-4 h-4 text-yellow-400"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                        />
+                      </svg>
+                    </template>
+                  </div>
+
+                  <p class="text-sm text-gray-500 ml-4">
+                    {{ formattedDate(review.createdAt) }}
+                  </p>
                 </div>
 
-                <!-- Date -->
-                <p class="text-sm text-gray-500 ml-4">
-                  {{ formattedDate(review.createdAt) }}
-                </p>
+                <p class="mt-4 text-gray-800">{{ review.comment }}</p>
+                <h4 class="font-bold text-gray-800">
+                  by {{ review.user.firstName + " " + review.user.lastName }}
+                </h4>
               </div>
-
-              <p class="mt-4 text-gray-800">{{ review.comment }}</p>
-              <h4 class="font-bold text-gray-800">
-                by {{ review.user.firstName + " " + review.user.lastName }}
-              </h4>
             </div>
           </div>
-          <!-- <p class="mt-4 text-gray-800">{{ review.comment }}</p> -->
-          <div class="flex items-center space-x-4 text-gray-500 text-sm mt-2">
-            <!-- <span class="cursor-pointer hover:text-gray-700">Reply</span> -->
-            <!-- <span>Likes: {{ review.likes }}</span>
-            <span>Replies: {{ review.replies }}</span> -->
-          </div>
+        </div>
+        <div v-else class="text-center text-gray-500 py-6">
+          No reviews yet. Be the first to review this product!
         </div>
       </div>
       <!-- Discussion Section -->
       <div v-if="activeTab === 'discussion'" class="mt-6 space-y-6">
         <h2 class="text-2xl font-bold text-gray-800">Discussion</h2>
-
         <!-- Input to Add a Comment -->
         <div class="flex items-start space-x-4">
           <div class="flex-1">
@@ -350,13 +346,7 @@
           class="rounded-full h-24 w-24"
         />
       </div>
-      <!-- <div class="spinner-border animate-spin text-white" role="status">
-        <span class="sr-only">Loading...</span>
-      </div> -->
     </div>
-
-    <!-- Related Products -->
-
     <section>
       <div class="rounded-md pt-10">
         <div class="flex justify-between items-center mb-4">
@@ -376,11 +366,6 @@
                 :alt="product.name"
                 class="w-full h-36 object-cover rounded-md"
               />
-              <!-- <span
-                class="absolute top-2 right-2 bg-orange-400 text-white text-xs px-2 py-1 rounded-md"
-              >
-                -{{ product.discount }}%
-              </span> -->
             </div>
             {{ product.product.name }}
             <h3 class="text-sm font-medium mt-2 truncate">
@@ -650,14 +635,4 @@ const getProductDetails = async () => {
   }
 };
 </script>
-<style scoped>
-/* Add some custom styles for the loading spinner if needed */
-.spinner-border {
-  border-width: 4px;
-  border-color: #fff transparent #fff transparent;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  border-top-color: transparent;
-}
-</style>
+<style scoped></style>

@@ -2,40 +2,7 @@
   <div class="container mx-auto my-10 pa-10">
     <TopCard :categories="categories" />
     <TopDeal />
-    <!-- <section class="flash-sales mt-12 mx-4">
-      <h2 class="text-xl font-bold">Browse By Category</h2>
-      <Carousel
-        :value="categories"
-        :numVisible="3"
-        :numScroll="1"
-        :responsiveOptions="responsiveOptions"
-      >
-        <template #item="slotProps">
-          <div
-            @click="getCategoryProducts(slotProps.data)"
-            class="border border-surface-200 dark:border-surface-700 rounded m-2 bg-white cursor-pointer"
-          >
-            <div class="p-4">
-              <div
-                class="mb-4 text-xs font-medium text-center flex items-center"
-              >
-                <i :class="getIcon(slotProps.data.name)"></i>
-                <span class="pl-2">
-                  {{ slotProps.data.name }}
-                </span>
-              </div>
-              <div class="flex justify-between items-center">
-                <div class="mt-0 font-semibold text-xl">
-                  {{ slotProps.data.price }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-      </Carousel>
-    </section> -->
-    <!-- </div> -->
-    <!-- Categories -->
+
     <section>
       <div class="p-4 rounded-md">
         <div class="flex justify-between items-center mb-4 px-2">
@@ -43,35 +10,13 @@
         </div>
 
         <div class="flex overflow-x-auto gap-4 p-2">
-          <div
+          <topSelling
             v-for="(product, index) in randomizedProducts"
             :key="index"
-            class="min-w-[200px] md:min-w-[220px] bg-white rounded-md shadow-md cursor-pointer p-2"
-            @click="goToProductPage(product)"
-          >
-            <div class="relative">
-              <img
-                :src="product.images[0]?.uploadUrl"
-                :alt="product.name"
-                class="w-full h-36 object-cover rounded-md p-2"
-              />
-              <!-- <span
-                class="absolute top-2 right-2 bg-orange-400 text-white text-xs px-2 py-1 rounded-md"
-              >
-                -{{ product.discount }}%
-              </span> -->
-            </div>
-            {{ product.product.name }}
-            <h3 class="text-sm font-medium mt-2 truncate">
-              {{ product.name }}
-            </h3>
-            <p class="text-lg font-semibold text-gray-900">
-              {{ formatPrice(product.price) }}
-            </p>
-            <p class="text-gray-500 text-xs line-through">
-              {{ product.oldPrice }}
-            </p>
-          </div>
+            :product="product"
+            :goToProductPage="goToProductPage"
+            :formatPrice="formatPrice"
+          />
         </div>
       </div>
     </section>
@@ -92,15 +37,7 @@
         <!-- Right Section -->
         <div class="w-full">
           <div v-if="fetching && products.length < 1" class="text-center mt-6">
-            <div class="relative flex justify-center items-center">
-              <div
-                class="absolute animate-spin rounded-full h-32 w-32 border-t-4 border-b-4 border-purple-100"
-              ></div>
-              <img
-                src="https://freelancerdxb.s3.eu-central-1.amazonaws.com/documents/image%20%285%29__5d197f13926ac20a20a6f301d00ce69b516f83eb.png"
-                class="rounded-full h-24 w-24"
-              />
-            </div>
+            <Loader />
           </div>
 
           <div
@@ -151,6 +88,8 @@ import TopCard from "~/components/cards/TopCard1.vue";
 import Footer from "~/components/shared/utils/Footer.vue";
 import FilterCard from "~/components/cards/FilterCard.vue";
 import TopDeal from "~/components/cards/TopDeal.vue";
+import topSelling from "~/components/MonthlyFeaturedCards/topSelling.vue";
+import Loader from "~/components/loaders/index.vue";
 
 import { useRouter } from "vue-router";
 
@@ -164,6 +103,8 @@ export default {
     Footer,
     FilterCard,
     TopDeal,
+    topSelling,
+    Loader,
   },
   props: {
     searchTerm: {

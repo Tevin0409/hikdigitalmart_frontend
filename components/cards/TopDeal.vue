@@ -1,106 +1,91 @@
 <template>
   <div class="flex flex-col md:flex-row w-full p-6">
-    <!-- Hot Deals Card -->
     <div
       class="w-full md:w-1/5 p-2 m-2 border dark:border-orange-600 rounded-lg shadow-sm"
     >
       <div
         class="text-lg font-semibold mb-2 border-b flex justify-between items-center"
       >
-        <span class="text-gray-500 pl-4">Hot Deals</span>
+        <p class="text-gray-500 d-flex justify-center text-center pl-4">
+          Hot Deals
+        </p>
       </div>
-
-      <div>
-        <Carousel
-          :d_circular="true"
-          :autoplayInterval="10000"
-          :value="topProducts"
-          :numVisible="1"
-          :numScroll="1"
-          orientation="horizontal"
-          containerClass="flex items-center justify-center"
-          :showIndicators="false"
-          :showNavigators="false"
-        >
-          <template #item="slotProps">
-            <div>
-              <div class="mb-4" @click="goToPage(slotProps.data)">
-                <div class="relative mx-auto h-">
-                  <img
-                    :src="slotProps.data.image"
-                    :alt="slotProps.data.name"
-                    class="object-cover rounded"
-                    style="
-                      max-width: 100% !important;
-                      min-height: 300px !important;
-                    "
-                  />
-                </div>
+      <Carousel
+        :d_circular="true"
+        :autoplayInterval="10000"
+        :value="topProducts"
+        :numVisible="1"
+        :numScroll="1"
+        orientation="horizontal"
+        containerClass="custom-carousel-heigh flexitems-center justify-center"
+        :showIndicators="false"
+        :showNavigators="false"
+      >
+        <template #item="slotProps">
+          <div>
+            <div class="mb-4" @click="goToPage(slotProps.data)">
+              <div class="relative mx-auto h-">
+                <img
+                  :src="slotProps.data.image"
+                  alt=" "
+                  class="object-cover rounded"
+                  style="
+                    max-width: 100% !important;
+                    min-height: 210px !important;
+                    max-height: 100px !important;
+                    width: 100% !important;
+                    height: 100% !important;
+                  "
+                />
               </div>
-              <div class="mb-4 font-medium flex justify-around">
-                {{ slotProps.data.name }}
-              </div>
-              <div class="flex justify-around items-center">
-                <div class="mt-0 font-semibold text-xl py-4">
-                  {{ formattedPrice(slotProps.data.price) }}
-                </div>
-              </div>
-
-              <p class="py-4">
-                <span
-                  class="text-gray-600 text-sm text-truncate mb-4"
-                  v-for="item in slotProps.data.features"
-                >
-                  {{ item.description }}
-                </span>
-              </p>
-              <p class="flex justify-around items-center">
-                <button
-                  class="w-3/4 px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-orange-600 focus:outline-none focus:shadow-outline"
-                  @click="addToCart(slotProps.data)"
-                >
-                  Add to Cart
-                </button>
-                <button
-                  class="w-1/4"
-                  @click="addToFavorites(slotProps.data)"
-                  :loading="loadingWish"
-                >
-                  <i
-                    v-if="!isInWishList(slotProps.data)"
-                    class="pi pi-heart cursor-pointer mr-2"
-                    style="font-size: 1.5rem"
-                  ></i>
-                  <i
-                    v-else
-                    class="pi pi-heart-fill cursor-pointer mr-2"
-                    style="font-size: 1.5rem; color: red"
-                  ></i>
-                </button>
-              </p>
-
-              <!-- <div
-                class="stock flex items-center text-sm text-gray-600 mb-6 justify-around"
-              >
-                <div
-                  v-for="(label, index) in ['DAYS', 'HOURS', 'MINS', 'SEC']"
-                  :key="index"
-                  class="flex flex-col items-center"
-                >
-                  <div
-                    class="flex items-center justify-center p-1 bg-orange-500 text-white rounded-full text-base md:text-lg font-bold"
-                  >
-                    {{ index === 0 ? 21 : "00" }}
-                  </div>
-                  <span class="text-xs mt-1 text-gray-400 font-bold">{{
-                    label
-                  }}</span>
-                </div>
-              </div> -->
             </div>
-          </template>
-        </Carousel>
-      </div>
+            <div class="mb-4 font-medium flex justify-around">
+              {{ slotProps.data.name }}
+            </div>
+            <div class="flex justify-around items-center">
+              <div class="mt-0 font-semibold text-xl py-4">
+                {{ formattedPrice(slotProps.data.price) }}
+              </div>
+            </div>
+            <div class="flex justify-center text-center">
+              <RatingCard :reviews="slotProps.data.Review" />
+            </div>
+
+            <p class="py-4">
+              <span
+                class="text-gray-600 text-sm text-truncate mb-4"
+                v-for="item in slotProps.data.features"
+              >
+                {{ item.description }}
+              </span>
+            </p>
+            <p class="flex justify-around items-center">
+              <button
+                class="w-3/4 px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-orange-600 focus:outline-none focus:shadow-outline"
+                @click="addToCart(slotProps.data)"
+              >
+                Add to Cart
+              </button>
+              <button
+                class="w-1/4"
+                @click="addToFavorites(slotProps.data)"
+                :loading="loadingWish"
+              >
+                <i
+                  v-if="!isInWishList(slotProps.data)"
+                  class="pi pi-heart cursor-pointer mr-2"
+                  style="font-size: 1.5rem"
+                ></i>
+                <i
+                  v-else
+                  class="pi pi-heart-fill cursor-pointer mr-2"
+                  style="font-size: 1.5rem; color: red"
+                ></i>
+              </button>
+            </p>
+          </div>
+        </template>
+      </Carousel>
     </div>
 
     <!-- Monthly Featured Items Section -->
@@ -135,88 +120,22 @@
           class="flex flex-col md:flex-row justify-between space-y-4 md:space-x-4 md:space-y-0"
         >
           <!-- Left Products -->
-          <div
-            class="flex flex-col space-y-4 w-full md:w-1/3 hover:text-primary transition-colors duration-200"
-          >
-            <div
+          <div class="flex flex-col space-y-4 w-full md:w-1/3">
+            <ProductCard
               v-for="item in featuredProducts.slice(0, 2)"
               :key="item.name"
+              :item="item"
+              :loadingWish="loadingWish"
+              :goToPage="goToPage"
+              :selectImage="selectImage"
+              :addToFavorites="addToFavorites"
+              :addToCart="addToCart"
+              :isInWishList="isInWishList"
+              :formattedPrice="formattedPrice"
               class="border rounded-sm p-4 shadow-sm flex-1 cursor-pointer"
-            >
-              <div class="flex items-center">
-                <!-- Main Product Image -->
-                <img
-                  :src="item.image"
-                  class="w-28 h-28 object-cover rounded-md"
-                />
-
-                <div @click="goToPage(item)" class="ml-4 flex flex-col w-full">
-                  <h3 class="text-lg font-medium">
-                    {{ item.product.name }}
-                  </h3>
-                  <span class="text-sm">
-                    {{ item.name }}
-                  </span>
-                  <div
-                    class="mt-2 hover:text-primary transition-colors duration-200 text-primary font-bold text-lg"
-                  >
-                    <span>{{ formattedPrice(item.price) }}</span>
-                  </div>
-                  <p class="text-gray-500 mt-1">
-                    <strong>
-                      {{
-                        item.features.map(feat => feat.description).join(", ")
-                      }}
-                    </strong>
-                  </p>
-
-                  <!-- Image Thumbnails Carousel -->
-                  <div class="carousel flex items-center mt-2 space-x-4">
-                    <div class="flex items-center space-x-2 overflow-x-auto">
-                      <img
-                        v-for="(image, index) in item.images"
-                        :key="index"
-                        :src="image.uploadUrl"
-                        :alt="'Product ' + (index + 1)"
-                        @click="selectImage(item, image.uploadUrl)"
-                        class="w-10 h-10 md:w-10 md:h-10 rounded-md border border-gray-300 cursor-pointer hover:border-orange-500"
-                        :class="{
-                          'border-orange-500': item.image === image,
-                        }"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Favorite & Cart Buttons -->
-                <div
-                  class="gap-5 relative left-0 top-0 align-start justify-end"
-                >
-                  <button @click="addToFavorites(item)" :loading="loadingWish">
-                    <i
-                      v-if="!isInWishList(item)"
-                      class="pi pi-heart cursor-pointer mr-2"
-                      style="font-size: 1.3rem"
-                    ></i>
-                    <i
-                      v-else
-                      class="pi pi-heart-fill cursor-pointer mr-2"
-                      style="font-size: 1.3rem; color: red"
-                    ></i>
-                  </button>
-                  <button
-                    class="rounded-full transition-colors"
-                    @click="addToCart(item)"
-                  >
-                    <i
-                      class="pi pi-shopping-cart text- pt-4"
-                      style="font-size: 1.3rem"
-                    ></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            />
           </div>
+
           <!-- Center Product -->
           <div class="flex-1 h-full">
             <div
@@ -276,10 +195,13 @@
                   >
                     <span>{{ formattedPrice(item.price) }}</span>
                   </div>
+                  <div class="flex mt-1 text-center">
+                    <RatingCard :reviews="item.Review" />
+                  </div>
                   <p class="text-gray-500 mt-1">
                     <strong>
                       {{
-                        item.features.map(feat => feat.description).join(", ")
+                        item.features.map((feat) => feat.description).join(", ")
                       }}
                     </strong>
                   </p>
@@ -290,79 +212,19 @@
 
           <!-- Right Products -->
           <div class="flex flex-col space-y-4 w-full md:w-1/3">
-            <div
+            <ProductCard
               v-for="item in featuredProducts.slice(3, 5)"
               :key="item.name"
+              :item="item"
+              :loadingWish="loadingWish"
+              :goToPage="goToPage"
+              :selectImage="selectImage"
+              :addToFavorites="addToFavorites"
+              :addToCart="addToCart"
+              :isInWishList="isInWishList"
+              :formattedPrice="formattedPrice"
               class="border rounded-sm p-4 shadow-sm flex-1 cursor-pointer"
-            >
-              <!-- @click="goToPage(item)" -->
-              <div class="flex items-center">
-                <img
-                  :src="item.image"
-                  class="w-28 h-28 object-cover rounded-md"
-                />
-                <div class="ml-4 flex flex-col w-full">
-                  <h3 class="text-lg font-medium">
-                    {{ item.product.name }}
-                  </h3>
-                  <span class="text-sm">
-                    {{ item.name }}
-                  </span>
-                  <div
-                    class="mt-2 text-primary hover:text-primary transition-colors duration-200font-bold text-lg"
-                  >
-                    <span class=""> {{ formattedPrice(item.price) }}</span>
-                  </div>
-                  <p class="text-gray-500 mt-1">
-                    <strong>
-                      {{
-                        item.features.map(feat => feat.description).join(", ")
-                      }}
-                    </strong>
-                  </p>
-                  <div class="carousel flex items-center mt-2 space-x-4">
-                    <div class="flex items-center space-x-2 overflow-x-auto">
-                      <img
-                        v-for="(image, index) in item.images"
-                        :key="index"
-                        :src="image.uploadUrl"
-                        :alt="'Product ' + (index + 1)"
-                        @click="selectImage(item, image.uploadUrl)"
-                        class="w-10 h-10 md:w-10 md:h-10 rounded-md border border-gray-300 cursor-pointer hover:border-orange-500"
-                        :class="{
-                          'border-orange-500': item.image === image,
-                        }"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="gap-5 relative left-0 top-0 align-start justify-end"
-                >
-                  <button @click="addToFavorites(item)" :loading="loadingWish">
-                    <i
-                      v-if="!isInWishList(item)"
-                      class="pi pi-heart cursor-pointer mr-2"
-                      style="font-size: 1.3rem"
-                    ></i>
-                    <i
-                      v-else
-                      class="pi pi-heart-fill cursor-pointer mr-2"
-                      style="font-size: 1.3rem; color: red"
-                    ></i>
-                  </button>
-                  <button
-                    class="rounded-full transition-colors"
-                    @click="addToCart(item)"
-                  >
-                    <i
-                      class="pi pi-shopping-cart pt-4"
-                      style="font-size: 1.3rem"
-                    ></i>
-                  </button>
-                </div>
-              </div>
-            </div>
+            />
           </div>
         </div>
       </div>
@@ -375,49 +237,32 @@ import { ref } from "vue";
 import Carousel from "primevue/carousel";
 import { useProductStore } from "@/stores/productStore";
 import { useRouter } from "vue-router";
+import ProductCard from "../MonthlyFeaturedCards/index.vue";
+import RatingCard from "../ratings";
 
 export default {
-  components: { Carousel },
+  components: { Carousel, ProductCard, RatingCard },
   setup() {
     const tabs = ref([
-      "Recent",
+      "Top Monthly",
       // "Best Seller",
       // "Top",
       // "New Arrivals",
       // "Top Rating",
     ]);
-    const userStore = useUserStore(); // Access the user store for authentication state
+    const userStore = useUserStore();
 
     const router = useRouter();
     const carousel = ref(null);
     const selectedTab = ref("Recent");
     const topProducts = ref([]);
-    // const products = ref([
-    //   // {
-    //   //   image:
-    //   //     "https://html.themexriver.com/radios/assets/img/product/img_53.png",
-    //   //   name: "Bullet Camera",
-    //   //   rating: 3,
-    //   //   reviews: 26,
-    //   //   oldPrice: 28.52,
-    //   //   price: 3052,
-    //   // },
-    //   // {
-    //   //   image:
-    //   //     "https://html.themexriver.com/radios/assets/img/product/img_53.png",
-    //   //   name: "Bullet HD Camera",
-    //   //   rating: 4,
-    //   //   reviews: 42,
-    //   //   oldPrice: 19.53,
-    //   //   price: 2153,
-    //   // },
-    // ]);
+
     const products = computed(() => productStore.products);
     const getTopProducts = () => {
       topProducts.value = products.value
         .sort((a, b) => b.price - a.price) // Sort products by price in descending order
         .slice(0, 3) // Select the top 3 products
-        .map(product => ({
+        .map((product) => ({
           name: product.name, // Ensure the product name is included
           price: product.price,
           image: product.images?.[0]?.uploadUrl || "",
@@ -428,11 +273,11 @@ export default {
     const toast = useToast();
     const { $formatPrice } = useNuxtApp();
     const productStore = useProductStore();
-    const formattedPrice = price => {
+    const formattedPrice = (price) => {
       let p = `Ksh ${$formatPrice(price)}`;
       return p;
     };
-    const getSeverity = status => {
+    const getSeverity = (status) => {
       switch (status) {
         case "INSTOCK":
           return "success";
@@ -449,29 +294,29 @@ export default {
     };
     const wishList = computed(() => productStore.wishListItems);
 
-    const isInWishList = item => {
+    const isInWishList = (item) => {
       if (!item || !item.id) {
         return false;
       }
       if (userStore.isLoggedIn) {
         const exists = wishList.value.some(
-          wish => wish.productModel.id === item.id
+          (wish) => wish.productModel.id === item.id
         );
         return exists;
       } else {
-        const exists = wishList.value.some(wish => wish.id === item.id);
+        const exists = wishList.value.some((wish) => wish.id === item.id);
         return exists;
       }
     };
     const selectImage = (item, image) => {
       item.image = image;
     };
-    const goToPage = item => {
+    const goToPage = (item) => {
       router.push({
         path: `/products/${item.id}`,
       });
     };
-    const addToFavorites = async product => {
+    const addToFavorites = async (product) => {
       // console.log(productId, "Attempting to add to wishlist");
 
       const productStore = useProductStore(); // Access the store
@@ -495,7 +340,7 @@ export default {
 
           // Check if the product is already in the local wishlist
           const existingIndex = localWishlist.findIndex(
-            item => item.id === product.id
+            (item) => item.id === product.id
           );
           if (existingIndex === -1) {
             const productMod = {
@@ -549,7 +394,7 @@ export default {
     onMounted(() => {
       getTopProducts();
     });
-    const addToCart = async product => {
+    const addToCart = async (product) => {
       console.log(product);
       const userStore = useUserStore();
       let user = userStore.user;
@@ -598,7 +443,7 @@ export default {
       while (repeatedProducts.length < totalItems) {
         repeatedProducts.push(...products);
       }
-      let productImages = products.map(el => {
+      let productImages = products.map((el) => {
         // const { image, name } = el;
         const products = {
           image: el.images[0]?.uploadUrl,
@@ -640,5 +485,9 @@ export default {
 <style>
 .pi-star-fill {
   color: gold;
+}
+
+.custom-carousel-height {
+  height: 100%;
 }
 </style>
