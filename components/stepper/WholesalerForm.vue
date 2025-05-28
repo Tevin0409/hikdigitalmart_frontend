@@ -370,9 +370,8 @@
                   :validateOnValueUpdate="false"
                   :validateOnBlur="true"
                   class="flex-col gap-4"
-                  @submit="() => validateAndProceed($form, activateCallback, 2)"
+                  @submit="(e) => validateAndProceed(e, activateCallback, 2)"
                 >
-                  <!-- Business Type -->
                   <div>
                     <label class="font-bold py-5">
                       Which of the following describes your business well?
@@ -482,12 +481,13 @@
                       label="Back"
                       severity="secondary"
                       icon="pi pi-arrow-left"
+                      type="submit"
                       @click="activateCallback(1)"
                     />
                     <Button
                       label="Next"
                       icon="pi pi-arrow-right"
-                      iconPos="right"
+                      iconPo="right"
                       type="submit"
                     />
                   </div>
@@ -729,6 +729,13 @@ export default {
         address: "",
         password: "",
       },
+      initialBusinessValues: {
+        selectedBusinessType: "",
+        selectedBrands: [],
+        selectedSecurityBrands: [],
+        otherBrand: "",
+      },
+
       wholesalerBusinessInfo: {
         selectedBusinessType: "",
         selectedBrands: [],
@@ -946,6 +953,32 @@ export default {
 
       return { errors };
     },
+    businessResolver({ values }) {
+      const errors = {};
+
+      if (!values.selectedBusinessType) {
+        errors.selectedBusinessType = {
+          message: "Business type is required.",
+        };
+      }
+
+      if (!values.selectedBrands || values.selectedBrands.length === 0) {
+        errors.selectedBrands = {
+          message: "At least one brand is required.",
+        };
+      }
+
+      if (
+        !values.selectedSecurityBrands ||
+        values.selectedSecurityBrands.length === 0
+      ) {
+        errors.selectedSecurityBrands = {
+          message: "At least one security brand is required.",
+        };
+      }
+
+      return { errors };
+    },
     toTitleCase(str) {
       return str
         .replace(/([A-Z])/g, " $1")
@@ -978,26 +1011,7 @@ export default {
         return value !== "";
       });
     },
-    // this.errors = {
-    //   wholesalerPersonalInfo: {
-    //     companyName: "",
-    //     firstName: "",
-    //     lastName: "",
-    //     phoneNumber: "",
-    //     email: "",
-    //     address: "",
-    //   },
-    //   wholesalerBusinessInfo: {
-    //     selectedBusinessType: "",
-    //     selectedBrands: [],
-    //     selectedSecurityBrands: [],
-    //   },
-    //   wholesalerTechnicalInfo: {
-    //     selectedCategories: [],
-    //     hikvisionChallenges: "",
-    //     adviceToSecureDigital: "",
-    //   },
-    // };
+
     validateAndProceed(formContext, activateCallback, currentStep) {
       console.log("Validating step", formContext.valid);
       console.log("Current step:", activateCallback);
