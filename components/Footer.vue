@@ -54,8 +54,8 @@
         <div>
           <h3 class="font-semibold mb-4">Quick Links</h3>
           <ul class="space-y-2 text-sm text-gray-600">
-            <nuxtLink to="/profile"> <li>Your Account</li></nuxtLink>
-            <nuxtLink to="/orders"> <li>Purchase History</li></nuxtLink>
+            <nuxtLink to=""> <li>Your Account</li></nuxtLink>
+            <nuxtLink to=""> <li>Purchase History</li></nuxtLink>
             <li>App Download</li>
             <li>Latest News Blog</li>
             <li>Shipping & Delivery</li>

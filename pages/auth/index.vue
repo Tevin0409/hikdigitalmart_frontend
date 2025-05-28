@@ -37,7 +37,7 @@ definePageMeta({
 // Reactive state
 const isSignup = ref(false);
 const showQuestionnaireVisible = ref(false);
-const showWholesaler = ref(false); // New state for wholesaler form
+const showWholesaler = ref(true); // New state for wholesaler form
 
 // Methods
 const toggleForm = () => {
