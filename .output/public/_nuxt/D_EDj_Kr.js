@@ -1,0 +1,1 @@
+import{_ as o,c,o as t,b as n,bH as _}from"./CoyVHb3q.js";const a={},s={class:"login-layou"};function r(d,l){const e=_;return t(),c("div",s,[n(e)])}const i=o(a,[["render",r],["__scopeId","data-v-8d0ae2df"]]);export{i as default};

@@ -1,0 +1,1 @@
+import{P as o,s as t,n as r}from"./CoyVHb3q.js";const d=o((s,n)=>{console.log("Auth middleware executed");const e=t();if(console.log("Auth middleware",e.isLoggedIn),!e.isLoggedIn)return console.log("User not logged in, redirecting to /auth"),r("/auth")});export{d as default};

@@ -1,0 +1,1 @@
+import{c as a,o,a as e,t}from"./CoyVHb3q.js";const n={__name:"error",props:{error:Object},setup(r){return(s,c)=>(o(),a("div",null,[e("h1",null,"Error: "+t(r.error.statusCode),1),e("p",null,t(r.error.message),1)]))}};export{n as default};
