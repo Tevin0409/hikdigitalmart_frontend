@@ -294,8 +294,9 @@ const products = ref([
 const featuresSIgn = ref([
   {
     icon: "pi pi-cog",
-    title: "Technician",
-    description: "Sign up with us today to enjoy discounted prices.",
+    title: "Technician & Resellers",
+    description:
+      "Sign up with us today and enjoy exclusive dealer prices, priority support, and product training",
   },
   // {
   //   icon: "pi pi-users",
@@ -305,12 +306,14 @@ const featuresSIgn = ref([
   {
     icon: "pi pi-shopping-cart",
     title: "User",
-    description: "Sign up with us today to enjoy discounted prices.",
+    description:
+      " Enjoy exclusive dealer prices, priority support, and Link you with Qualified Installer Near You.",
   },
   {
     icon: "pi pi-user",
     title: "Shop Owner",
-    description: "Sign up with us today to enjoy request quotation.",
+    description:
+      "Register now to request official quotations, access Wholesale discounts, and grow your business with our support",
   },
 ]);
 const features = ref([
