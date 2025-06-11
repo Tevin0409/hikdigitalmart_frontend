@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen flex w-full align-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
+    class="min-h flex w- align-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
     style="
       background-image: url('https://www.sdl.co.ke/assets/images/icons/vector-1.png');
       background-size: cover;
@@ -9,17 +9,18 @@
   >
     <!-- Main Content Container -->
     <div class="flex w-full flex-col items-center justify-center px-4 py-8">
-      <!-- Back Button - Enhanced -->
-      <div class="flex justify-start items-center absolute top-6 left-6 z-10">
-        <a
-          @click="$emit('back-to-signup')"
-          class="flex items-center gap-2 px-4 py-2 text-indigo-600 hover:text-indigo-800 font-medium transition-all duration-200 hover:bg-white/80 rounded-lg backdrop-blur-sm cursor-pointer group"
-        >
-          <i
-            class="pi pi-arrow-left text-lg group-hover:-translate-x-1 transition-transform duration-200"
-          ></i>
-          <span>Back to Signup</span>
-        </a>
+      <div class="relative w-full pb-16">
+        <div class="absolute top-4 left-4 z-10">
+          <Button
+            @click="$emit('back-to-signup')"
+            severity="secondary"
+            text
+            class="flex items-center gap-2 text-primary hover:text-secondary transition-colors duration-200"
+          >
+            <i class="pi pi-arrow-left"></i>
+            <span class="hidden sm:inline">Back to Signup</span>
+          </Button>
+        </div>
       </div>
 
       <!-- Enhanced Main Card -->
