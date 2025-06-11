@@ -33,11 +33,13 @@ export default defineNuxtConfig({
     "~/plugins/formatPrice.js",
     "~/plugins/formatDate.js",
     "~/plugins/error-handler.ts",
+    "~/plugins/pricePlugin.js",
   ],
   modules: [
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
     // "pinia-plugin-persistedstate",
+    // "pinia-plugin-persistedstate/nuxt",
     "@primevue/nuxt-module",
   ],
   primevue: {

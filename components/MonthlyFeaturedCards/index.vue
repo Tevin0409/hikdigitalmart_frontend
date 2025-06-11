@@ -2,14 +2,7 @@
   <div class="lg:flex sm:flex-co items-center">
     <img
       :src="item.image"
-      style="
-         {
-          object-fit: fit;
-          width: 100%;
-          min-height: 160px;
-          min-width: 160px;
-        }
-      "
+      style="object-fit: fit; width: 100%; min-height: 160px; min-width: 160px"
       class="w-40 h-40 object-cover rounded-md"
     />
 

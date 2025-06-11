@@ -18,7 +18,7 @@ export const useUserStore = defineStore("user", {
         accessTokenExpiresAt,
         refreshTokenExpiresAt,
         user,
-      } = response
+      } = response;
       this.user = user;
       this.accessToken = accessToken;
       this.refreshToken = refreshToken;
@@ -134,7 +134,7 @@ export const useUserStore = defineStore("user", {
 
         const response = await $axios.post("/auth/verify", userData);
 
-         const {
+        const {
           accessToken,
           user,
           refreshToken,
@@ -143,14 +143,20 @@ export const useUserStore = defineStore("user", {
         } = response.data;
 
         // const { accessToken, user } = response.data;
-      if (accessToken && user) {
+        if (accessToken && user) {
           this.user = user;
           this.accessToken = accessToken;
           this.refreshToken = refreshToken;
           this.accessTokenExpiresAt = accessTokenExpiresAt;
           this.refreshTokenExpiresAt = refreshTokenExpiresAt;
 
-          return { accessToken, user, refreshToken, refreshTokenExpiresAt, accessTokenExpiresAt };
+          return {
+            accessToken,
+            user,
+            refreshToken,
+            refreshTokenExpiresAt,
+            accessTokenExpiresAt,
+          };
         } else {
           throw new Error("Registration failed.");
         }
@@ -158,56 +164,62 @@ export const useUserStore = defineStore("user", {
         throw new Error(error.response?.data?.error?.message || "Invalid OTP.");
       }
     },
-    async updateUser(user, id){
+    async updateUser(user, id) {
       try {
         const { $axios } = useNuxtApp();
-        
+
         const response = await $axios.put(`user/update-user/${id}`, user);
         return response;
-      }catch (error) {
+      } catch (error) {
         throw new Error(error.response?.data?.error?.message);
-      }  
+      }
     },
-   async updatePassword(password){
+    async updatePassword(password) {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.post(`auth/change-password`, password);
         return response;
-      }catch (error) {
+      } catch (error) {
         throw new Error(error.response?.data?.error?.message);
-      }  
+      }
     },
-  async resetPassword(resetPassDTO) {
-  try {
-    const { $axios } = useNuxtApp();
-    
-    const response = await $axios.post("/auth/reset-password", resetPassDTO);
+    async resetPassword(resetPassDTO) {
+      try {
+        const { $axios } = useNuxtApp();
 
-    console.log(response, "success")
-    // const {
-    //   accessToken,
-    //   user,
-    //   refreshToken,
-    //   refreshTokenExpiresAt,
-    //   accessTokenExpiresAt,
-    // } = response.data;
+        const response = await $axios.post(
+          "/auth/reset-password",
+          resetPassDTO
+        );
 
-    // if (accessToken && user) {
-    //   this.user = user;
-    //   this.accessToken = accessToken;
-    //   this.refreshToken = refreshToken;
-    //   this.accessTokenExpiresAt = accessTokenExpiresAt;
-    //   this.refreshTokenExpiresAt = refreshTokenExpiresAt;
+        console.log(response, "success");
+        // const {
+        //   accessToken,
+        //   user,
+        //   refreshToken,
+        //   refreshTokenExpiresAt,
+        //   accessTokenExpiresAt,
+        // } = response.data;
 
-    //   return { accessToken, user, refreshToken, refreshTokenExpiresAt, accessTokenExpiresAt };
-    // } else {
-    //   throw new Error("Password reset failed.");
-    // }
-    return response
-  } catch (error) {
-    throw new Error(error.response?.data?.error?.message || "Invalid OTP or password reset failed.");
-  }
-},
+        // if (accessToken && user) {
+        //   this.user = user;
+        //   this.accessToken = accessToken;
+        //   this.refreshToken = refreshToken;
+        //   this.accessTokenExpiresAt = accessTokenExpiresAt;
+        //   this.refreshTokenExpiresAt = refreshTokenExpiresAt;
+
+        //   return { accessToken, user, refreshToken, refreshTokenExpiresAt, accessTokenExpiresAt };
+        // } else {
+        //   throw new Error("Password reset failed.");
+        // }
+        return response;
+      } catch (error) {
+        throw new Error(
+          error.response?.data?.error?.message ||
+            "Invalid OTP or password reset failed."
+        );
+      }
+    },
 
     logout() {
       // Clear user and accessToken data from the store
@@ -240,10 +252,11 @@ export const useUserStore = defineStore("user", {
   },
 
   getters: {
-    isLoggedIn: state => state.accessToken !== null,
+    isLoggedIn: (state) => state.accessToken !== null,
   },
+  persist: true,
 
-  persist: {
-    storage: typeof window !== "undefined" ? localStorage : undefined,
-  },
+  // persist: {
+  //   storage: typeof window !== "undefined" ? localStorage : undefined,
+  // },
 });

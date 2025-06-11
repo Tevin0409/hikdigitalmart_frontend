@@ -105,18 +105,25 @@
         <h4 class="text-primary font-bold">HOT DEALS</h4>
         <p class="text-gray-600 text-sm">Updated Daily</p>
       </div>
-      <div
-        class="bg-primary text-white text-center p-6 rounded-lg max-w-md mx-auto"
+      <a
+        href="https://wa.me/254727909060"
+        target="_blank"
+        rel="noopener"
+        class="block no-underline"
       >
-        <p class="font-bold text-lg md:text-xl">CALL OR WHATSAPP</p>
-        <p
-          class="text-xl md:text-sm font-bold flex items-center justify-center gap-2"
+        <div
+          class="bg-primary text-white text-center p-6 rounded-lg max-w-md mx-auto hover:cursor-pointer"
         >
-          <i class="pi pi-whatsapp text-md md:text-2xl"></i>
-          +254 727 909 060
-        </p>
-        <p class="text-sm md:text-base">TO ORDER</p>
-      </div>
+          <p class="font-bold text-lg md:text-xl">CALL OR WHATSAPP</p>
+          <p
+            class="text-xl md:text-sm font-bold flex items-center justify-center gap-2"
+          >
+            <i class="pi pi-whatsapp text-md md:text-2xl"></i>
+            +254 727 909 060
+          </p>
+          <p class="text-sm md:text-base">TO ORDER</p>
+        </div>
+      </a>
     </div>
   </div>
 </template>
@@ -153,11 +160,11 @@ const iconMap = {
 
 const hoveredCategory = ref(""); // Stores the category name on hover
 
-const getIcon = name => {
+const getIcon = (name) => {
   return iconMap[name] || "pi pi-question"; // Default icon if no match
 };
 
-const fetchProducts = async category => {
+const fetchProducts = async (category) => {
   return;
   const { $axios } = useNuxtApp();
   try {

@@ -30,7 +30,7 @@
                   alt=" "
                   class="object-cover rounded"
                   style="
-                    max-width: 100% !important;
+                    max-width: 10% !important;
                     min-height: 210px !important;
                     max-height: 100px !important;
                     width: 100% !important;

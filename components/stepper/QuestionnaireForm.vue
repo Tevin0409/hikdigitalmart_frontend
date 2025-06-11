@@ -1,667 +1,1046 @@
 <template>
   <div
-    class="flex w-full align-center justify-center"
+    class="min-h-screen flex w-full align-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
     style="
       background-image: url('https://www.sdl.co.ke/assets/images/icons/vector-1.png');
+      background-size: cover;
+      background-position: center;
     "
   >
-    <div class="flex w-full flex-col items-center justify-center">
-      <div class="flex justify-center items-center absolute top-16 left-8">
+    <!-- Main Content Container -->
+    <div class="flex w-full flex-col items-center justify-center px-4 py-8">
+      <!-- Back Button - Enhanced -->
+      <div class="flex justify-start items-center absolute top-6 left-6 z-10">
         <a
           @click="$emit('back-to-signup')"
-          class="text-primary text-md cursor-pointer hover:text-secondary"
+          class="flex items-center gap-2 px-4 py-2 text-indigo-600 hover:text-indigo-800 font-medium transition-all duration-200 hover:bg-white/80 rounded-lg backdrop-blur-sm cursor-pointer group"
         >
           <i
-            class="pi pi-arrow-left text-primary pr-2 hover:text-secondary"
-            style=""
+            class="pi pi-arrow-left text-lg group-hover:-translate-x-1 transition-transform duration-200"
           ></i>
-          Back to Signup</a
-        >
+          <span>Back to Signup</span>
+        </a>
       </div>
-      <div class="border shadow-xl mt-36 p-6 lg:ml-16 rounded-xl bg-white">
-        <Stepper v-model:value="activeStep" class="">
-          <StepList>
-            <Step
-              v-slot="{ activateCallback, value, a11yAttrs }"
-              asChild
-              :value="1"
+
+      <!-- Enhanced Main Card -->
+      <div class="w-full max-w-5xl mt-20">
+        <div
+          class="bg-white/95 backdrop-blur-lg border border-white/20 shadow-2xl rounded-3xl p-8 lg:p-12 relative overflow-hidden"
+        >
+          <!-- Decorative Elements -->
+          <div
+            class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full -translate-y-16 translate-x-16"
+          ></div>
+          <div
+            class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-500/10 to-cyan-500/10 rounded-full translate-y-12 -translate-x-12"
+          ></div>
+
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <h1
+              class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3"
             >
-              <div
-                class="flex flex-row flex-auto gap-2"
-                v-bind="a11yAttrs.root"
+              Partner Registration
+            </h1>
+            <p class="text-gray-600 text-lg">
+              Join our network of trusted security professionals
+            </p>
+          </div>
+
+          <Stepper v-model:value="activeStep" class="relative">
+            <!-- Enhanced Step List -->
+            <StepList class="mb-8">
+              <Step
+                v-slot="{ activateCallback, value, a11yAttrs }"
+                asChild
+                :value="1"
               >
-                <button
-                  class="bg-transparent border-0 inline-flex flex-col gap-2"
-                  @click="activateCallback"
-                  v-bind="a11yAttrs.header"
-                >
-                  <span
-                    :class="[
-                      'rounded-full border-2 w-12 h-12 inline-flex items-center justify-center',
-                      {
-                        'bg-primary text-primary-contrast border-primary':
-                          value <= activeStep,
-                        'border-surface-200 dark:border-surface-700':
-                          value > activeStep,
-                      },
-                    ]"
-                  >
-                    <i class="pi pi-building" />
-                  </span>
-                </button>
-                <Divider />
-              </div>
-            </Step>
-            <Step
-              v-slot="{ activateCallback, value, a11yAttrs }"
-              asChild
-              :value="2"
-            >
-              <div
-                class="flex flex-row flex-auto gap-2 pl-2"
-                v-bind="a11yAttrs.root"
-              >
-                <button
-                  class="bg-transparent border-0 inline-flex flex-col gap-2"
-                  @click="activateCallback"
-                  v-bind="a11yAttrs.header"
-                >
-                  <span
-                    :class="[
-                      'rounded-full border-2 w-12 h-12 inline-flex items-center justify-center',
-                      {
-                        'bg-primary text-primary-contrast border-primary':
-                          value <= activeStep,
-                        'border-surface-200 dark:border-surface-700':
-                          value > activeStep,
-                      },
-                    ]"
-                  >
-                    <i class="pi pi-cog" />
-                  </span>
-                </button>
-                <Divider />
-              </div>
-            </Step>
-            <Step
-              v-slot="{ activateCallback, value, a11yAttrs }"
-              asChild
-              :value="3"
-            >
-              <div class="flex flex-row pl-2" v-bind="a11yAttrs.root">
-                <button
-                  class="bg-transparent border-0 inline-flex flex-col gap-2"
-                  @click="activateCallback"
-                  v-bind="a11yAttrs.header"
-                >
-                  <span
-                    :class="[
-                      'rounded-full border-2 w-12 h-12 inline-flex items-center justify-center',
-                      {
-                        'bg-primary text-primary-contrast border-primary':
-                          value <= activeStep,
-                        'border-surface-200 dark:border-surface-700':
-                          value > activeStep,
-                      },
-                    ]"
-                  >
-                    <i class="pi pi-question-circle" />
-                  </span>
-                </button>
-                <Divider />
-              </div>
-            </Step>
-            <Step
-              v-slot="{ activateCallback, value, a11yAttrs }"
-              asChild
-              :value="4"
-            >
-              <div class="flex flex-row pl-2" v-bind="a11yAttrs.root">
-                <button
-                  class="bg-transparent border-0 inline-flex flex-col gap-2"
-                  @click="activateCallback"
-                  v-bind="a11yAttrs.header"
-                >
-                  <span
-                    :class="[
-                      'rounded-full border-2 w-12 h-12 inline-flex items-center justify-center',
-                      {
-                        'bg-primary text-primary-contrast border-primary':
-                          value <= activeStep,
-                        'border-surface-200 dark:border-surface-700':
-                          value > activeStep,
-                      },
-                    ]"
-                  >
-                    <i class="pi pi-check-circle" />
-                  </span>
-                </button>
-              </div>
-            </Step>
-          </StepList>
-
-          <StepPanels>
-            <StepPanel v-slot="{ activateCallback }" :value="1">
-              <div class="flex flex-col gap-4 mx-auto" style="min-width: 40vw">
-                <div class="text-center mt-4 mb-4 text-xl font-semibold">
-                  Section 1: Business Identification
-                </div>
-
-                <!-- Form Fields for Section 1 -->
-                <div class="flex gap-4">
-                  <div class="field w-1/2">
-                    <label for="firstName" class="font-bold">First Name</label>
-                    <InputText
-                      id="firstName"
-                      v-model="firstName"
-                      type="text"
-                      placeholder="Enter first name"
-                      class="w-full"
-                    />
-                    <small v-if="errors.firstName" class="text-red-500">
-                      {{ errors.firstName }}
-                    </small>
-                  </div>
-
-                  <div class="field w-1/2">
-                    <label for="lastName" class="font-bold">Last Name</label>
-                    <InputText
-                      id="lastName"
-                      v-model="lastName"
-                      type="text"
-                      placeholder="Enter last name"
-                      class="w-full"
-                    />
-                    <small v-if="errors.lastName" class="text-red-500">
-                      {{ errors.lastName }}
-                    </small>
-                  </div>
-                </div>
-
-                <div class="flex gap-4">
-                  <div class="field w-1/2">
-                    <label for="phoneNumber" class="font-bold"
-                      >Phone Number</label
-                    >
-                    <InputText
-                      id="phoneNumber"
-                      v-model="phoneNumber"
-                      type="tel"
-                      placeholder="Enter phone number"
-                      class="w-full"
-                    />
-                    <small v-if="errors.phoneNumber" class="text-red-500">
-                      {{ errors.phoneNumber }}
-                    </small>
-                  </div>
-
-                  <div class="field w-1/2">
-                    <label for="email" class="font-bold">Email Address</label>
-                    <InputText
-                      id="email"
-                      v-model="email"
-                      type="email"
-                      placeholder="Enter email address"
-                      class="w-full"
-                    />
-                    <small v-if="errors.email" class="text-red-500">
-                      {{ errors.email }}
-                    </small>
-                  </div>
-                </div>
-
-                <div class="flex gap-4">
-                  <div class="field w-1/2">
-                    <label for="businessName" class="font-bold"
-                      >Business/Company Name</label
-                    >
-                    <InputText
-                      id="businessName"
-                      v-model="businessName"
-                      type="text"
-                      placeholder="Enter business name"
-                      class="w-full"
-                    />
-                    <small v-if="errors.businessName" class="text-red-500">
-                      {{ errors.businessName }}
-                    </small>
-                  </div>
-
-                  <div class="field w-1/2">
-                    <label for="location" class="font-bold"
-                      >Business Location</label
-                    >
-                    <InputText
-                      id="location"
-                      v-model="location"
-                      type="text"
-                      placeholder="City, State, Country"
-                      class="w-full"
-                    />
-                    <small v-if="errors.location" class="text-red-500">
-                      {{ errors.location }}
-                    </small>
-                  </div>
-                </div>
-
-                <!-- Business Type Section -->
-                <div class="flex flex-col gap-4">
-                  <div class="font-bold mb-2">Business Type</div>
-                  <div class="flex flex-wrap gap-4">
-                    <div
-                      v-for="category in businessCategories"
-                      :key="category.key"
-                      class="flex items-center gap-2"
-                    >
-                      <RadioButton
-                        v-model="businessType"
-                        :inputId="category.key"
-                        name="businessType"
-                        :value="category.key"
-                      />
-                      <label :for="category.key">{{ category.name }}</label>
-                    </div>
-                    <small v-if="errors.businessType" class="text-red-500">
-                      {{ errors.businessType }}
-                    </small>
-                  </div>
-                </div>
-
-                <!-- Years of Experience Section -->
-                <div>
-                  <div class="font-bold mb-2">Years of Experience</div>
-                  <div class="flex flex-wrap gap-4">
-                    <div
-                      v-for="category in yearExperiences"
-                      :key="category.key"
-                      class="flex items-center gap-2"
-                    >
-                      <RadioButton
-                        v-model="experienceYears"
-                        :inputId="category.key"
-                        name="experienceYears"
-                        :value="category.key"
-                      />
-                      <label :for="category.key">{{ category.name }}</label>
-                    </div>
-                    <small v-if="errors.experienceYears" class="text-red-500">
-                      {{ errors.experienceYears }}
-                    </small>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="flex pt-6 justify-end"
-                style="max-width: 800px; margin: 0 auto"
-              >
-                <Button
-                  label="Next"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  @click="validateAndProceed(activateCallback, 1)"
-                />
-              </div>
-            </StepPanel>
-
-            <StepPanel
-              v-slot="{ activateCallback }"
-              :value="2"
-              style="min-width: 40vw"
-            >
-              <div class="flex flex-col gap-4">
-                <div class="text-center mt-4 mb-4 text-xl font-semibold">
-                  Section 2: Technical Experience
-                </div>
-
-                <!-- Experience Areas (Checkboxes) -->
-                <div>
-                  <label class="font-bold py-5">
-                    Which of the following areas do you have experience with?
-                  </label>
-                  <div
-                    v-for="category of experienceAreasList"
-                    :key="category.key"
-                    class="flex items-center gap-2"
-                  >
-                    <Checkbox
-                      v-model="experienceAreas"
-                      :inputId="category.key"
-                      name="category"
-                      :value="category.name"
-                    />
-                    <label :for="category.key">{{ category.name }}</label>
-                  </div>
-                  <p v-if="experienceAreasError" class="text-red-500">
-                    Please select at least one area of experience.
-                  </p>
-                </div>
-
-                <!-- Brands Worked With (Checkboxes) -->
-                <div>
-                  <label class="font-bold pb-3">
-                    Which brands have you primarily worked with?
-                  </label>
-                  <div
-                    v-for="category of brandsWorkedWithList"
-                    :key="category.key"
-                    class="flex items-center gap-2"
-                  >
-                    <Checkbox
-                      v-model="brandsWorkedWith"
-                      :inputId="category.key"
-                      name="category"
-                      :value="category.key"
-                    />
-                    <label :for="category.key">{{ category.name }}</label>
-                  </div>
-                  <InputText
-                    v-if="brandsWorkedWith.includes('Other')"
-                    id="purchaseSource"
-                    v-model="purchaseSource"
-                    type="text"
-                    placeholder="Please Specify ..."
-                    class="w-full mt-4"
-                  />
-                  <p v-if="brandsWorkedWithError" class="text-red-500">
-                    Please select at least one brand.
-                  </p>
-                </div>
-
-                <!-- Integration Experience (Radio Buttons) -->
-                <div class="field">
-                  <label class="font-bold pb-3">
-                    Do you have experience integrating security systems into
-                    larger solutions?
-                  </label>
-                  <div
-                    v-for="category in integrationExperienceList"
-                    :key="category.key"
-                    class="flex items-center gap-2"
-                  >
-                    <RadioButton
-                      v-model="integrationExperience"
-                      :inputId="category.key"
-                      name="integrationExperience"
-                      :value="category.name"
-                    />
-                    <label :for="category.key">{{ category.name }}</label>
-                  </div>
-                  <p v-if="integrationExperienceError" class="text-red-500">
-                    Please select an option.
-                  </p>
-                </div>
-
-                <!-- Familiar with Standards (Radio Buttons) -->
-                <div class="field">
-                  <label class="font-bold pb-3">
-                    Are you familiar with Hikvision product certifications and
-                    installation standards?
-                  </label>
-                  <div
-                    v-for="category in familiarWithStandards"
-                    :key="category.key"
-                    class="flex items-center gap-2"
-                  >
-                    <RadioButton
-                      v-model="familiarWithStandard"
-                      :inputId="category.key"
-                      name="familiarWithStandard"
-                      :value="category.name"
-                    />
-                    <label :for="category.key">{{ category.name }}</label>
-                  </div>
-                  <p v-if="familiarWithStandardError" class="text-red-500">
-                    Please select an option.
-                  </p>
-                </div>
-              </div>
-
-              <!-- Navigation Buttons -->
-              <div class="flex pt-6 justify-between">
-                <Button
-                  label="Back"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                  @click="activateCallback(1)"
-                />
-                <Button
-                  label="Next"
-                  icon="pi pi-arrow-right"
-                  iconPos="right"
-                  @click="validateAndProceed(activateCallback, 2)"
-                />
-              </div>
-            </StepPanel>
-            <StepPanel
-              v-slot="{ activateCallback }"
-              :value="3"
-              style="min-width: 40vw"
-            >
-              <div class="flex flex-col gap-4">
-                <div class="text-center mt-4 mb-4 text-xl font-semibold">
-                  Section 3: Technical Questions
-                </div>
-
-                <!-- Where do you purchase security products -->
-                <div class="field">
-                  <label for="purchaseSource" class="font-bold pb-3">
-                    Where do you currently purchase your security products?
-                    (Please select all that apply and provide details for each
-                    category)
-                  </label>
-                  <div
-                    v-for="category in wherePurchase"
-                    :key="category.key"
-                    class="flex items-center gap-2"
-                  >
-                    <Checkbox
-                      v-model="purchaseSource"
-                      :inputId="category.key"
-                      name="purchaseSource"
-                      :value="category.name"
-                    />
-                    <label :for="category.key">{{ category.name }}</label>
-                  </div>
-                  <p v-if="purchaseError" class="text-red-500">
-                    Please select an option.
-                  </p>
-                </div>
-
-                <!-- Purchase Hikvision products -->
-                <div class="field">
-                  <label class="font-bold pb-3">
-                    Do you currently purchase Hikvision products?
-                  </label>
-                  <div
-                    v-for="category in options"
-                    :key="category.key"
-                    class="flex items-center gap-2"
-                  >
-                    <RadioButton
-                      v-model="purchaseHikvision"
-                      :inputId="category.key"
-                      name="purchaseHikvision"
-                      :value="category.name"
-                    />
-                    <label :for="category.key">{{ category.name }}</label>
-                  </div>
-                  <p v-if="currentlyPurchaseError" class="text-red-500">
-                    Please select an option.
-                  </p>
-                </div>
-
-                <!-- Textarea fields with validation -->
                 <div
-                  v-for="field in textareaFields"
-                  :key="field.id"
-                  class="field"
+                  class="flex flex-row flex-auto gap-2 items-center"
+                  v-bind="a11yAttrs.root"
                 >
-                  <label class="font-bold pb-3">
-                    <span v-html="field.label"></span>
-                  </label>
-                  <IftaLabel class="mt-4">
-                    <Textarea
-                      :id="field.id"
-                      v-model="formData[field.model]"
-                      rows="5"
-                      cols="30"
-                      style="resize: none"
-                      class="w-full"
-                    />
-                    <label :for="field.id">Summary</label>
-                  </IftaLabel>
-                  <p v-if="errors[field.model]" class="text-red-500">
-                    {{ errors[field.model] }}
-                  </p>
+                  <button
+                    class="bg-transparent border-0 inline-flex flex-col gap-3 items-center transition-all duration-300 hover:scale-105"
+                    @click="activateCallback"
+                    v-bind="a11yAttrs.header"
+                  >
+                    <span
+                      :class="[
+                        'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
+                        {
+                          'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-indigo-200':
+                            value <= activeStep,
+                          'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
+                            value > activeStep,
+                        },
+                      ]"
+                    >
+                      <i class="pi pi-building text-xl" />
+                    </span>
+                    <span
+                      class="text-sm font-medium text-gray-600 hidden sm:block"
+                      >Business Info</span
+                    >
+                  </button>
+                  <Divider class="flex-1 mx-4" />
                 </div>
-              </div>
+              </Step>
 
-              <!-- Navigation Buttons -->
-              <div class="flex pt-6 justify-between">
-                <Button
-                  label="Back"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                  @click="activateCallback(2)"
-                />
-                <Button
-                  label="Submit"
-                  icon="pi pi-check"
-                  iconPos="right"
-                  @click="handleSubmit(activateCallback)"
-                />
-              </div>
-            </StepPanel>
-
-            <StepPanel v-slot="{ activateCallback }" :value="4">
-              <div
-                class="flex flex-col gap-4 mx-auto w-full max-w-lg min-h-[20rem]"
+              <Step
+                v-slot="{ activateCallback, value, a11yAttrs }"
+                asChild
+                :value="2"
               >
-                <div class="text-center mt-4 mb-4 text-sm font-semibold">
-                  <div class="p-6 rounded-lg shadow-md">
-                    Thank You!
-                    <p class="text-gray-700">
-                      Your application will undergo a thorough review. Upon
-                      successful verification, you will gain access to:
+                <div
+                  class="flex flex-row flex-auto gap-2 items-center pl-2"
+                  v-bind="a11yAttrs.root"
+                >
+                  <button
+                    class="bg-transparent border-0 inline-flex flex-col gap-3 items-center transition-all duration-300 hover:scale-105"
+                    @click="activateCallback"
+                    v-bind="a11yAttrs.header"
+                  >
+                    <span
+                      :class="[
+                        'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
+                        {
+                          'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-indigo-200':
+                            value <= activeStep,
+                          'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
+                            value > activeStep,
+                        },
+                      ]"
+                    >
+                      <i class="pi pi-cog text-xl" />
+                    </span>
+                    <span
+                      class="text-sm font-medium text-gray-600 hidden sm:block"
+                      >Experience</span
+                    >
+                  </button>
+                  <Divider class="flex-1 mx-4" />
+                </div>
+              </Step>
+
+              <Step
+                v-slot="{ activateCallback, value, a11yAttrs }"
+                asChild
+                :value="3"
+              >
+                <div
+                  class="flex flex-row flex-auto gap-2 items-center pl-2"
+                  v-bind="a11yAttrs.root"
+                >
+                  <button
+                    class="bg-transparent border-0 inline-flex flex-col gap-3 items-center transition-all duration-300 hover:scale-105"
+                    @click="activateCallback"
+                    v-bind="a11yAttrs.header"
+                  >
+                    <span
+                      :class="[
+                        'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
+                        {
+                          'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-indigo-200':
+                            value <= activeStep,
+                          'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
+                            value > activeStep,
+                        },
+                      ]"
+                    >
+                      <i class="pi pi-question-circle text-xl" />
+                    </span>
+                    <span
+                      class="text-sm font-medium text-gray-600 hidden sm:block"
+                      >Questions</span
+                    >
+                  </button>
+                  <Divider class="flex-1 mx-4" />
+                </div>
+              </Step>
+
+              <Step
+                v-slot="{ activateCallback, value, a11yAttrs }"
+                asChild
+                :value="4"
+              >
+                <div
+                  class="flex flex-row items-center pl-2"
+                  v-bind="a11yAttrs.root"
+                >
+                  <button
+                    class="bg-transparent border-0 inline-flex flex-col gap-3 items-center transition-all duration-300 hover:scale-105"
+                    @click="activateCallback"
+                    v-bind="a11yAttrs.header"
+                  >
+                    <span
+                      :class="[
+                        'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
+                        {
+                          'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-transparent shadow-green-200':
+                            value <= activeStep,
+                          'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
+                            value > activeStep,
+                        },
+                      ]"
+                    >
+                      <i class="pi pi-check-circle text-xl" />
+                    </span>
+                    <span
+                      class="text-sm font-medium text-gray-600 hidden sm:block"
+                      >Complete</span
+                    >
+                  </button>
+                </div>
+              </Step>
+            </StepList>
+
+            <StepPanels>
+              <!-- Step 1: Business Identification -->
+              <StepPanel v-slot="{ activateCallback }" :value="1">
+                <div class="space-y-6">
+                  <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                      Business Identification
+                    </h2>
+                    <p class="text-gray-600">
+                      Tell us about your business and experience
                     </p>
+                  </div>
 
-                    <ul class="list-disc text-left pl-5 text-gray-700 mt-3">
-                      <li><strong>Reseller Pricing</strong></li>
-                      <li>
-                        <strong
-                          >Comprehensive Marketing and Technical
-                          Resources</strong
+                  <!-- Personal Information Card -->
+                  <div
+                    class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-user text-indigo-600"></i>
+                      Personal Information
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div class="space-y-2">
+                        <label
+                          for="firstName"
+                          class="font-semibold text-gray-700"
+                          >First Name</label
                         >
-                      </li>
-                      <li><strong>Product and Business Support</strong></li>
-                    </ul>
+                        <InputText
+                          id="firstName"
+                          v-model="firstName"
+                          type="text"
+                          placeholder="Enter first name"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.firstName"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.firstName }}
+                        </small>
+                      </div>
 
-                    <p class="text-gray-700 mt-4">
-                      For any inquiries or further assistance, please do not
-                      hesitate to contact us:
-                    </p>
+                      <div class="space-y-2">
+                        <label
+                          for="lastName"
+                          class="font-semibold text-gray-700"
+                          >Last Name</label
+                        >
+                        <InputText
+                          id="lastName"
+                          v-model="lastName"
+                          type="text"
+                          placeholder="Enter last name"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.lastName"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.lastName }}
+                        </small>
+                      </div>
 
-                    <div class="bg-white p-4 rounded-lg shadow mt-4">
-                      <p class="text-gray-800 font-semibold">
-                        📧 Email:
-                        <a
-                          href="mailto:sdl@hikvisionkenya.com"
-                          class="text-blue-600 hover:underline"
-                          >sdl@hikvisionkenya.com</a
+                      <div class="space-y-2">
+                        <label
+                          for="phoneNumber"
+                          class="font-semibold text-gray-700"
+                          >Phone Number</label
                         >
-                      </p>
-                      <p class="text-gray-800 font-semibold">
-                        📞 Phone:
-                        <a
-                          href="tel:+254727909060"
-                          class="text-blue-600 hover:underline"
-                          >+254 727 909 060</a
+                        <InputText
+                          id="phoneNumber"
+                          v-model="phoneNumber"
+                          type="tel"
+                          placeholder="Enter phone number"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.phoneNumber"
+                          class="text-red-500 flex items-center gap-1"
                         >
-                      </p>
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.phoneNumber }}
+                        </small>
+                      </div>
+
+                      <div class="space-y-2">
+                        <label for="email" class="font-semibold text-gray-700"
+                          >Email Address</label
+                        >
+                        <InputText
+                          id="email"
+                          v-model="email"
+                          type="email"
+                          placeholder="Enter email address"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.email"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.email }}
+                        </small>
+                      </div>
+                      <div class="space-y-2">
+                        <label for="email" class="font-semibold text-gray-700"
+                          >Password</label
+                        >
+                        <InputText
+                          id="password"
+                          v-model="password"
+                          type="email"
+                          placeholder="Enter password"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.password"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.password }}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Business Information Card -->
+                  <div
+                    class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border border-purple-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-building text-purple-600"></i>
+                      Business Information
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div class="space-y-2">
+                        <label
+                          for="businessName"
+                          class="font-semibold text-gray-700"
+                          >Business/Company Name</label
+                        >
+                        <InputText
+                          id="businessName"
+                          v-model="businessName"
+                          type="text"
+                          placeholder="Enter business name"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-purple-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.businessName"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.businessName }}
+                        </small>
+                      </div>
+
+                      <div class="space-y-2">
+                        <label
+                          for="location"
+                          class="font-semibold text-gray-700"
+                          >Business Location</label
+                        >
+                        <InputText
+                          id="location"
+                          v-model="location"
+                          type="text"
+                          placeholder="City, State, Country"
+                          class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-purple-400 transition-colors"
+                        />
+                        <small
+                          v-if="errors.location"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors.location }}
+                        </small>
+                      </div>
                     </div>
 
-                    <p class="text-gray-700 mt-6">
-                      We look forward to the opportunity to collaborate with
-                      you.
-                    </p>
-
-                    <hr class="my-4 border-gray-300" />
-
-                    <p class="text-gray-800 font-bold">Best regards,</p>
-                    <p class="text-gray-700">
-                      Secure Digital Limited | Hik Digital Mart Limited
-                    </p>
-                    <p class="text-gray-700 font-semibold">
-                      SDLKenya Online Shop Administration Department
-                    </p>
-
-                    <div class="bg-white p-4 rounded-lg shadow mt-4">
-                      <p class="text-gray-800 font-semibold">
-                        📧 Email:
-                        <a
-                          href="mailto:sdl@hikvisionkenya.com"
-                          class="text-blue-600 hover:underline"
-                          >sdl@hikvisionkenya.com</a
+                    <!-- Business Type -->
+                    <div class="space-y-4">
+                      <h4 class="font-semibold text-gray-700">Business Type</h4>
+                      <div
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"
+                      >
+                        <div
+                          v-for="category in businessCategories"
+                          :key="category.key"
+                          class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition-colors cursor-pointer"
+                          @click="businessType = category.key"
                         >
-                      </p>
-                      <p class="text-gray-800 font-semibold">
-                        📞 Phone:
-                        <a
-                          href="tel:+254727909060"
-                          class="text-blue-600 hover:underline"
-                          >+254 727 909 060</a
+                          <RadioButton
+                            v-model="businessType"
+                            :inputId="category.key"
+                            name="businessType"
+                            :value="category.key"
+                            class="text-purple-600"
+                          />
+                          <label
+                            :for="category.key"
+                            class="cursor-pointer font-medium"
+                            >{{ category.name }}</label
+                          >
+                        </div>
+                      </div>
+                      <small
+                        v-if="errors.businessType"
+                        class="text-red-500 flex items-center gap-1"
+                      >
+                        <i class="pi pi-exclamation-triangle"></i>
+                        {{ errors.businessType }}
+                      </small>
+                    </div>
+
+                    <!-- Years of Experience -->
+                    <div class="space-y-4 mt-6">
+                      <h4 class="font-semibold text-gray-700">
+                        Years of Experience
+                      </h4>
+                      <div
+                        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
+                      >
+                        <div
+                          v-for="category in yearExperiences"
+                          :key="category.key"
+                          class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-purple-300 transition-colors cursor-pointer"
+                          @click="experienceYears = category.key"
                         >
-                      </p>
+                          <RadioButton
+                            v-model="experienceYears"
+                            :inputId="category.key"
+                            name="experienceYears"
+                            :value="category.key"
+                            class="text-purple-600"
+                          />
+                          <label
+                            :for="category.key"
+                            class="cursor-pointer font-medium"
+                            >{{ category.name }}</label
+                          >
+                        </div>
+                      </div>
+                      <small
+                        v-if="errors.experienceYears"
+                        class="text-red-500 flex items-center gap-1"
+                      >
+                        <i class="pi pi-exclamation-triangle"></i>
+                        {{ errors.experienceYears }}
+                      </small>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="flex pt-6 justify-between">
-                <Button
-                  label="Back"
-                  severity="secondary"
-                  icon="pi pi-arrow-left"
-                  @click="activateCallback(3)"
-                />
-              </div>
-            </StepPanel>
-          </StepPanels>
-        </Stepper>
+
+                <div class="flex pt-8 justify-end">
+                  <Button
+                    label="Continue"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 border-0 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    @click="validateAndProceed(activateCallback, 1)"
+                  />
+                </div>
+              </StepPanel>
+
+              <!-- Step 2: Technical Experience -->
+              <StepPanel v-slot="{ activateCallback }" :value="2">
+                <div class="space-y-6">
+                  <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                      Technical Experience
+                    </h2>
+                    <p class="text-gray-600">
+                      Share your technical expertise and background
+                    </p>
+                  </div>
+
+                  <!-- Experience Areas -->
+                  <div
+                    class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border border-green-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-star text-green-600"></i>
+                      Areas of Experience
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      Which of the following areas do you have experience with?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div
+                        v-for="category of experienceAreasList"
+                        :key="category.key"
+                        class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-green-300 transition-colors cursor-pointer"
+                        @click="toggleExperienceArea(category.name)"
+                      >
+                        <Checkbox
+                          v-model="experienceAreas"
+                          :inputId="category.key"
+                          name="category"
+                          :value="category.name"
+                          class="text-green-600"
+                        />
+                        <label
+                          :for="category.key"
+                          class="cursor-pointer font-medium"
+                          >{{ category.name }}</label
+                        >
+                      </div>
+                    </div>
+                    <p
+                      v-if="experienceAreasError"
+                      class="text-red-500 mt-3 flex items-center gap-1"
+                    >
+                      <i class="pi pi-exclamation-triangle"></i>
+                      Please select at least one area of experience.
+                    </p>
+                  </div>
+
+                  <!-- Brands Worked With -->
+                  <div
+                    class="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-tags text-orange-600"></i>
+                      Brand Experience
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      Which brands have you primarily worked with?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div
+                        v-for="category of brandsWorkedWithList"
+                        :key="category.key"
+                        class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-orange-300 transition-colors cursor-pointer"
+                        @click="toggleBrandExperience(category.key)"
+                      >
+                        <Checkbox
+                          v-model="brandsWorkedWith"
+                          :inputId="category.key"
+                          name="category"
+                          :value="category.key"
+                          class="text-orange-600"
+                        />
+                        <label
+                          :for="category.key"
+                          class="cursor-pointer font-medium"
+                          >{{ category.name }}</label
+                        >
+                      </div>
+                    </div>
+                    <InputText
+                      v-if="brandsWorkedWith.includes('Other')"
+                      id="otherBrand"
+                      v-model="otherBrandSpecification"
+                      type="text"
+                      placeholder="Please specify other brands..."
+                      class="w-full mt-4 p-3 rounded-xl border-2 border-gray-200 focus:border-orange-400 transition-colors"
+                    />
+                    <p
+                      v-if="brandsWorkedWithError"
+                      class="text-red-500 mt-3 flex items-center gap-1"
+                    >
+                      <i class="pi pi-exclamation-triangle"></i>
+                      Please select at least one brand.
+                    </p>
+                  </div>
+
+                  <!-- Integration Experience -->
+                  <div
+                    class="bg-gradient-to-r from-cyan-50 to-blue-50 rounded-2xl p-6 border border-cyan-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-sitemap text-cyan-600"></i>
+                      Integration & Standards
+                    </h3>
+
+                    <div class="space-y-6">
+                      <div>
+                        <p class="text-gray-600 mb-4">
+                          Do you have experience integrating security systems
+                          into larger solutions?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div
+                            v-for="category in integrationExperienceList"
+                            :key="category.key"
+                            class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-cyan-300 transition-colors cursor-pointer"
+                            @click="integrationExperience = category.name"
+                          >
+                            <RadioButton
+                              v-model="integrationExperience"
+                              :inputId="category.key"
+                              name="integrationExperience"
+                              :value="category.name"
+                              class="text-cyan-600"
+                            />
+                            <label
+                              :for="category.key"
+                              class="cursor-pointer font-medium"
+                              >{{ category.name }}</label
+                            >
+                          </div>
+                        </div>
+                        <p
+                          v-if="integrationExperienceError"
+                          class="text-red-500 mt-3 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          Please select an option.
+                        </p>
+                      </div>
+
+                      <div>
+                        <p class="text-gray-600 mb-4">
+                          Are you familiar with Hikvision product certifications
+                          and installation standards?
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div
+                            v-for="category in familiarWithStandards"
+                            :key="category.key"
+                            class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-cyan-300 transition-colors cursor-pointer"
+                            @click="familiarWithStandard = category.name"
+                          >
+                            <RadioButton
+                              v-model="familiarWithStandard"
+                              :inputId="category.key"
+                              name="familiarWithStandard"
+                              :value="category.name"
+                              class="text-cyan-600"
+                            />
+                            <label
+                              :for="category.key"
+                              class="cursor-pointer font-medium"
+                              >{{ category.name }}</label
+                            >
+                          </div>
+                        </div>
+                        <p
+                          v-if="familiarWithStandardError"
+                          class="text-red-500 mt-3 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          Please select an option.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex pt-8 justify-between">
+                  <Button
+                    label="Previous"
+                    severity="secondary"
+                    icon="pi pi-arrow-left"
+                    class="px-6 py-3 rounded-xl font-semibold"
+                    @click="activateCallback(1)"
+                  />
+                  <Button
+                    label="Continue"
+                    icon="pi pi-arrow-right"
+                    iconPos="right"
+                    class="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 border-0 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    @click="validateAndProceed(activateCallback, 2)"
+                  />
+                </div>
+              </StepPanel>
+
+              <!-- Step 3: Technical Questions -->
+              <StepPanel v-slot="{ activateCallback }" :value="3">
+                <div class="space-y-6">
+                  <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                      Technical Questions
+                    </h2>
+                    <p class="text-gray-600">
+                      Help us understand your current operations
+                    </p>
+                  </div>
+
+                  <!-- Purchase Sources -->
+                  <div
+                    class="bg-gradient-to-r from-violet-50 to-purple-50 rounded-2xl p-6 border border-violet-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-shopping-cart text-violet-600"></i>
+                      Purchase Sources
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      Where do you currently purchase your security products?
+                      (Select all that apply)
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div
+                        v-for="category in wherePurchase"
+                        :key="category.key"
+                        class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-violet-300 transition-colors cursor-pointer"
+                        @click="togglePurchaseSource(category.name)"
+                      >
+                        <Checkbox
+                          v-model="purchaseSource"
+                          :inputId="category.key"
+                          name="purchaseSource"
+                          :value="category.name"
+                          class="text-violet-600"
+                        />
+                        <label
+                          :for="category.key"
+                          class="cursor-pointer font-medium"
+                          >{{ category.name }}</label
+                        >
+                      </div>
+                    </div>
+                    <p
+                      v-if="purchaseError"
+                      class="text-red-500 mt-3 flex items-center gap-1"
+                    >
+                      <i class="pi pi-exclamation-triangle"></i>
+                      Please select at least one option.
+                    </p>
+                  </div>
+
+                  <!-- Hikvision Products -->
+                  <div
+                    class="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-2xl p-6 border border-teal-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2"
+                    >
+                      <i class="pi pi-eye text-teal-600"></i>
+                      Hikvision Experience
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                      Do you currently purchase Hikvision products?
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div
+                        v-for="category in options"
+                        :key="category.key"
+                        class="flex items-center gap-3 p-3 rounded-lg border-2 border-gray-200 hover:border-teal-300 transition-colors cursor-pointer"
+                        @click="purchaseHikvision = category.name"
+                      >
+                        <RadioButton
+                          v-model="purchaseHikvision"
+                          :inputId="category.key"
+                          name="purchaseHikvision"
+                          :value="category.name"
+                          class="text-teal-600"
+                        />
+                        <label
+                          :for="category.key"
+                          class="cursor-pointer font-medium"
+                          >{{ category.name }}</label
+                        >
+                      </div>
+                    </div>
+                    <p
+                      v-if="currentlyPurchaseError"
+                      class="text-red-500 mt-3 flex items-center gap-1"
+                    >
+                      <i class="pi pi-exclamation-triangle"></i>
+                      Please select an option.
+                    </p>
+                  </div>
+
+                  <!-- Additional Questions -->
+                  <div
+                    class="bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl p-6 border border-amber-100"
+                  >
+                    <h3
+                      class="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2"
+                    >
+                      <i class="pi pi-file-edit text-amber-600"></i>
+                      Additional Information
+                    </h3>
+                    <div class="space-y-6">
+                      <div
+                        v-for="field in textareaFields"
+                        :key="field.id"
+                        class="space-y-3"
+                      >
+                        <label class="font-semibold text-gray-700 block">
+                          <span v-html="field.label"></span>
+                        </label>
+                        <div class="relative">
+                          <Textarea
+                            :id="field.id"
+                            v-model="formData[field.model]"
+                            rows="4"
+                            cols="30"
+                            style="resize: none"
+                            class="w-full p-4 rounded-xl border-2 border-gray-200 focus:border-amber-400 transition-colors"
+                            placeholder="Please provide detailed information..."
+                          />
+                        </div>
+                        <p
+                          v-if="errors[field.model]"
+                          class="text-red-500 flex items-center gap-1"
+                        >
+                          <i class="pi pi-exclamation-triangle"></i>
+                          {{ errors[field.model] }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex pt-8 justify-between">
+                  <Button
+                    label="Previous"
+                    severity="secondary"
+                    icon="pi pi-arrow-left"
+                    class="px-6 py-3 rounded-xl font-semibold"
+                    @click="activateCallback(2)"
+                  />
+                  <Button
+                    label="Submit Application"
+                    icon="pi pi-check"
+                    iconPos="right"
+                    class="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 border-0 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+                    @click="handleSubmit(activateCallback)"
+                  />
+                </div>
+              </StepPanel>
+
+              <!-- Step 4: Success -->
+              <StepPanel v-slot="{ activateCallback }" :value="4">
+                <div class="text-center space-y-8">
+                  <!-- Success Animation -->
+                  <div class="flex justify-center mb-8">
+                    <div class="relative">
+                      <div
+                        class="w-24 h-24 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center shadow-2xl"
+                      >
+                        <i
+                          class="pi pi-check text-white text-4xl animate-pulse"
+                        ></i>
+                      </div>
+                      <div
+                        class="absolute -inset-2 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full opacity-20 animate-ping"
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div class="max-w-2xl mx-auto">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">
+                      Application Submitted Successfully!
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                      Thank you for your interest in becoming a partner. Your
+                      application will undergo a thorough review process.
+                    </p>
+
+                    <!-- Benefits Card -->
+                    <div
+                      class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-8 border border-green-100 mb-8"
+                    >
+                      <h3 class="text-xl font-semibold text-gray-800 mb-6">
+                        Upon successful verification, you'll gain access to:
+                      </h3>
+                      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="text-center">
+                          <div
+                            class="w-16 h-16 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                          >
+                            <i class="pi pi-dollar text-white text-2xl"></i>
+                          </div>
+                          <h4 class="font-semibold text-gray-800 mb-2">
+                            Reseller Pricing
+                          </h4>
+                          <p class="text-gray-600 text-sm">
+                            Competitive wholesale rates for all products
+                          </p>
+                        </div>
+                        <div class="text-center">
+                          <div
+                            class="w-16 h-16 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                          >
+                            <i class="pi pi-book text-white text-2xl"></i>
+                          </div>
+                          <h4 class="font-semibold text-gray-800 mb-2">
+                            Marketing Resources
+                          </h4>
+                          <p class="text-gray-600 text-sm">
+                            Comprehensive marketing and technical materials
+                          </p>
+                        </div>
+                        <div class="text-center">
+                          <div
+                            class="w-16 h-16 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4"
+                          >
+                            <i class="pi pi-users text-white text-2xl"></i>
+                          </div>
+                          <h4 class="font-semibold text-gray-800 mb-2">
+                            Dedicated Support
+                          </h4>
+                          <p class="text-gray-600 text-sm">
+                            Product and business support from our team
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div
+                      class="bg-white rounded-2xl p-8 border border-gray-200 shadow-lg"
+                    >
+                      <h3 class="text-xl font-semibold text-gray-800 mb-6">
+                        Need assistance? Contact us:
+                      </h3>
+                      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div
+                          class="flex items-center gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl"
+                        >
+                          <div
+                            class="w-12 h-12 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full flex items-center justify-center"
+                          >
+                            <i class="pi pi-envelope text-white"></i>
+                          </div>
+                          <div>
+                            <p class="font-semibold text-gray-800">Email</p>
+                            <a
+                              href="mailto:sdl@hikvisionkenya.com"
+                              class="text-blue-600 hover:text-blue-800 transition-colors"
+                            >
+                              sdl@hikvisionkenya.com
+                            </a>
+                          </div>
+                        </div>
+                        <div
+                          class="flex items-center gap-4 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl"
+                        >
+                          <div
+                            class="w-12 h-12 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center"
+                          >
+                            <i class="pi pi-phone text-white"></i>
+                          </div>
+                          <div>
+                            <p class="font-semibold text-gray-800">Phone</p>
+                            <a
+                              href="tel:+254727909060"
+                              class="text-green-600 hover:text-green-800 transition-colors"
+                            >
+                              +254 727 909 060
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Company Information -->
+                    <div
+                      class="mt-8 p-6 bg-gradient-to-r from-gray-50 to-slate-50 rounded-2xl border border-gray-200"
+                    >
+                      <div class="text-center">
+                        <p class="text-gray-800 font-semibold mb-2">
+                          Best regards,
+                        </p>
+                        <p class="text-gray-700 font-medium">
+                          Secure Digital Limited | Hik Digital Mart Limited
+                        </p>
+                        <p class="text-gray-600">
+                          SDLKenya Online Shop Administration Department
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex pt-8 justify-center">
+                  <Button
+                    label="Start New Application"
+                    severity="secondary"
+                    icon="pi pi-refresh"
+                    class="px-6 py-3 rounded-xl font-semibold"
+                    @click="resetForm()"
+                  />
+                </div>
+              </StepPanel>
+            </StepPanels>
+          </Stepper>
+        </div>
       </div>
     </div>
-    <div class="hidden md:block h-full w-full">
+
+    <!-- Background Carousel - Enhanced -->
+    <!-- <div class="hidden lg:block fixed right-0 top-0 h-full w-1/3 z-0">
       <Carousel
         :verticalViewPortHeight="2000"
-        :autoplayInterval="4000"
+        :autoplayInterval="5000"
         :value="images"
         :numVisible="1"
         :numScroll="1"
-        :showIndicators="false"
+        :showIndicators="true"
         :showNavigators="false"
         circular
-        class="rounded-lg w-full"
+        class="h-full w-full"
       >
         <template #item="slotProps">
           <div
-            class="relative w-full h-screen flex justify-center items-center"
+            class="relative w-full h-screen flex justify-center items-center overflow-hidden"
           >
             <img
               :src="slotProps.data.src"
               :alt="slotProps.data.alt"
-              class="rounded-xl object-cover w-100 h-100"
+              class="object-cover w-full h-full"
             />
             <div
-              class="absolute bottom-16 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white py-2 px-4 rounded"
+              class="absolute inset-0 bg-gradient-to-l from-black/20 to-transparent"
+            ></div>
+            <div
+              class="absolute bottom-8 left-8 right-8 bg-black/60 backdrop-blur-sm text-white p-6 rounded-2xl"
             >
-              {{ slotProps.data.alt }}
+              <h3 class="text-xl font-semibold mb-2">
+                {{ slotProps.data.title || slotProps.data.alt }}
+              </h3>
+              <p class="text-gray-200">
+                {{
+                  slotProps.data.description ||
+                  "Professional security solutions"
+                }}
+              </p>
             </div>
           </div>
         </template>
       </Carousel>
-    </div>
-  <Toast position="bottom-right" group="br" />
+    </div> -->
 
+    <!-- Toast Notifications -->
+    <Toast position="bottom-right" group="br" />
   </div>
 </template>
 
@@ -834,7 +1213,7 @@ export default {
       this.currentlyPurchaseError = !this.purchaseHikvision;
       if (this.currentlyPurchaseError) isValid = false;
 
-      this.textareaFields.forEach(field => {
+      this.textareaFields.forEach((field) => {
         if (
           !this.formData[field.model].trim() &&
           field.id !== "businessSupport"
@@ -940,16 +1319,16 @@ export default {
           // alert('Form submitted successfully!');
         }
 
-      this.$toast.add({
+        this.$toast.add({
           severity: "success",
-          summary:response.data.message,
+          summary: response.data.message,
           group: "br",
           life: 3000,
         });
       } catch (error) {
-         this.$toast.add({
+        this.$toast.add({
           severity: "error",
-          summary:error.message,
+          summary: error.message,
           group: "br",
           life: 3000,
         });

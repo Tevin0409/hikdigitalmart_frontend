@@ -68,7 +68,15 @@ const toast = useToast();
 const router = useRouter();
 const userStore = useUserStore();
 const { $axios } = useNuxtApp();
-const { $formatPrice } = useNuxtApp();
+
+const { $getPriceByRole, $formatPrice } = useNuxtApp();
+
+const finalPrice = computed(() => {
+  if (!item || !item.product || !userStore.user) return item.price;
+
+  console.log("userrrr ", userStore.user);
+  return $getPriceByRole(item.product, userStore.user.roleId);
+});
 
 const productStore = useProductStore();
 
