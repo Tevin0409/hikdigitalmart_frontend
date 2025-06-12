@@ -16,7 +16,7 @@
       <div
         class="mt-2hover:text-primary transitin-colors duration-200 text-primary font-bold text-sm"
       >
-        <span>{{ formattedPrice(item.price) }}</span>
+        <span>{{ getPrice(item) }}</span>
       </div>
       <p class="text-gray-500 mt-1 text-xs">
         <strong>
@@ -78,4 +78,10 @@ defineProps({
   isInWishList: Function,
   formattedPrice: Function,
 });
+
+const { $getProductPrice } = useNuxtApp();
+
+const getPrice = (item) => {
+  return $getProductPrice(item);
+};
 </script>

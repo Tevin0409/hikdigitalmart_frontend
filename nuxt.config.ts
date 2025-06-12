@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     "~/plugins/formatPrice.js",
     "~/plugins/formatDate.js",
     "~/plugins/error-handler.ts",
-    "~/plugins/pricePlugin.js",
+    "~/plugins/pricePlugin",
   ],
   modules: [
     "@nuxtjs/tailwindcss",

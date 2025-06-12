@@ -18,7 +18,7 @@
         {{ product.name }}
       </h3>
       <p class="text-lg font-semibold text-gray-900">
-        {{ formatPrice(product.price) }}
+        {{ getPrice(product) }}
       </p>
       <p class="text-gray-500 text-xs line-through" v-if="product.oldPrice">
         {{ product.oldPrice }}
@@ -42,4 +42,9 @@ defineProps({
     required: true,
   },
 });
+const { $getProductPrice } = useNuxtApp();
+
+const getPrice = (item) => {
+  return $getProductPrice(item);
+};
 </script>

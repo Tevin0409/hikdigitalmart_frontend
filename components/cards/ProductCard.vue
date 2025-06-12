@@ -24,7 +24,7 @@
       <p
         class="text-red-500 d-flex justify-center flex -1 font-semibold text-center"
       >
-        Ksh {{ formattedPrice(item.price) }}
+        {{ getPrice(item) }}
       </p>
     </div>
     <!-- Hover Buttons -->
@@ -62,21 +62,18 @@ import { useNuxtApp } from "nuxt/app";
 import { useUserStore } from "@/stores/auth";
 import { useProductStore } from "@/stores/productStore";
 import RatingCard from "../ratings/index.vue";
-// import ProductCard from "../ProductCards/index.vue";
+import { USER_ROLES } from "@/constants/user.js";
 
 const toast = useToast();
 const router = useRouter();
 const userStore = useUserStore();
 const { $axios } = useNuxtApp();
 
-const { $getPriceByRole, $formatPrice } = useNuxtApp();
+const { $getProductPrice } = useNuxtApp();
 
-const finalPrice = computed(() => {
-  if (!item || !item.product || !userStore.user) return item.price;
-
-  console.log("userrrr ", userStore.user);
-  return $getPriceByRole(item.product, userStore.user.roleId);
-});
+const getPrice = (item) => {
+  return $getProductPrice(item);
+};
 
 const productStore = useProductStore();
 
@@ -87,9 +84,6 @@ defineProps({
   },
 });
 
-const formattedPrice = (price) => {
-  return $formatPrice(price);
-};
 const emit = defineEmits(["wishlist-updated"]);
 
 // defineEmits(["wishlist-updated"]);
@@ -249,11 +243,25 @@ const goToProductPage = (product) => {
     path: `/products/${product.id}`,
   });
 };
+// const getProductPrice = (item) => {
+//   let user = userStore.user;
+//   console.log(":", user.role.name);
+//   let userRole = user.role.name;
+//   if (userRole == USER_ROLES.TECHNICIAN.name) {
+//     return item.originalPrice;
+//   } else if (
+//     userRole == USER_ROLES.USER.name ||
+//     userRole == USER_ROLES.WHOLESALER.name
+//   ) {
+//     return item.roleAdjustedPrice;
+//   }
+// };
 
 // Fetch the wishlist when the component is mounted
 onMounted(() => {
   getWishList();
   checkUserLoggedIn();
+  // console.log("PRICE CHECK:", $getProductPrice(item, userStore.user));
 });
 </script>
 

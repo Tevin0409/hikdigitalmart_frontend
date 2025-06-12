@@ -30,7 +30,7 @@
       <div class="flex flex-col space-y-4">
         <h2 class="text-xl font-bold">{{ product.name }}</h2>
         <p class="text-lg text-gray-700 font-medium">
-          Ksh {{ formattedPrice(product.price) }}
+          {{ getPrice(product) }}
         </p>
         <p class="text-gray-600 leading-relaxed">
           <!-- {{ product.features.map(feature => feature.description).join(", ") }} -->
@@ -67,8 +67,8 @@
             class="w-16 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-gray-500"
           />
           <p class="text-gray-600">
-            <i class="pi pi-wallet mr-4"></i> Ksh
-            {{ formattedPrice(product.price * quantity) }}
+            <i class="pi pi-wallet mr-4"></i>
+            {{ getPrice(product * quantity) }}
           </p>
           <p>
             <button @click="addToWishlist(product)" :loading="loadingWish">
@@ -194,19 +194,20 @@
           <div
             v-for="review in product.Review"
             :key="review.id"
-            class="border-b pb-4"
+            class="border-b pb-6 mb-6"
           >
-            <div class="flex items-center space-x-4">
+            <!-- Original Review -->
+            <div class="flex items-start space-x-4">
               <Avatar
                 :label="initials(review.user)"
                 class="bg-blue-100 text-blue-700 font-bold"
                 shape="circle"
                 size="xlarge"
               />
-              <div>
+              <div class="flex-1">
                 <div class="flex justify-between items-center mt-1">
                   <div class="flex space-x-1">
-                    <template v-for="i in 5">
+                    <template v-for="i in 5" :key="i">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         :fill="i <= review.rating ? 'currentColor' : 'none'"
@@ -233,6 +234,40 @@
                 <h4 class="font-bold text-gray-800">
                   by {{ review.user.firstName + " " + review.user.lastName }}
                 </h4>
+
+                <!-- Admin Review Response -->
+                <div
+                  v-if="review.ReviewResponse"
+                  class="mt-4 ml-6 bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500"
+                >
+                  <div class="flex items-start space-x-3">
+                    <Avatar
+                      :label="initials(review.ReviewResponse.user)"
+                      class="bg-green-100 text-green-700 font-bold"
+                      shape="circle"
+                      size="large"
+                    />
+                    <div class="flex-1">
+                      <div class="flex items-center justify-between">
+                        <h5
+                          class="font-semibold text-gray-800 flex items-center"
+                        >
+                          {{
+                            review.ReviewResponse.user.firstName +
+                            " " +
+                            review.ReviewResponse.user.lastName
+                          }}
+                        </h5>
+                        <p class="text-sm text-gray-500">
+                          {{ formattedDate(review.ReviewResponse.createdAt) }}
+                        </p>
+                      </div>
+                      <p class="mt-2 text-gray-700">
+                        {{ review.ReviewResponse.message }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -376,8 +411,13 @@ import RatingCard from "~/components/ratings/index.vue";
 
 const { $formatPrice } = useNuxtApp();
 const router = useRouter();
-const formattedPrice = (price) => {
-  return $formatPrice(price);
+// const formattedPrice = (price) => {
+//   return $formatPrice(price);
+// };
+const { $getProductPrice } = useNuxtApp();
+
+const getPrice = (item) => {
+  return $getProductPrice(item);
 };
 const { $formatDate } = useNuxtApp();
 const formattedDate = (date) => {

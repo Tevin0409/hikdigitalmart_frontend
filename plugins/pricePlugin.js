@@ -1,15 +1,32 @@
-export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.provide("getPriceByRole", (product, userRoleId) => {
-    const basePrice = product.price;
+// plugins/getProductPrice.js
 
-    if (!product.PricePercentage || !Array.isArray(product.PricePercentage)) {
-      return basePrice;
+import { USER_ROLES } from "@/constants/user.js";
+import { useUserStore } from "@/stores/auth";
+
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.provide("getProductPrice", (item) => {
+    const userStore = useUserStore();
+    const user = userStore.user;
+
+    let price = item.originalPrice || 0;
+
+    if (user && user.role && user.role.name) {
+      const userRole = user.role.name;
+
+      if (userRole === USER_ROLES.TECHNICIAN.name) {
+        price = item.originalPrice;
+      } else if (
+        userRole === USER_ROLES.USER.name ||
+        userRole === USER_ROLES.WHOLESALER.name
+      ) {
+        price = item.roleAdjustedPrice || item.originalPrice || 0;
+      } else {
+        price = item.roleAdjustedPrice || item.originalPrice || 0;
+      }
     }
 
-    const roleEntry = [...product.PricePercentage]
-      .reverse()
-      .find((p) => p.roleId === userRoleId);
-
-    return roleEntry ? (basePrice * roleEntry.percentage) / 100 : basePrice;
+    // Format the price using the other plugin
+    const formatted = nuxtApp.$formatPrice(price);
+    return `Ksh ${formatted}`;
   });
 });
