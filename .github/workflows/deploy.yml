@@ -31,32 +31,38 @@ jobs:
           username: ${{ secrets.DO_USER }}
           key: ${{ secrets.DO_SSH_PRIVATE_KEY }}
           script: |
-            # Set project directory
-            PROJECT_DIR="$HOME/frontend"
+            # Load NVM and use Node.js v24
+             export NVM_DIR="$HOME/.nvm"
+             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+             nvm use 24
 
-            # Ensure SSH agent is running
-            eval "$(ssh-agent -s)"
-            mkdir -p ~/.ssh
-            chmod 700 ~/.ssh
+             echo "Using Node: $(node -v)"
+             # Set project directory
+             PROJECT_DIR="$HOME/frontend"
 
-            # Create the backend folder if it doesn't exist
-            mkdir -p $PROJECT_DIR
+             # Ensure SSH agent is running
+             eval "$(ssh-agent -s)"
+             mkdir -p ~/.ssh
+             chmod 700 ~/.ssh
 
-            # Clone repository if it doesn’t exist, otherwise pull updates
-            if [ ! -d "$PROJECT_DIR/.git" ]; then
-              echo "Repository not found. Cloning..."
-              git clone git@github.com:Tevin0409/hikdigitalmart_frontend.git $PROJECT_DIR
-            else
-              echo "Repository exists. Pulling latest changes..."
-              cd $PROJECT_DIR
-              git pull origin main
-            fi
+             # Create the backend folder if it doesn't exist
+             mkdir -p $PROJECT_DIR
 
-            # Navigate to project directory
-            cd $PROJECT_DIR
+             # Clone repository if it doesn’t exist, otherwise pull updates
+             if [ ! -d "$PROJECT_DIR/.git" ]; then
+               echo "Repository not found. Cloning..."
+               git clone git@github.com:Tevin0409/hikdigitalmart_frontend.git $PROJECT_DIR
+             else
+               echo "Repository exists. Pulling latest changes..."
+               cd $PROJECT_DIR
+               git pull origin main
+             fi
 
-            # Install dependencies
-            npm install 
+             # Navigate to project directory
+             cd $PROJECT_DIR
 
-            # Restart the application using PM2
-            pm2 restart all || pm2 start npm --name "hickdigitalmart_frontend" -- start
+             # Install dependencies
+             npm install 
+
+             # Restart the application using PM2
+             pm2 restart all || pm2 start npm --name "hickdigitalmart_frontend" -- start
