@@ -39,9 +39,9 @@
           <!-- Header -->
           <div class="text-center mb-8">
             <h1
-              class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-3"
+              class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-orange-600 bg-clip-text text-transparent mb-3"
             >
-              Partner Registration
+              Technician Partner Registration
             </h1>
             <p class="text-gray-600 text-lg">
               Join our network of trusted security professionals
@@ -49,7 +49,6 @@
           </div>
 
           <Stepper v-model:value="activeStep" class="relative">
-            <!-- Enhanced Step List -->
             <StepList class="mb-8">
               <Step
                 v-slot="{ activateCallback, value, a11yAttrs }"
@@ -69,7 +68,7 @@
                       :class="[
                         'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
                         {
-                          'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-indigo-200':
+                          'bg-gradient-to-r from-primary to-orange-600 text-white border-transparent shadow-indigo-200':
                             value <= activeStep,
                           'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
                             value > activeStep,
@@ -105,7 +104,7 @@
                       :class="[
                         'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
                         {
-                          'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-indigo-200':
+                          'bg-gradient-to-r from-primary to-orange-600 text-white border-transparent shadow-indigo-200':
                             value <= activeStep,
                           'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
                             value > activeStep,
@@ -141,7 +140,7 @@
                       :class="[
                         'rounded-full border-2 w-14 h-14 inline-flex items-center justify-center text-lg font-semibold transition-all duration-300 shadow-lg',
                         {
-                          'bg-gradient-to-r from-indigo-500 to-purple-500 text-white border-transparent shadow-indigo-200':
+                          'bg-gradient-to-r from-primary to-orange-600 text-white border-transparent shadow-indigo-200':
                             value <= activeStep,
                           'border-gray-300 bg-white text-gray-400 hover:border-indigo-300':
                             value > activeStep,
@@ -311,7 +310,7 @@
                         <InputText
                           id="password"
                           v-model="password"
-                          type="email"
+                          type="password"
                           placeholder="Enter password"
                           class="w-full p-3 rounded-xl border-2 border-gray-200 focus:border-indigo-400 transition-colors"
                         />
